@@ -9,7 +9,7 @@
 						<p class="text-center mb-lg">
 							<br>
 								<a href="#">
-									<img src="resources/images/logo_blue_white.png" alt="Image" class="block-center img-rounded">
+									<img src="<?php echo base_url()."resources/images/logo_blue_white.png"; ?>" alt="Image" class="block-center img-rounded">
 								</a>
 							</p>
 							<p class="text-center mb-lg">
