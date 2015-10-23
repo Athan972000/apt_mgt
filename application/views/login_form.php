@@ -2,7 +2,11 @@
 <?php
 	defined('BASEPATH') OR exit('No direct script access allowed');?>
 	<body>
-		
+		<?php
+			if (isset($this->session->userdata['logged_in'])) {
+			header(base_url().'login_process');
+			}
+		?>
 		<script>
 		  // This is called with the results from from FB.getLoginStatus().
 		  function statusChangeCallback(response) {
@@ -76,7 +80,8 @@
 		  // successful.  See statusChangeCallback() for when this call is made.
 		  function testAPI() {
 			console.log('Welcome!  Fetching your information.... ');
-			FB.api('/me', function(response) {
+			FB.api('/me/permissions', function(response) {
+			console.log(JSON.stringify(response));
 			  console.log('Successful login for: ' + response.email);
 			  document.getElementById('status').innerHTML =
 				'Thanks for logging in, ' + response.email + '!';
@@ -114,16 +119,16 @@
 							</p>
 							<div class="panel-body">	
 								<?php 
-									//echo form_open('user_authentication/user_login_process'); 
+									echo form_open('login_process'); 
 									echo "<div class='error_msg'>";
 									if (isset($error_message)) {
 										echo $error_message;
 									}
-									//echo validation_errors();
+									echo validation_errors();
 									echo "</div>";
 								?>
 								<div align = "right">
-									<a href="<?php echo base_url().'index.php/register' ?>">To SignUp Click Here</a>
+									<a href="<?php echo base_url().'register' ?>">To SignUp Click Here</a>
 								</div>
 								
 								<div class="form-group has-feedback">
@@ -146,8 +151,7 @@
 								</div>
 								<button type="submit" class="btn btn-block btn-primary" name="submit"> Login</button><br />
 								
-								<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-</fb:login-button>
+								<fb:login-button data-scope="email" onlogin="checkLoginState();">Log in using Facebook</fb:login-button>
 
 <div id="status">
 </div>
