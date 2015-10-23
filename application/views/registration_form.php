@@ -17,7 +17,7 @@
 							</p>
 							<div class="panel-body">
 								<?php 
-									echo form_open('new_user_registration'); 
+									//echo form_open('user_authentication/user_login_process'); 
 									echo "<div class='error_msg'>";
 									if (isset($error_message)) {
 										echo $error_message;
