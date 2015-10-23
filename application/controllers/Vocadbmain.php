@@ -28,6 +28,12 @@ class Vocadbmain extends MY_Controller {
 		$this->_render("registration_form");
 	}
 	
+	public function welcome(){
+		$this->mynav=TRUE;
+		$this->_render('welcome_message');
+	}
+	
+	
 	public function login_process(){
 		
 		// if(isset($this->session->userdata['logged_in'])){
@@ -53,7 +59,7 @@ class Vocadbmain extends MY_Controller {
 			
 			//Add user data in session
 			$this->session->set_userdata('logged_in',$session_data);
-			$this->load->view('welcome_message');
+			$this->welcome();
 		}
 		else{
 			$data = array('error_message'=>'Invalid Username or Password');
