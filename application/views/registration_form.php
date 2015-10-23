@@ -38,13 +38,13 @@
 								</div>
 								<div class="form-group has-feedback">
 									<input type="password" name="password" id="password" placeholder="Password" class="form-control"
-									data-toggle="popover" data-placement="top" data-content="Password atleast 6 Alpha-Numeric characters"
+									data-toggle="popover" data-placement="right" data-content="Password atleast 6 Alpha-Numeric characters"
 									/>
 									<span class="fa fa-lock form-control-feedback text-muted"></span>
 								</div>
 								<div class="form-group has-feedback">
 									<input type="password" name="repassword" id="repassword" placeholder="Confirm Password" class="form-control"
-									data-toggle="popover" data-placement="top" data-content="Password do not match"
+									data-toggle="popover" data-placement="bottom" data-content="Password do not match"
 									/>
 									<span class="fa fa-lock form-control-feedback text-muted"></span>
 								</div>
@@ -98,7 +98,7 @@
 				$('#repassword').parent('div').removeClass("has-error");
 			}
 			
-			if( pword != cpword )
+			if( pword != cpword || !cpword )
 			{
 				e.preventDefault();
 				$('#repassword').parent('div').addClass("has-error");
