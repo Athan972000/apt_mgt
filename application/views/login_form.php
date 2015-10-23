@@ -132,7 +132,9 @@
 								</div>
 								
 								<div class="form-group has-feedback">
-									<input type="text" name="email" id="name" placeholder="email address" class="form-control"/>
+									<input type="text" name="email" id="name" placeholder="email address" class="form-control"
+									data-toggle="popover" data-placement="top" data-content="Not a valid Email Address."
+									/>
 									<span class="fa fa-lock form-control-feedback text-muted"></span>
 								</div>
 								<div class="form-group has-feedback">
@@ -153,8 +155,8 @@
 								
 								<fb:login-button data-scope="email" onlogin="checkLoginState();">Log in using Facebook</fb:login-button>
 
-<div id="status">
-</div>
+								<div id="status">
+								</div>
 
 							</div>
 						</div>
@@ -162,4 +164,44 @@
 				</div>
 			</div>
 		</div>
+		
+		<script type="text/javascript" src="<?php echo base_url()."resources/vendor/jquery.min.js"; ?>"></script>
+		<script type="text/javascript">
+		var base_url = <?php echo base_url();?>
+		
+		$('form').submit(function (e) {
+			var name = $('#name').val();
+			var emailregex = /.+@.+/;
+			if( !name || !name.match(emailregex) )
+			{
+				e.preventDefault();
+				$('#name').parent('div').addClass("has-error");
+				$('#name').popover('show');
+			}
+			else
+			{
+				$('#name').parent('div').removeClass("has-error");
+				// $.ajax({
+					// url: base_url+"apply_api",
+					// type:'POST',
+					// data:
+					// {
+						// names_mail: $("input[name=names-mail]").val(),
+						// emails_mail: $("input[name=emails-mail]").val(),
+						// companys_mail: $("input[name=companys-mail]").val(),
+						// nation_mail: $("input[name=nation-mail]").val(),
+						// msgs_mail: $("textarea[name=msgs-mail]").val(),
+						// scode: $("input[name=scode]").val()
+					// },
+					// success: function(msg)
+					// {
+						// $('#vocamodalmsg').html(msg);
+						// $('#vocadbmodal').modal('show');
+						
+					// }               
+				// });
+				
+			}
+		});
+		</script>
 	</body>
