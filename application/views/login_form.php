@@ -115,7 +115,7 @@
 								</a>
 							</p>
 							<p class="text-center mb-lg">
-								<strong>SIGN IN TO CONTINUE.</strong>
+								<strong id="loginchecker" >SIGN IN TO CONTINUE.</strong>
 							</p>
 							<div class="panel-body">	
 								<?php 
@@ -167,40 +167,47 @@
 		
 		<script type="text/javascript" src="<?php echo base_url()."resources/vendor/jquery.min.js"; ?>"></script>
 		<script type="text/javascript">
-		var base_url = <?php echo base_url();?>
+		var base_url = '<?php echo base_url();?>';
 		
 		$('form').submit(function (e) {
+			e.preventDefault();
 			var name = $('#name').val();
 			var emailregex = /.+@.+/;
 			if( !name || !name.match(emailregex) )
 			{
-				e.preventDefault();
 				$('#name').parent('div').addClass("has-error");
 				$('#name').popover('show');
 			}
 			else
 			{
 				$('#name').parent('div').removeClass("has-error");
-				// $.ajax({
-					// url: base_url+"apply_api",
-					// type:'POST',
-					// data:
-					// {
-						// names_mail: $("input[name=names-mail]").val(),
-						// emails_mail: $("input[name=emails-mail]").val(),
-						// companys_mail: $("input[name=companys-mail]").val(),
-						// nation_mail: $("input[name=nation-mail]").val(),
-						// msgs_mail: $("textarea[name=msgs-mail]").val(),
-						// scode: $("input[name=scode]").val()
-					// },
-					// success: function(msg)
-					// {
-						// $('#vocamodalmsg').html(msg);
-						// $('#vocadbmodal').modal('show');
-						
-					// }               
-				// });
 				
+				$.ajax({
+					url: base_url+"login_process",
+					type:'POST',
+					data:
+					{
+						email: $("input[name=email]").val(),
+						password: $("input[name=password]").val(),
+					},
+					success: function(msg)
+					{
+						if(msg)
+						{
+							// console.log("login success");
+							$('#name').parent('div').removeClass("has-error");
+							$('#password').parent('div').removeClass("has-error");
+							window.location = base_url+'welcome';
+						}
+						else
+						{
+							// console.log("login fail");
+							$('#name').parent('div').addClass("has-error");
+							$('#password').parent('div').addClass("has-error");
+							$("#loginchecker").html("Email and/or Password does not match").addClass("has-error");
+						}
+					}
+				});
 			}
 		});
 		</script>

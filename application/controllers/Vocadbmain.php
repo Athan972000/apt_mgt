@@ -59,13 +59,18 @@ class Vocadbmain extends MY_Controller {
 			
 			//Add user data in session
 			$this->session->set_userdata('logged_in',$session_data);
+<<<<<<< HEAD
 			$this->welcome();
+=======
+			// $this->load->view('welcome_message');
+			echo TRUE;
+>>>>>>> c907ce5a1a1987de5f109cfd9dbca7ee3caa947f
 		}
 		else{
-			$data = array('error_message'=>'Invalid Username or Password');
-			$this->_render('login_form',$data);
+			// $data = array('error_message'=>'Invalid Username or Password');
+			// $this->_render('login_form',$data);
+			echo FALSE;
 		}
-		
 		
 	}
 	
