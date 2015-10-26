@@ -15,8 +15,9 @@ class MY_Controller extends CI_Controller {
         $this->load->helper('url');
     }
 
-    public function _render($view) {
+    public function _render($view, $add_val=NULL) {
         $data = $this->data;
+		$data['Nvoca'] = $add_val;
 		
 		$data['css'] = $this->css;
         $data['js'] = $this->js;

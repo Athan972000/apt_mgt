@@ -24,8 +24,40 @@ class Vocadbmain extends MY_Controller {
         $this->_render("login_form");
 	}
 	
-	public function register(){
-		$this->_render("registration_form");
+	public function register($email=NULL,$name=NULL){
+		$fb = array();
+		
+		if( isset($email) )
+		{
+			$fb['fb_email'] = "readonly='readonly' value='".$email."'";
+		}
+		if( isset($name) )
+		{
+			$fb['fb_name'] = "readonly='readonly' value='".$name."'";
+		}
+		$this->_render("registration_form", $fb);
+	}
+	
+	public function check_user()
+	{
+		$email = $this->input->get("email");
+		$name = $this->input->get("name");
+		$check = $this->database_model->read_user_information($email);
+		$confirm = $this->database_model->check_confirmation_email($email);
+		if( $check && $confirm )
+		{
+			redirect(base_url().'/welcome', 'refresh');
+		}
+		else if ( !$confirm )
+		{
+			//land on email confirmation
+			redirect(base_url().'confirm', 'refresh');
+		}
+		else
+		{
+			$this->register($email,$name);
+		}
+		
 	}
 	
 	public function welcome(){
@@ -143,6 +175,11 @@ class Vocadbmain extends MY_Controller {
 	{
 		$verify_key = $this->input->get("verify_key");
 		echo $verify_key;
+	}
+	public function confirm()
+	{
+		echo "confirm page";
+		//resend confirm
 	}
 }
 ?>
