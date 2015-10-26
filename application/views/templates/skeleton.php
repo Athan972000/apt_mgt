@@ -1,4 +1,4 @@
-<html>
+<html style="padding:0px;">
 	<head>
     <?php echo $head; ?>
 	<style type="text/css">

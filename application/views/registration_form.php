@@ -1,12 +1,22 @@
 <?php
 	defined('BASEPATH') OR exit('No direct script access allowed');
 	
-	// echo $Nvoca['fb_email']." ".$Nvoca['fb_name'];
-	// echo "<pre>";
-	// print_r($Nvoca);
-	// exit();
-	?>
-	<body>
+$link = "vocabdb";
+$confirm = 0;
+if( isset($Nvoca['fb_link']) )
+{
+	$link = $Nvoca['fb_link'];
+}
+if( isset($Nvoca['fb_confirm']) )
+{
+	$confirm = $Nvoca['fb_confirm'];
+}
+echo "<script type='text/javascript'>
+var link = '".$link."';
+var confirm = ".$confirm.";	
+</script>";
+?>
+
 		<div style="height: 100%; padding: 50px 0; background-color: #2c3037" class="row row-table">
 			<div style="padding:0px;" class="col-lg-3 col-md-6 col-sm-8 col-xs-12 align-middle">
 			<div class="panel panel-default panel-flat">
@@ -117,7 +127,7 @@
 			window.location = base_url;
 		}
 		
-		var base_url = "<?php echo base_url();?>";	
+		var base_url = "<?php echo base_url();?>";
 		$('#vocadb_regform').on("submit",function (e) {
 			var f = $(this);
 			f.parsley().validate();
@@ -138,8 +148,8 @@
 						how: $("textarea[name=how]").val(),
 						nationality: $("input[name=nationality]").val(),
 						//temp
-						confirm: 0,
-						link: "vocabdb"
+						confirm: confirm,
+						link: link
 						//end temp
 					},
 					success: function(check)

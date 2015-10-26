@@ -60,11 +60,17 @@ Class Database_Model extends CI_Model{
 	//checks if email confirmed
 	public function check_confirmation_email($email)
 	{
-		$this->db->select('confirm');
-		$this->db->from('api_users');
-		$this->db->where('email',$email);
-		$query = $this->db->get()->row();
-		return $query->confirm;
+		$sql = "SELECT confirm FROM api_users WHERE email = '".$email."'";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() < 1)
+		{
+			return FALSE;
+		}
+		else
+		{
+			$row = $query->row();
+			return $row['confirm'];
+		}
 	}
 }
 ?>

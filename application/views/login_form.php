@@ -36,6 +36,7 @@
 		  // Button.  See the onlogin handler attached to it in the sample
 		  // code below.
 		  function checkLoginState() {
+			  console.log("checkloginstate");
 			FB.getLoginStatus(function(response) {
 			  statusChangeCallback(response);
 			});
@@ -63,7 +64,7 @@
 		  // These three cases are handled in the callback function.
 
 		  FB.getLoginStatus(function(response) {
-			statusChangeCallback(response);
+			// statusChangeCallback(response);
 		  });
 
 		  };

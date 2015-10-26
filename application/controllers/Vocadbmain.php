@@ -6,7 +6,7 @@ class Vocadbmain extends MY_Controller {
 	public function __construct() {
         parent::__construct();
 		$this->load->helper('url');
-		
+		$this->load->library('session');
 		$this->load->model('database_model');
 		
 		$this->mynav = FALSE; //true=implement side-nav to all pages
@@ -24,16 +24,17 @@ class Vocadbmain extends MY_Controller {
         $this->_render("login_form");
 	}
 	
-	public function register($email=NULL,$name=NULL){
+	public function register(){
 		$fb = array();
-		
-		if( isset($email) )
+		if( $this->session->has_userdata('email') )
 		{
-			$fb['fb_email'] = "readonly='readonly' value='".$email."'";
+			$fb['fb_email'] = "readonly='readonly' value='".$this->session->userdata('email')."'";
+			$fb['fb_confirm'] = 1;
 		}
-		if( isset($name) )
+		if( $this->session->has_userdata('name') )
 		{
-			$fb['fb_name'] = "readonly='readonly' value='".$name."'";
+			$fb['fb_name'] = "readonly='readonly' value='".$this->session->userdata('name')."'";
+			$fb['fb_link'] = "facebook";
 		}
 		$this->_render("registration_form", $fb);
 	}
@@ -44,18 +45,26 @@ class Vocadbmain extends MY_Controller {
 		$name = $this->input->get("name");
 		$check = $this->database_model->read_user_information($email);
 		$confirm = $this->database_model->check_confirmation_email($email);
+		// echo $confirm;exit();
 		if( $check && $confirm )
 		{
 			redirect(base_url().'welcome', 'refresh');
 		}
-		else if ( !$confirm )
+		else if ( $check && !$confirm )
 		{
 			//land on email confirmation
 			redirect(base_url().'confirm', 'refresh');
 		}
 		else
-		{
-			$this->register($email,$name);
+		{	
+			$newdata = array(
+				'name'  => $name,
+				'email'     => $email
+			);
+
+			$this->session->set_userdata($newdata);
+			redirect(base_url().'register', 'refresh');
+			// $this->register($email,$name);
 		}
 		
 	}
