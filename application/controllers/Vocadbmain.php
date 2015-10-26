@@ -46,7 +46,7 @@ class Vocadbmain extends MY_Controller {
 		$confirm = $this->database_model->check_confirmation_email($email);
 		if( $check && $confirm )
 		{
-			redirect(base_url().'/welcome', 'refresh');
+			redirect(base_url().'welcome', 'refresh');
 		}
 		else if ( !$confirm )
 		{
