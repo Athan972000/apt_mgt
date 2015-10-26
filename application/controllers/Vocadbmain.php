@@ -92,6 +92,7 @@ class Vocadbmain extends MY_Controller {
 		$result = $this->database_model->registration_insert($data);
 		if($result){
 			// $this->_render('login_form');
+			$this->send_confirm_email($data['email'],$data['password']);
 			echo TRUE;
 		}
 		else
@@ -100,5 +101,33 @@ class Vocadbmain extends MY_Controller {
 		}
 	}
 	
+	public function send_confirm_email($email,$password)
+	{
+		$data['link'] = base_url()."verify?verify_key=".md5($email.$password);
+		
+		$config['mailtype'] = 'html';
+		$config['charset']  = 'UTF-8';
+		$this->load->library('email',$config);	
+		
+		$this->email->set_newline("\r\n");
+		$this->email->clear();
+		$this->email->from('vocabdb.api@gmail.com');
+		
+		$sentto[] = $email;
+		// $sentto[] = 'vocadb.api@gmail.com';
+		$this->email->to($sentto);
+
+		$this->email->subject('Email Confirmation');
+		// $this->email->message($this->load->view("mail_structure",$data,true));
+		$this->email->message($this->load->view("mail_structure",$data,true));
+		$this->email->send();
+		// if (!$this->email->send()) echo "Sorry to sending failure, Try it again";
+	}
+	
+	public function verify()
+	{
+		$verify_key = $this->input->get("verify_key");
+		echo $verify_key;
+	}
 }
 ?>

@@ -6,13 +6,13 @@ Class Database_Model extends CI_Model{
 	public function registration_insert($data){
 		$condition="email ="."'".$data['email']."'";
 		$this->db->select('*');
-		$this->db->from('users');
+		$this->db->from('api_users');
 		$this->db->where($condition);
 		$this->db->limit(1);
 		$query = $this->db->get();
 		if($query->num_rows()==0){
 			//insert data
-			$this->db->insert('users',$data);
+			$this->db->insert('api_users',$data);
 			if($this->db->affected_rows()>0){
 				return true;
 			}
@@ -24,7 +24,7 @@ Class Database_Model extends CI_Model{
 	public function login($data){
 		$condition = "email ="."'".$data['email']."' AND "."password ="."'" .$data['password']."'";
 		$this->db->select('*');
-		$this->db->from('users');
+		$this->db->from('api_users');
 		$this->db->where($condition);
 		$this->db->limit(1);
 		$query = $this->db->get();
@@ -42,7 +42,7 @@ Class Database_Model extends CI_Model{
 
 		$condition = "email =" . "'" . $email . "'";
 		$this->db->select('*');
-		$this->db->from('users');
+		$this->db->from('api_users');
 		$this->db->where($condition);
 		$this->db->limit(1);
 		$query = $this->db->get();
