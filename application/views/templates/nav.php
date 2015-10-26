@@ -10,13 +10,7 @@
 					</a>
 				</li>
                <!-- START Menu-->
-               
-			   <li>
-                  <a href="#" title="Usage" data-toggle="" class="no-submenu">
-                     <em class="fa fa-bar-chart-o"></em>
-                     <span class="item-text">Usage Statistics</span>
-                  </a>
-               </li>
+              
                <li>
                   <a href="#" title="Features" data-toggle="" class="no-submenu">
                      <em class="fa fa-check-square"></em>
@@ -24,7 +18,12 @@
                   </a>
                   
                </li>
-               
+               <li>
+                  <a href="#" title="Usage" data-toggle="" class="no-submenu">
+                     <em class="fa fa-bar-chart-o"></em>
+                     <span class="item-text">Usage Statistics</span>
+                  </a>
+               </li>
                <li>
                   <a href="#" title="Pricing" data-toggle="collapse-next" class="has-submenu">
                      <em class="fa fa-money"></em>
