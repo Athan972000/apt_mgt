@@ -117,9 +117,7 @@
 									<img src="<?php echo base_url()."resources/images/logo_blue_white.png"; ?>" alt="Image" class="block-center img-rounded">
 								</a>
 							</p>
-							<p class="text-center mb-lg">
-								<strong id="loginchecker" >SIGN IN TO CONTINUE.</strong>
-							</p>
+
 							<div class="panel-body">	
 								<?php 
 									echo form_open('login_process'); 
@@ -135,14 +133,14 @@
 								</div>
 								
 								<div class="form-group has-feedback">
-									<input type="text" name="email" id="name" placeholder="email address" class="form-control"
+									<input required type="text" name="email" id="name" placeholder="* Email Address" class="form-control"
 									data-toggle="popover" data-placement="top" data-content="Not a valid Email Address."
 									/>
-									<span class="fa fa-lock form-control-feedback text-muted"></span>
+									
 								</div>
 								<div class="form-group has-feedback">
-									<input type="password" name="password" id="password" placeholder="Password" class="form-control"/>
-									<span class="fa fa-lock form-control-feedback text-muted"></span>
+									<input required type="password" name="password" id="password" placeholder="* Password" class="form-control"/>
+									
 								</div>
 								
 								<div class="clearfix">
