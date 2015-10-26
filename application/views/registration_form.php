@@ -1,5 +1,11 @@
 <?php
-	defined('BASEPATH') OR exit('No direct script access allowed');?>
+	defined('BASEPATH') OR exit('No direct script access allowed');
+	
+	// echo $Nvoca['fb_email']." ".$Nvoca['fb_name'];
+	// echo "<pre>";
+	// print_r($Nvoca);
+	// exit();
+	?>
 	<body>
 		<div style="height: 100%; padding: 50px 0; background-color: #2c3037" class="row row-table">
 			<div style="padding:0px;" class="col-lg-3 col-md-6 col-sm-8 col-xs-12 align-middle">
@@ -39,21 +45,14 @@
 								</div>
 							
 								<div class="form-group has-feedback">
-									<input type="text" type="email" name="email" id="name" placeholder="Email address" class="form-control" 
+									<input <?php if(isset($Nvoca['fb_email'])){echo $Nvoca['fb_email'];}?>  type="text" type="email" name="email" id="name" placeholder="Email address" class="form-control" 
 									required data-parsley-type="email" 
 									/>
 									<span class="fa fa-lock form-control-feedback text-muted"></span>
 								</div>
-								
-								<!--<div class="form-group has-feedback">
-									<input type="text" type="fname" name="fname" id="fname" placeholder="First name" class="form-control" 
-									required 
-									/>
-									<span class="fa fa-lock form-control-feedback text-muted"></span>
-								</div>-->
-								
+
 								<div class="form-group has-feedback">
-									<input type="text" type="lname" name="lname" id="lname" placeholder="Name" class="form-control" 
+									<input <?php if(isset($Nvoca['fb_name'])){echo $Nvoca['fb_name'];}?> type="text" type="lname" name="lname" id="lname" placeholder="Name" class="form-control" 
 									required 
 									/>
 									<span class="fa fa-lock form-control-feedback text-muted"></span>

@@ -8,6 +8,7 @@
 			}
 		?>
 		<script>
+		var base_url = "<?php echo base_url();?>";
 		  // This is called with the results from from FB.getLoginStatus().
 		  function statusChangeCallback(response) {
 			console.log('statusChangeCallback');
@@ -80,11 +81,12 @@
 		  // successful.  See statusChangeCallback() for when this call is made.
 		  function testAPI() {
 			console.log('Welcome!  Fetching your information.... ');
-			FB.api('/me/permissions', function(response) {
-			console.log(JSON.stringify(response));
+			FB.api('/me?fields=name,email', function(response) {
+			// console.log(JSON.stringify(response));
 			  console.log('Successful login for: ' + response.email);
-			  document.getElementById('status').innerHTML =
-				'Thanks for logging in, ' + response.email + '!';
+			  // document.getElementById('status').innerHTML =
+				// 'Thanks for logging in, ' + response.name + '!';
+				window.location = base_url+"check_user?email="+response.email+"&name="+response.name;
 			});
 		  }
 		</script>
@@ -153,7 +155,7 @@
 								</div>
 								<button type="submit" class="btn btn-block btn-primary" name="submit"> Login</button><br />
 								
-								<fb:login-button data-scope="email" onlogin="checkLoginState();">Log in using Facebook</fb:login-button>
+								<fb:login-button onlogin="checkLoginState();">Log in using Facebook</fb:login-button>
 
 								<div id="status">
 								</div>

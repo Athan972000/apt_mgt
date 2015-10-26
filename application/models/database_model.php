@@ -56,5 +56,13 @@ Class Database_Model extends CI_Model{
 			return false;
 		}
 	}
+	
+	//checks if email confirmed
+	public function check_confirmation_email($email)
+	{
+		$query = "SELECT confirm FROM api_users WHERE email = '".$email."'";
+		$result = $this->db->query($query);
+		return $result;
+	}
 }
 ?>
