@@ -91,7 +91,12 @@ class Vocadbmain extends MY_Controller {
 		);
 		$result = $this->database_model->registration_insert($data);
 		if($result){
-			$this->_render('login_form');
+			// $this->_render('login_form');
+			echo TRUE;
+		}
+		else
+		{
+			echo FALSE;
 		}
 	}
 	

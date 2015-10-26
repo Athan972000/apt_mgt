@@ -69,12 +69,18 @@
 		</div>
 		<script type="text/javascript" src="<?php echo base_url()."resources/vendor/jquery.min.js"; ?>"></script>
 		<script type="text/javascript">
+		function openUrl()
+		{
+			window.location = base_url;
+		}
+		var base_url = "<?php echo base_url();?>";	
 		$('#vocadb_regform').submit(function (e) {
 			var name = $('#name').val();
+			var ctr = 0;
 			var emailregex = /.+@.+/;
 			if( !name || !name.match(emailregex) )
 			{
-				e.preventDefault();
+				ctr++;
 				$('#name').parent('div').addClass("has-error");
 				$('#name').popover('show');
 			}
@@ -87,7 +93,7 @@
 			var cpword = $('#repassword').val();
 			if( !pword || !cpword || pword.length < 6 )
 			{
-				e.preventDefault();
+				ctr++;
 				$('#password').parent('div').addClass("has-error");
 				$('#repassword').parent('div').addClass("has-error");
 				$('#password').popover('show');
@@ -100,7 +106,7 @@
 			
 			if( pword != cpword || !cpword )
 			{
-				e.preventDefault();
+				ctr++;
 				$('#repassword').parent('div').addClass("has-error");
 				$('#repassword').popover('show');
 			}
@@ -110,13 +116,60 @@
 			}
 			if( !$('#terms').is(':checked') )
 			{
-				e.preventDefault();
+				ctr++;
 				$('.clearfix ').addClass("has-error");
 			}
 			else
 			{
 				$('.clearfix ').removeClass("has-error");
 			}
+			if( ctr > 0 )
+			{
+				e.preventDefault();
+			}
+			else
+			{
+				e.preventDefault();
+				$.ajax({
+					url: base_url+"new_user_registration",
+					type:'POST',
+					data:
+					{
+						email: $("input[name=email]").val(),
+						password: $("input[name=password]").val()
+					},
+					success: function(check)
+					{
+						if( !check )
+						{					
+							$('#vocamodalmsg').html("Email already registered");
+						}
+						else
+						{
+							$('#vocamodalmsg').html("Registration Successful, you may now login.");
+							setTimeout(openUrl, 3000);
+						}
+						$('#vocadbmodal').modal('show');
+					}               
+				});
+			}
 		});
 		</script>
+<!-- Modal for footer -->
+<div class="modal fade" id="vocadbmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Your VocaDB Registration</h4>
+      </div>
+      <div class="modal-body">
+        <p id="vocamodalmsg" ></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 	</body>
