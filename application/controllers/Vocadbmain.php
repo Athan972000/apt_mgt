@@ -48,10 +48,10 @@ class Vocadbmain extends MY_Controller {
 		{
 			redirect(base_url().'/welcome', 'refresh');
 		}
-		else if ( $confirm )
+		else if ( !$confirm )
 		{
 			//land on email confirmation
-			redirect(base_url().'/conrfirm', 'refresh');
+			redirect(base_url().'confirm', 'refresh');
 		}
 		else
 		{
@@ -174,6 +174,7 @@ class Vocadbmain extends MY_Controller {
 	}
 	public function confirm()
 	{
+		echo "confirm page";
 		//resend confirm
 	}
 }
