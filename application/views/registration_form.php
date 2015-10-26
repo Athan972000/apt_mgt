@@ -2,8 +2,8 @@
 	defined('BASEPATH') OR exit('No direct script access allowed');?>
 	<body>
 		<div style="height: 100%; padding: 50px 0; background-color: #2c3037" class="row row-table">
-			<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12 align-middle">
-			<div  class="panel panel-default panel-flat">
+			<div style="padding:0px;" class="col-lg-3 col-md-6 col-sm-8 col-xs-12 align-middle">
+			<div class="panel panel-default panel-flat">
 					<div id="main">
 						<div id="login">
 						<p class="text-center mb-lg">
@@ -28,23 +28,67 @@
 							</div>
 							
 							
-							<form id="vocadb_regform" action="" method="post" data-toggle="validator">
+							<form id="vocadb_regform" action="" method="post" data-toggle="validator" data-parsley-validate novalidate>
 							<div class="panel-body">
+								
 								<div class="form-group has-feedback">
-									<input type="text" type="email" name="email" id="name" placeholder="email address" class="form-control" 
-									data-toggle="popover" data-placement="top" data-content="Please enter a valid email address."
+									<input type="text" type="company" name="company" id="company" placeholder="Company" class="form-control" 
+									required 
 									/>
 									<span class="fa fa-lock form-control-feedback text-muted"></span>
 								</div>
+							
+								<div class="form-group has-feedback">
+									<input type="text" type="email" name="email" id="name" placeholder="Email address" class="form-control" 
+									required data-parsley-type="email" 
+									/>
+									<span class="fa fa-lock form-control-feedback text-muted"></span>
+								</div>
+								
+								<!--<div class="form-group has-feedback">
+									<input type="text" type="fname" name="fname" id="fname" placeholder="First name" class="form-control" 
+									required 
+									/>
+									<span class="fa fa-lock form-control-feedback text-muted"></span>
+								</div>-->
+								
+								<div class="form-group has-feedback">
+									<input type="text" type="lname" name="lname" id="lname" placeholder="Name" class="form-control" 
+									required 
+									/>
+									<span class="fa fa-lock form-control-feedback text-muted"></span>
+								</div>
+								
+								
+								
+								<div class="form-group has-feedback">
+									<input type="text" type="platform" name="platform" id="platform" placeholder="Platform? e.g. iOS,Android" class="form-control" 
+									required 
+									/>
+									<span class="fa fa-lock form-control-feedback text-muted"></span>
+								</div>
+								
+								<div class="form-group has-feedback">
+									<textarea style="resize: none;" class="form-control" required type="search" name="how" placeholder="How to use? e.g. App and/or Web"></textarea>
+									<span class="fa fa-lock form-control-feedback text-muted"></span>
+								</div>
+								
+								<div class="form-group has-feedback">
+									<input type="text" type="nationality" name="nationality" id="nationality" placeholder="Nationality? Chinese, Japanese, Korean." class="form-control" 
+									required 
+									/>
+									<span class="fa fa-lock form-control-feedback text-muted"></span>
+								</div>
+
 								<div class="form-group has-feedback">
 									<input type="password" name="password" id="password" placeholder="Password" class="form-control"
-									data-toggle="popover" data-placement="right" data-content="Password atleast 6 Alpha-Numeric characters"
+									required data-parsley-type="alphanum"
 									/>
 									<span class="fa fa-lock form-control-feedback text-muted"></span>
 								</div>
 								<div class="form-group has-feedback">
 									<input type="password" name="repassword" id="repassword" placeholder="Confirm Password" class="form-control"
-									data-toggle="popover" data-placement="bottom" data-content="Password do not match"
+									required data-parsley-equalto='#password'
 									/>
 									<span class="fa fa-lock form-control-feedback text-muted"></span>
 								</div>
@@ -52,7 +96,7 @@
 								<div class="clearfix">
 									<div class="checkbox c-checkbox pull-left mt0">
 										<label>
-										   <input id="terms" type="checkbox" value="">
+										   <input required id="terms" type="checkbox" value="">
 										   <span class="fa fa-check"></span>I agree with the <a href="#">terms</label>							
 									</div>
 								</div>
@@ -73,61 +117,13 @@
 		{
 			window.location = base_url;
 		}
+		
 		var base_url = "<?php echo base_url();?>";	
-		$('#vocadb_regform').submit(function (e) {
-			var name = $('#name').val();
-			var ctr = 0;
-			var emailregex = /.+@.+/;
-			if( !name || !name.match(emailregex) )
-			{
-				ctr++;
-				$('#name').parent('div').addClass("has-error");
-				$('#name').popover('show');
-			}
-			else
-			{
-				$('#name').parent('div').removeClass("has-error");
-			}
-			
-			var pword = $('#password').val();
-			var cpword = $('#repassword').val();
-			if( !pword || !cpword || pword.length < 6 )
-			{
-				ctr++;
-				$('#password').parent('div').addClass("has-error");
-				$('#repassword').parent('div').addClass("has-error");
-				$('#password').popover('show');
-			}
-			else
-			{
-				$('#password').parent('div').removeClass("has-error");
-				$('#repassword').parent('div').removeClass("has-error");
-			}
-			
-			if( pword != cpword || !cpword )
-			{
-				ctr++;
-				$('#repassword').parent('div').addClass("has-error");
-				$('#repassword').popover('show');
-			}
-			else
-			{
-				$('#repassword').parent('div').removeClass("has-error");
-			}
-			if( !$('#terms').is(':checked') )
-			{
-				ctr++;
-				$('.clearfix ').addClass("has-error");
-			}
-			else
-			{
-				$('.clearfix ').removeClass("has-error");
-			}
-			if( ctr > 0 )
-			{
-				e.preventDefault();
-			}
-			else
+		$('#vocadb_regform').on("submit",function (e) {
+			var f = $(this);
+			f.parsley().validate();
+
+			if (f.parsley().isValid()) 
 			{
 				e.preventDefault();
 				$.ajax({
@@ -135,8 +131,17 @@
 					type:'POST',
 					data:
 					{
+						company: $("input[name=company]").val(),
 						email: $("input[name=email]").val(),
-						password: $("input[name=password]").val()
+						password: $("input[name=password]").val(),
+						name: $("input[name=lname]").val(),
+						platform: $("input[name=platform]").val(),
+						how: $("textarea[name=how]").val(),
+						nationality: $("input[name=nationality]").val(),
+						//temp
+						confirm: 0,
+						link: "vocabdb"
+						//end temp
 					},
 					success: function(check)
 					{
@@ -146,15 +151,18 @@
 						}
 						else
 						{
-							$('#vocamodalmsg').html("Registration Successful, you may now login.");
+							$('#vocamodalmsg').html("Confirmation email sent!");
 							setTimeout(openUrl, 3000);
 						}
 						$('#vocadbmodal').modal('show');
 					}               
 				});
 			}
+				
 		});
+		
 		</script>
+		<script src="<?php echo base_url().'resources/'; ?>vendor/parsley/parsley.min.js"></script>
 <!-- Modal for footer -->
 <div class="modal fade" id="vocadbmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
