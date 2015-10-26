@@ -18,6 +18,9 @@ Class Database_Model extends CI_Model{
 			}
 			else{return false;}
 		}
+		else{
+			return "Email address already in use.";
+		}
 	}
 	
 	//Read data to verify login credentials

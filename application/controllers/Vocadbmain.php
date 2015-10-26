@@ -85,19 +85,30 @@ class Vocadbmain extends MY_Controller {
 	
 	public function new_user_registration(){
 		$data = array(
+			'apikey' => "",
 			'email' => $this->input->post('email'),
 			'password' => $this->input->post('password'),
-			'start_date' => date("Y-m-d H:i:s")
+			'last_name' => $this->input->post('name'),
+			'start_date' => date("Y-m-d H:i:s"),
+			'company' => $this->input->post('company'),
+			'platform' =>  $this->input->post('platform'),
+			'how' => $this->input->post('how'),
+			'nationality' => $this->input->post('nationality'),
+			'confirm' => $this->input->post('confirm'),
+			'link' => $this->input->post('link')
+			
 		);
 		$result = $this->database_model->registration_insert($data);
-		if($result){
+		if($result===true){
 			// $this->_render('login_form');
 			$this->send_confirm_email($data['email'],$data['password']);
-			echo TRUE;
+			echo $result;
 		}
 		else
 		{
-			echo FALSE;
+			echo $result;
+			$data['dbError'] = $result;
+			$this->_render('register',$data);
 		}
 	}
 	

@@ -131,12 +131,17 @@
 					type:'POST',
 					data:
 					{
+						company: $("input[name=company]").val(),
 						email: $("input[name=email]").val(),
 						password: $("input[name=password]").val(),
 						name: $("input[name=lname]").val(),
 						platform: $("input[name=platform]").val(),
-						how: $("input[name=how]").val(),
-						nationality: $("input[name=nationality]").val()
+						how: $("textarea[name=how]").val(),
+						nationality: $("input[name=nationality]").val(),
+						//temp
+						confirm: 0,
+						link: "vocabdb"
+						//end temp
 					},
 					success: function(check)
 					{
