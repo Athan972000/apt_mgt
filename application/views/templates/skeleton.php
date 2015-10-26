@@ -1,4 +1,4 @@
-<html>
+<html style="padding:0 ;" >
 	<head>
     <?php echo $head; ?>
 	<style type="text/css">
@@ -10,7 +10,7 @@
 	</style>
 	<?php echo $scripts; ?>
 	</head>
-    <body class="two-column docs normal-width">
+    <body class="two-column docs normal-width" style="background-color:white;">
 		<?php echo $header ?>
 		<div class="row no-gutter">
 			<?php if($mynav): ?>

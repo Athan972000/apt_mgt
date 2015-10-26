@@ -50,24 +50,7 @@
   </div>
   
   <div id="maia-main">
-  <div id="purchase" class="generic-section scroll-section" data-section-label="purchase">
-	<div class="maia-cols">
-        <div class="header">
-          <h2 class="headline maia-col-8"></h2>
-          <p class="subheadline maia-col-8">
-		  <div class="maia-col-6 inner-block">
-		  <p>Visit our developer site to learn more on how VocaDB API works!</p>
-			<a href="" class="btn  btn-default " id="try-body" track-type="freeTrial" track-name="try" track-metadata-position="body">Learn</a>
-		  </div>
-		  <div class="maia-col-6 inner-block">
-			<a href="" class="btn  btn-success " id="try-body" track-type="freeTrial" track-name="try" track-metadata-position="body">Buy</a>
-		  </div>
-			
-			
-          </p>
-        </div>
-      </div>
-  </div>
+  
   <div id="diagram" class="generic-section scroll-section" data-section-label="diagram">
 		<div class="maia-cols">
         <div class="header">
@@ -110,7 +93,7 @@
 
         <div class="maia-col-6 inner-block">
           <h3 class="headline"><img class="inline-icon" src="/images/products/icons/translate-1.png" alt="Dynamic">Dynamically access languages</h3>
-          <p>Google Translate API supports dozens of <a href="/translate/v2/using_rest#language-params" target="_blank" event="autotrack-data-g" data-g-event="Products: Translate API" data-g-action="Features" data-g-label="Languages">languages</a>. Detect a document’s language and translate it using a <a href="/translate/v2/getting_started#REST" target="_blank" track-type="features" track-name="translateRest">RESTful API</a>.</p>
+          <p>VocaDB Translate API supports dozens of <a href="/translate/v2/using_rest#language-params" target="_blank" event="autotrack-data-g" data-g-event="Products: Translate API" data-g-action="Features" data-g-label="Languages">languages</a>. Detect a document's language and translate it using a <a href="/translate/v2/getting_started#REST" target="_blank" track-type="features" track-name="translateRest">RESTful API</a>.</p>
         </div>
 
         <div class="maia-col-6 inner-block">
@@ -119,5 +102,25 @@
         </div>
       </div>
     </div>
+	
+	<div id="purchase" class="generic-section scroll-section" data-section-label="purchase">
+	<div class="maia-cols">
+        <div class="header">
+          <h2 class="headline maia-col-8"></h2>
+          <p class="subheadline maia-col-8">
+		  <div class="maia-col-6 inner-block">
+		  <p>For more in-depth information and documentation on how VocaDB API works, Visit our developer site to learn more!</p>
+			<a href="" class="btn  btn-default " id="learn-body" track-type="learn" track-name="learn" >Learn More</a>
+		  </div>
+		  <div class="maia-col-6 inner-block">
+		  <p>If your trial period is over and you want to continue using VocaDB API, pay a small fee and upgrade now!</p>
+			<a href="" class="btn  btn-success " id="buy-body" track-type="buy" track-name="buy" >Buy API Key</a>
+		  </div>
+			
+			
+          </p>
+        </div>
+      </div>
+  </div>
 	
   </div>
