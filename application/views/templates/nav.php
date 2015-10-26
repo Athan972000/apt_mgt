@@ -10,12 +10,12 @@
 					</a>
 				</li>
                <!-- START Menu-->
-               <li class="active">
-                  <a href=<?php echo base_url().'register'?> title="Trial" data-toggle="" class="no-submenu">
-                     <em class="fa fa-key"></em>
-                     <span class="item-text">Free Trial</span>
+               
+			   <li>
+                  <a href="#" title="Usage" data-toggle="" class="no-submenu">
+                     <em class="fa fa-bar-chart-o"></em>
+                     <span class="item-text">Usage Statistics</span>
                   </a>
-                  
                </li>
                <li>
                   <a href="#" title="Features" data-toggle="" class="no-submenu">
@@ -24,12 +24,7 @@
                   </a>
                   
                </li>
-               <li>
-                  <a href="#" title="Usage" data-toggle="" class="no-submenu">
-                     <em class="fa fa-bar-chart-o"></em>
-                     <span class="item-text">Usage Statistics</span>
-                  </a>
-               </li>
+               
                <li>
                   <a href="#" title="Pricing" data-toggle="collapse-next" class="has-submenu">
                      <em class="fa fa-money"></em>
