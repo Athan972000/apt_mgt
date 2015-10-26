@@ -33,6 +33,10 @@ class Vocadbmain extends MY_Controller {
 		$this->_render('welcome_message');
 	}
 	
+	public function home(){
+		$this->_render('home');
+	}
+	
 	
 	public function login_process(){
 		
