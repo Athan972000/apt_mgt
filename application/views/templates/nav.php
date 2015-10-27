@@ -12,24 +12,24 @@
                <!-- START Menu-->
               
                <li>
-                  <a href="#" title="Features" data-toggle="" class="no-submenu">
+                  <a href="<?php echo base_url()."feat"; ?>" title="Features" data-toggle="" class="no-submenu">
                      <em class="fa fa-check-square"></em>
                      <span class="item-text">Features</span>
                   </a>
                   
                </li>
                <li>
-                  <a href="#" title="Usage" data-toggle="" class="no-submenu">
+                  <a href="<?php echo base_url()."stats"; ?>" title="Usage" data-toggle="" class="no-submenu">
                      <em class="fa fa-bar-chart-o"></em>
                      <span class="item-text">Usage Statistics</span>
                   </a>
                </li>
                <li>
-                  <a href="#" title="Pricing" data-toggle="collapse-next" class="has-submenu">
+                  <a href="<?php echo base_url()."pricing"; ?>" title="Pricing" data-toggle="collapse-next" class="has-submenu">
                      <em class="fa fa-money"></em>
-                     <span class="item-text">Pricing</span>
+                     <span class="item-text">Billing</span>
                   </a>
-                  <!-- START SubMenu item-->
+                  <!-- START SubMenu item
                   <ul class="nav collapse ">
                      <li>
                         <a href="#" title="Pricing" data-toggle="" class="no-submenu">
@@ -42,10 +42,10 @@
                         </a>
                      </li>                     
                   </ul>
-                  <!-- END SubMenu item-->
+                  END SubMenu item-->
                </li>
                <li>
-                  <a href="#" title="Documentation" data-toggle="" class="no-submenu">
+                  <a href="<?php echo base_url()."documentation"; ?>" title="Documentation" data-toggle="" class="no-submenu">
                     <em class="fa fa-book"></em>
                     <span class="item-text">Documentation</span>
                   </a>               

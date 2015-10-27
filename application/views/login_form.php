@@ -197,7 +197,7 @@
 					{
 						if(msg)
 						{
-							// console.log("login success");
+							console.log("login success");
 							$('#name').parent('div').removeClass("has-error");
 							$('#password').parent('div').removeClass("has-error");
 							console.log(msg);
@@ -213,7 +213,7 @@
 						}
 						else
 						{
-							// console.log("login fail");
+							console.log("login fail");
 							$('#name').parent('div').addClass("has-error");
 							$('#password').parent('div').addClass("has-error");
 							$("#loginchecker").html("Email and/or Password does not match").addClass("has-error");

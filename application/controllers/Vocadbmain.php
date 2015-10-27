@@ -82,22 +82,9 @@ class Vocadbmain extends MY_Controller {
 	public function home(){
 		$this->_render('home');
 	}
-	
-	public function stats(){
-		$this->mynav = TRUE;
-		$query = $this->database_model->read_user_information($this->session->userdata('email'));
-		// $data['apikey'] = $query[0]->apikey;
-		$data['text_result'] = $this->database_model->get_usage_text($query[0]->apikey);
-		$this->_render('stats',$data);
-	}
-	
-	public function get_usage_text_chart_data(){
-		$apikey = $this->input->post('apikey');
-		echo json_encode($this->database_model->get_usage_text($apikey));
-	}
-	
+
 	public function login_process(){
-		
+		// $this->is_logged_in();
 		// if(isset($this->session->userdata['logged_in'])){
 			// $this->load->view('welcome');
 		// }else{
@@ -248,8 +235,47 @@ class Vocadbmain extends MY_Controller {
 	{
 		$data['email'] = $this->session->userdata('email');
 		$this->load->view("confirm_require",$data);
-		// echo "confirm page";
-		//resend confirm
+		$this->is_logged_in();
+	}
+	
+	//check if logged in
+	public function is_logged_in()
+	{
+		$email = $this->session->userdata('email');
+		if( $this->database_model->check_confirmation_email($email) )
+		{
+			redirect(base_url().'welcome', 'refresh');
+		}
+	}
+	
+	/*
+		User management After Log IN
+	*/
+	public function feat()
+	{
+		$this->mynav = TRUE;
+		$this->_render('stats');
+	}
+	
+	public function stats()
+	{
+		$this->mynav = TRUE;
+		$query = $this->database_model->read_user_information($this->session->userdata('email'));
+		// $data['apikey'] = $query[0]->apikey;
+		$data['text_result'] = $this->database_model->get_usage_text($query[0]->apikey);
+		$this->_render('stats',$data);
+	}
+	
+	public function pricing()
+	{
+		$this->mynav = TRUE;
+		$this->_render('stats');
+	}
+	
+	public function documentation()
+	{
+		$this->mynav = TRUE;
+		$this->_render('stats');
 	}
 }
 ?>
