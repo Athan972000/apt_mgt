@@ -45,8 +45,8 @@
 		  window.fbAsyncInit = function() {
 		  FB.init({
 			appId      : '421187494738493',
-			//local server app id :421187494738493
-			//actual server app id: 1238357556189718 
+			//local server app id :421425981381311			
+			//actual server app id: 421187494738493 
 			cookie     : true,  // enable cookies to allow the server to access 
 								// the session
 			xfbml      : true,  // parse social plugins on this page
