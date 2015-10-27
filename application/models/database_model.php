@@ -72,5 +72,34 @@ Class Database_Model extends CI_Model{
 			return $row['confirm'];
 		}
 	}
+	
+	public function verifier ($email,$key)
+	{
+		$sql = "SELECT email, password FROM api_users WHERE email ='".$email."'";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 1)
+		{
+			return FALSE;
+		}
+		else
+		{
+			$row = $query->row();
+			if( $key == md5($row['email'].$row['password']) )
+			{
+				return TRUE;
+			}
+			else
+			{
+				return FALSE;
+			}
+		}
+	}
+	
+	public function confirmed($email)
+	{
+		$data = array('confirm' => '1');
+		$this->db->where('email', $email);
+		$this->db->update('api_users', $data); 
+	}
 }
 ?>

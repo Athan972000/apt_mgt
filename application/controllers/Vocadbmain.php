@@ -36,6 +36,7 @@ class Vocadbmain extends MY_Controller {
 			$fb['fb_name'] = "readonly='readonly' value='".$this->session->userdata('name')."'";
 			$fb['fb_link'] = "facebook";
 		}
+		$this->session->sess_destroy();
 		$this->_render("registration_form", $fb);
 	}
 	
@@ -98,12 +99,12 @@ class Vocadbmain extends MY_Controller {
 			if($result){
 				$session_data = array(
 				'email' => $result[0]->email,
-				'first_name' => $result[0]->first_name
+				'name' => $result[0]->name
 				);
 			}
 			
 			//Add user data in session
-			$this->session->set_userdata('logged_in',$session_data);
+			$this->session->set_userdata($session_data);
 
 			// $this->load->view('welcome_message');
 			echo TRUE;
@@ -159,7 +160,7 @@ class Vocadbmain extends MY_Controller {
 	
 	public function send_confirm_email($email,$password)
 	{
-		$data['link'] = base_url()."verify?verify_key=".md5($email.$password);
+		$data['link'] = base_url()."verify?email=".$email."&verify_key=".md5($email.$password);
 		
 		$config['mailtype'] = 'html';
 		$config['charset']  = 'UTF-8';
@@ -182,12 +183,26 @@ class Vocadbmain extends MY_Controller {
 	
 	public function verify()
 	{
+		$email = $this->input->get("email");
 		$verify_key = $this->input->get("verify_key");
-		echo $verify_key;
+		// echo $verify_key;
+		$verify = $this->database_model->verifier($email,$verify_key);
+		if($verify)
+		{
+			$this->database_model->confirmed($email);
+			echo "Thank you for your confirmation.";
+		}
+		else
+		{
+			echo "Error with confirmation. Please try again.";
+		}
 	}
+	
 	public function confirm()
 	{
-		echo "confirm page";
+		$data['email'] = $this->session->userdata('email');
+		$this->load->view("confirm_require",$data);
+		// echo "confirm page";
 		//resend confirm
 	}
 }

@@ -56,21 +56,21 @@
                      <span class="item-text">Contact Us</span>
                   </a>
                </li>
+			   <li>
+                  <a href="#" title="Contact" data-toggle="" class="no-submenu">
+                     <em class="fa fa-cog"></em>
+                     <span class="item-text">Account Settings</span>
+                  </a>
+               </li>
+			   <li>
+                  <a href="#" title="Contact" data-toggle="" class="no-submenu">
+                     <em class="fa fa-sign-out"></em>
+                     <span class="item-text">Logout</span>
+                  </a>
+               </li>
                <!-- END Menu-->
                <!-- Sidebar footer    -->
-               <li class="nav-footer">
-                  <div class="nav-footer-divider"></div>
-                  <!-- START button group-->
-                  <div class="btn-group text-center">                     
-                     <button type="button" data-toggle="tooltip" data-title="Settings" class="btn btn-link">
-                        <em class="fa fa-cog text-muted"></em>
-                     </button>
-                     <button type="button" data-toggle="tooltip" data-title="Logout" class="btn btn-link">
-                        <em class="fa fa-sign-out text-muted"></em>
-                     </button>
-                  </div>
-                  <!-- END button group-->
-               </li>
+               
             </ul>
          </nav>
          <!-- END Sidebar (left)-->
