@@ -79,6 +79,14 @@ class Vocadbmain extends MY_Controller {
 		$this->_render('home');
 	}
 	
+	public function stats(){
+		$this->_render('stats');
+	}
+	
+	public function get_chart_data(){
+		echo json_encode($this->database_model->get_usage_text('3065'));
+	}
+	
 	
 	public function login_process(){
 		
