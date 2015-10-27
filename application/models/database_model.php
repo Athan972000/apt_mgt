@@ -108,7 +108,7 @@ Class Database_Model extends CI_Model{
 		$query = $this->db->query($sql);
 		$row = $query->row();
 		return $row['password'];
-
+	}
 	//get data from api_usage_text table
 	public function get_usage_text($apikey){
 		
@@ -120,8 +120,8 @@ Class Database_Model extends CI_Model{
 		if($query->num_rows() > 0){
 			$data = array();
 			foreach($query->result_array() as $key => $value){
-			$data[$key]['label'] = $value['datetime'];
-			$data[$key]['value'] = $value['length'];
+			$data[$key]['date'] = $value['datetime'];
+			$data[$key]['length'] = $value['length'];
 			}
 			return $data;
 		}
