@@ -96,6 +96,16 @@ class Vocadbmain extends MY_Controller {
 		echo json_encode($this->database_model->get_usage_text($apikey));
 	}
 	
+	public function get_usage_word_chart_data(){
+		$apikey = $this->input->post('apikey');
+		echo json_encode($this->database_model->get_usage_word($apikey));
+	}
+	
+	public function get_usage_definition_chart_data(){
+		$apikey = $this->input->post('apikey');
+		echo json_encode($this->database_model->get_usage_definition($apikey));
+	}
+	
 	public function login_process(){
 		
 		// if(isset($this->session->userdata['logged_in'])){
