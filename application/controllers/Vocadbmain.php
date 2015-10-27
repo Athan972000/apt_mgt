@@ -80,11 +80,14 @@ class Vocadbmain extends MY_Controller {
 	}
 	
 	public function stats(){
-		$this->_render('stats');
+		$query = $this->database_model->read_user_information($this->session->userdata('email'));
+		$data['apikey'] = $query[0]->apikey;
+		$this->_render('stats',$data);
 	}
 	
 	public function get_chart_data(){
-		echo json_encode($this->database_model->get_usage_text('3065'));
+		$apikey = $this->input->post('apikey');;
+		echo json_encode($this->database_model->get_usage_text($apikey));
 	}
 	
 	
