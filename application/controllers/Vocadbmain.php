@@ -79,7 +79,6 @@ class Vocadbmain extends MY_Controller {
 		$this->_render('home');
 	}
 	
-	
 	public function login_process(){
 		
 		// if(isset($this->session->userdata['logged_in'])){
@@ -131,7 +130,7 @@ class Vocadbmain extends MY_Controller {
 	
 	public function new_user_registration(){
 		$data = array(
-			'apikey' => "",
+			'apikey' => rand(10000000000000000000000000000000, 99999999999999999999999999999999),
 			'email' => $this->input->post('email'),
 			'password' => $this->input->post('password'),
 			'last_name' => $this->input->post('name'),
@@ -160,6 +159,10 @@ class Vocadbmain extends MY_Controller {
 	
 	public function send_confirm_email($email,$password)
 	{
+		if( !isset($password) )
+		{
+			$password = $this->database_model->get_password($email);
+		}
 		$data['link'] = base_url()."verify?email=".$email."&verify_key=".md5($email.$password);
 		
 		$config['mailtype'] = 'html';

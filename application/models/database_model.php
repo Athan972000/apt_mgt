@@ -73,7 +73,7 @@ Class Database_Model extends CI_Model{
 		}
 	}
 	
-	public function verifier ($email,$key)
+	public function verifier($email,$key)
 	{
 		$sql = "SELECT email, password FROM api_users WHERE email ='".$email."'";
 		$query = $this->db->query($sql);
@@ -100,6 +100,15 @@ Class Database_Model extends CI_Model{
 		$data = array('confirm' => '1');
 		$this->db->where('email', $email);
 		$this->db->update('api_users', $data); 
+	}
+	
+	public function get_password($email)
+	{
+		$sql = "SELECT password FROM api_users WHERE email = '".$email."'";
+		$query = $this->db->query($sql);
+		$row = $query->row();
+		return $row['password'];
+
 	}
 }
 ?>
