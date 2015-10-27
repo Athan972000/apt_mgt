@@ -16,9 +16,12 @@ $(function () {
 	var dateArray = new Array();
 	var lengthArray= new Array();
 	var dataArrayFinal = new Array();
+	var testArray = new Array;
+	testArray = [480, 480, 480, 11, 480, 480];
+	var jsonObj;
 	//get usage data
 	$.ajax({
-			url: base_url+"get_chart_data",
+			url: base_url+"get_usage_text_chart_data",
 			type:'POST',
 			dataType:'json',
 			data:
@@ -31,16 +34,30 @@ $(function () {
 				alert(msg[0].date);
 				for(i =0;i<msg.length;i++){
 					dateArray[i] = msg[i].date;
-					lengthArray[i] = msg[i].length;
+					lengthArray.push(parseInt(msg[i].length,10));
 				}
 				
-				for(j=0;j<dateArray.length;j++){
-					var temp = new Array(dateArray[j],lengthArray[j]);
-					dataArrayFinal[j] = temp;
+				// for(j=0;j<dateArray.length;j++){
+					// var temp = new Array(dateArray[j],lengthArray[j]);
+					// dataArrayFinal[j] = temp;
+				// }
+				console.log(JSON.stringify(msg));
+				jsonObj = msg;
+				for(i=0;i<msg.length;i++){
+					dataArrayFinal.push([msg[i].date,parseInt(msg[i].length)]);
 				}
+				console.log(jsonObj);
+				console.log(dateArray);
+				console.log(lengthArray);
+				console.log(testArray);
+				
 			}
-		});
+			
+	});
 	
+	$.each(length, function (i,jsonObj){
+		jsonObj.y = jsonObj.length ;
+	})
 	
     $('#container').highcharts({
         title: {
@@ -52,12 +69,11 @@ $(function () {
             x: -20
         },
         xAxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            categories: dateArray
         },
         yAxis: {
             title: {
-                text: 'Temperature (°C)'
+                text: 'length'
             },
             plotLines: [{
                 value: 0,
@@ -65,9 +81,7 @@ $(function () {
                 color: '#808080'
             }]
         },
-        tooltip: {
-            valueSuffix: '°C'
-        },
+       
         legend: {
             layout: 'vertical',
             align: 'right',
@@ -76,8 +90,8 @@ $(function () {
         },
         series: [{
             name: 'Tokyo',
-            data: dataArrayFinal
-        }, ]
+            data: lengthArray
+        } ]
     });
 });
 		</script>

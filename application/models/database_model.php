@@ -121,8 +121,11 @@ Class Database_Model extends CI_Model {
 		if($query->num_rows() > 0){
 			$data = array();
 			foreach($query->result_array() as $key => $value){
-			$data[$key]['date'] = $value['datetime'];
-			$data[$key]['length'] = $value['length'];
+				$old =  $value['datetime'];
+				$temp = strtotime($old);
+				$newDate = date('m-d-Y',$temp);
+				$data[$key]['date'] = $newDate;
+				$data[$key]['length'] =(int)$value['length'];
 			}
 			return $data;
 		}
