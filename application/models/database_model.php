@@ -109,6 +109,24 @@ Class Database_Model extends CI_Model{
 		$row = $query->row();
 		return $row['password'];
 
+	//get data from api_usage_text table
+	public function get_usage_text($apikey){
+		
+		$this->db->select('datetime');
+		$this->db->select('length');
+		$this->db->from('api_usage_text');
+		$this->db->where('apikey',$apikey);
+		$query = $this->db->get();
+		if($query->num_rows() > 0){
+			$data = array();
+			foreach($query->result_array() as $key => $value){
+			$data[$key]['label'] = $value['datetime'];
+			$data[$key]['value'] = $value['length'];
+			}
+			return $data;
+		}
+		
+		return NULL;
 	}
 }
 ?>

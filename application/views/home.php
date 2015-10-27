@@ -32,18 +32,11 @@
           <span>Translate API</span>
         </h1>
         <p class="subheadline">
-        Quickly and dynamically translate between thousands of available language pairs within your app, integrating with VocaDB API.
+			Quickly and dynamically translate between thousands of available language pairs within your app, integrating with VocaDB API.
         </p>
 
-        <p class="cta">
-          
-  
-    
         <a href="" class="maia-button try-it track-cloud-event" id="try-body" track-type="freeTrial" track-name="try" track-metadata-position="body">Start your free trial</a>
 		
-  
-
-        </p>
 
       </div>
     </div>
@@ -92,7 +85,7 @@
       <div class="maia-cols">
 
         <div class="maia-col-6 inner-block">
-          <h3 class="headline"><img class="inline-icon" src="/images/products/icons/translate-1.png" alt="Dynamic">Dynamically access languages</h3>
+          <h3 class="headline"><img class="inline-icon" src="" alt="Dynamic">Dynamically access languages</h3>
           <p>VocaDB Translate API supports dozens of <a href="/translate/v2/using_rest#language-params" target="_blank" event="autotrack-data-g" data-g-event="Products: Translate API" data-g-action="Features" data-g-label="Languages">languages</a>. Detect a document's language and translate it using a <a href="/translate/v2/getting_started#REST" target="_blank" track-type="features" track-name="translateRest">RESTful API</a>.</p>
         </div>
 
