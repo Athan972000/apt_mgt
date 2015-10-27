@@ -31,6 +31,11 @@ class Vocadbmain extends MY_Controller {
 			$fb['fb_email'] = "readonly='readonly' value='".$this->session->userdata('email')."'";
 			$fb['fb_confirm'] = 1;
 		}
+		else
+		{
+			$fb['fb_email'] = "";
+			$fb['fb_confirm'] = 0;
+		}
 		if( $this->session->has_userdata('name') )
 		{
 			$fb['fb_name'] = "readonly='readonly' value='".$this->session->userdata('name')."'";
@@ -67,7 +72,6 @@ class Vocadbmain extends MY_Controller {
 			redirect(base_url().'register', 'refresh');
 			// $this->register($email,$name);
 		}
-		
 	}
 	
 	public function welcome(){
@@ -106,18 +110,24 @@ class Vocadbmain extends MY_Controller {
 		if($result){
 			$email = $this->input->post('email');
 			$result = $this->database_model->read_user_information($email);
+			$confirm = $this->database_model->check_confirmation_email($email);
 			if($result){
 				$session_data = array(
 				'email' => $result[0]->email,
-				'name' => $result[0]->name
+				'name' => $result[0]->last_name
 				);
 			}
-			
-			//Add user data in session
 			$this->session->set_userdata($session_data);
-
-			// $this->load->view('welcome_message');
-			echo TRUE;
+			
+			if($confirm)
+			{
+				$return = "confirmed";
+			}
+			else
+			{
+				$return = "notconfirmed";
+			}
+			echo $return;
 		}
 		else{
 			// $data = array('error_message'=>'Invalid Username or Password');
@@ -170,11 +180,7 @@ class Vocadbmain extends MY_Controller {
 	
 	public function send_confirm_email($email,$password)
 	{
-		if( !isset($password) )
-		{
-			$password = $this->database_model->get_password($email);
-		}
-		$data['link'] = base_url()."verify?email=".$email."&verify_key=".md5($email.$password);
+		$data['link'] = base_url()."verify?email=".$email."&verify_key=".$email.$password;
 		
 		$config['mailtype'] = 'html';
 		$config['charset']  = 'UTF-8';
@@ -193,6 +199,30 @@ class Vocadbmain extends MY_Controller {
 		$this->email->message($this->load->view("mail_structure",$data,true));
 		$this->email->send();
 		// if (!$this->email->send()) echo "Sorry to sending failure, Try it again";
+		// echo "<pre>";
+		// print_r($data);
+	}
+	
+	public function resend_confirm()
+	{
+		$email = $this->input->post('email');
+		$password = $this->database_model->get_password($email);
+
+		$data['link'] = base_url()."verify?email=".$email."&verify_key=".md5($email.$password);
+		
+		$config['mailtype'] = 'html';
+		$config['charset']  = 'UTF-8';
+		$this->load->library('email',$config);	
+		
+		$this->email->set_newline("\r\n");
+		$this->email->clear();
+		$this->email->from('vocabdb.api@gmail.com');
+		$sentto[] = $email;
+		$this->email->to($sentto);
+		$this->email->subject('Email Confirmation');
+		$this->email->message($this->load->view("mail_structure",$data,true));
+		$this->email->send();
+
 	}
 	
 	public function verify()

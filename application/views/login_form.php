@@ -85,7 +85,7 @@
 		  function testAPI() {
 			console.log('Welcome!  Fetching your information.... ');
 			FB.api('/me?fields=name,email', function(response) {
-			// console.log(JSON.stringify(response));
+			console.log(JSON.stringify(response));
 			  console.log('Successful login for: ' + response.email);
 			  // document.getElementById('status').innerHTML =
 				// 'Thanks for logging in, ' + response.name + '!';
@@ -168,7 +168,7 @@
 			</div>
 		</div>
 		
-		<script type="text/javascript" src="<?php echo base_url()."resources/vendor/jquery.min.js"; ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url()."resources/vendor/jquery/jquery.min.js"; ?>"></script>
 		<script type="text/javascript">
 		var base_url = '<?php echo base_url();?>';
 		
@@ -200,7 +200,16 @@
 							// console.log("login success");
 							$('#name').parent('div').removeClass("has-error");
 							$('#password').parent('div').removeClass("has-error");
-							window.location = base_url+'welcome';
+							console.log(msg);
+							if(msg == "confirmed")
+							{
+								console.log("in confirmed")
+								window.location = base_url+'welcome';
+							}
+							else
+							{
+								window.location = base_url+'confirm';
+							}
 						}
 						else
 						{

@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-Class Database_Model extends CI_Model{
+Class Database_Model extends CI_Model {
 	
 	//insert registration data into DB0
 	public function registration_insert($data){
@@ -69,7 +69,7 @@ Class Database_Model extends CI_Model{
 		else
 		{
 			$row = $query->row();
-			return $row['confirm'];
+			return $row->confirm;
 		}
 	}
 	
@@ -84,7 +84,8 @@ Class Database_Model extends CI_Model{
 		else
 		{
 			$row = $query->row();
-			if( $key == md5($row['email'].$row['password']) )
+			// echo $key." ".$row->email.$row->password;
+			if( $key == md5($row->email.$row->password) )
 			{
 				return TRUE;
 			}
@@ -107,11 +108,11 @@ Class Database_Model extends CI_Model{
 		$sql = "SELECT password FROM api_users WHERE email = '".$email."'";
 		$query = $this->db->query($sql);
 		$row = $query->row();
-		return $row['password'];
-
+		return $row->password;
+	}
 	//get data from api_usage_text table
-	public function get_usage_text($apikey){
-		
+	public function get_usage_text($apikey)
+	{
 		$this->db->select('datetime');
 		$this->db->select('length');
 		$this->db->from('api_usage_text');

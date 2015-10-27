@@ -11,20 +11,23 @@ If you don't see this email you can :<br/>
 </ul>
 <span id="msg"></span>
 </div>
-<script type="text/javascript" src="<?php echo base_url()."resources/vendor/jquery.min.js"; ?>"></script>
+<script type="text/javascript" src="<?php echo base_url()."resources/vendor/jquery/jquery.min.js"; ?>"></script>
 <script type="text/javascript">
+var base_url = '<?php echo base_url();?>';
+// console.log($("#email").html());
 $('#resend').on("click", function(e){
 	e.preventDefault();
 	$.ajax({
-		url: base_url+"login_process",
+		url: base_url+"resend_confirm",
 		type:'POST',
 		data:
 		{
-			email: $("#email").val()
+			email: $("#email").html()
 		},
 		success: function(msg)
 		{
-			$('#msg').html(msg);
+			// console.log(msg);
+			$('#msg').html("Confirmation Email Sent");
 		}
 	});
 });
