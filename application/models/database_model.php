@@ -139,9 +139,10 @@ Class Database_Model extends CI_Model {
 		$total_arr = [];
 		$api_usage_text = [];
 		$api_usage_word = [];
+		$api_usage_definition = [];
 		
 		//TEXT
-		$sql = "SELECT * FROM api_usage_text ";
+		$sql = "SELECT * FROM api_usage_text ORDER BY datetime";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
@@ -171,7 +172,7 @@ Class Database_Model extends CI_Model {
 		}
 		
 		//WORD
-		$sql = "SELECT * FROM api_usage_word";
+		$sql = "SELECT * FROM api_usage_word ORDER BY datetime";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
@@ -200,11 +201,42 @@ Class Database_Model extends CI_Model {
 			}
 		}
 		
+		//Definition
+		$sql = "SELECT * FROM api_usage_definition ORDER BY datetime";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->row_array();
+			foreach ($query->result_array() as $row)
+			{
+				//api_usage_definition
+				if( isset( $api_usage_definition[date('m-d-Y',strtotime($row['datetime']))] ) )
+				{
+					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+				}
+				else
+				{
+					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+				}
+				//total_arr
+				if( isset( $total_arr[date('m-d-Y',strtotime($row['datetime']))] ) )
+				{
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+				}
+				else
+				{
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+				}
+				
+			}
+		}
+		ksort($total_arr);
 		$return['total'] = $total_arr;
 		$return['text'] = $api_usage_text;
 		$return['word'] = $api_usage_word;
+		$return['defi'] = $api_usage_definition;
 		
-		return $total_arr;
+		return $return;
 	}
 	
 	
