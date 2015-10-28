@@ -133,7 +133,7 @@ Class Database_Model extends CI_Model {
 		return NULL;
 	}
 	
-	public function get_usage_total_admin()
+	public function get_usage_admin()
 	{
 		$return = [];
 		$total_arr = [];
@@ -203,6 +203,113 @@ Class Database_Model extends CI_Model {
 		
 		//Definition
 		$sql = "SELECT * FROM api_usage_definition ORDER BY datetime";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->row_array();
+			foreach ($query->result_array() as $row)
+			{
+				//api_usage_definition
+				if( isset( $api_usage_definition[date('m-d-Y',strtotime($row['datetime']))] ) )
+				{
+					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+				}
+				else
+				{
+					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+				}
+				//total_arr
+				if( isset( $total_arr[date('m-d-Y',strtotime($row['datetime']))] ) )
+				{
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+				}
+				else
+				{
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+				}
+				
+			}
+		}
+		ksort($total_arr);
+		$return['total'] = $total_arr;
+		$return['text'] = $api_usage_text;
+		$return['word'] = $api_usage_word;
+		$return['defi'] = $api_usage_definition;
+		
+		return $return;
+	}
+	
+	//users
+	public function get_usage_users($apikey)
+	{
+		$return = [];
+		$total_arr = [];
+		$api_usage_text = [];
+		$api_usage_word = [];
+		$api_usage_definition = [];
+		
+		//TEXT	
+		$sql = "SELECT * FROM api_usage_text WHERE apikey ='".$apikey."' ORDER BY datetime";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->row_array();
+			foreach ($query->result_array() as $row)
+			{
+				//api_usage_text
+				if( isset( $api_usage_text[date('m-d-Y',strtotime($row['datetime']))] ) )
+				{
+					$api_usage_text[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+				}
+				else
+				{
+					$api_usage_text[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+				}
+				//total_arr
+				if( isset( $total_arr[date('m-d-Y',strtotime($row['datetime']))] ) )
+				{
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+				}
+				else
+				{
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+				}
+				
+			}
+		}
+		
+		//WORD
+		$sql = "SELECT * FROM api_usage_word WHERE apikey ='".$apikey."' ORDER BY datetime";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->row_array();
+			foreach ($query->result_array() as $row)
+			{
+				//api_usage_word
+				if( isset( $api_usage_word[date('m-d-Y',strtotime($row['datetime']))] ) )
+				{
+					$api_usage_word[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+				}
+				else
+				{
+					$api_usage_word[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+				}
+				//total_arr
+				if( isset( $total_arr[date('m-d-Y',strtotime($row['datetime']))] ) )
+				{
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+				}
+				else
+				{
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+				}
+				
+			}
+		}
+		
+		//Definition
+		$sql = "SELECT * FROM api_usage_definition WHERE apikey ='".$apikey."' ORDER BY datetime";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
