@@ -54,7 +54,7 @@ class Vocadbmain extends MY_Controller {
 		// echo $confirm;exit();
 		if( $check && $confirm )
 		{
-			redirect(base_url().'welcome', 'refresh');
+			redirect(base_url().'feat', 'refresh');
 		}
 		else if ( $check && !$confirm )
 		{
@@ -227,7 +227,7 @@ class Vocadbmain extends MY_Controller {
 		$email = $this->session->userdata('email');
 		if( $this->database_model->check_confirmation_email($email) )
 		{
-			redirect(base_url().'welcome', 'refresh');
+			redirect(base_url().'feat', 'refresh');
 		}
 	}
 	
@@ -248,13 +248,6 @@ class Vocadbmain extends MY_Controller {
 	{
 		$this->session->sess_destroy();
 		redirect(base_url(), 'refresh');
-	}
-	
-	public function welcome()
-	{
-		$this->not_logged_in();
-		$this->mynav=TRUE;
-		$this->_render('welcome_message');
 	}
 	
 	public function feat()

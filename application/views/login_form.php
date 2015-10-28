@@ -209,7 +209,7 @@ if (isset($this->session->userdata['logged_in']))
 							if(msg == "confirmed")
 							{
 								console.log("in confirmed")
-								window.location = base_url+'welcome';
+								window.location = base_url+'feat';
 							}
 							else
 							{
