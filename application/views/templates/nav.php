@@ -51,19 +51,19 @@
                   </a>               
                </li>
                <li>
-                  <a href="#" title="Contact" data-toggle="" class="no-submenu">
+                  <a href="<?php echo base_url()."contact"; ?>" title="Contact" data-toggle="" class="no-submenu">
                      <em class="fa fa-envelope"></em>
                      <span class="item-text">Contact Us</span>
                   </a>
                </li>
 			   <li>
-                  <a href="#" title="Contact" data-toggle="" class="no-submenu">
+                  <a href="<?php echo base_url()."accountsettings"; ?>" title="Account_Settings" data-toggle="" class="no-submenu">
                      <em class="fa fa-cog"></em>
                      <span class="item-text">Account Settings</span>
                   </a>
                </li>
 			   <li>
-                  <a href="#" title="Contact" data-toggle="" class="no-submenu">
+                  <a href="<?php echo base_url()."logout"; ?>" title="Contact" data-toggle="" class="no-submenu">
                      <em class="fa fa-sign-out"></em>
                      <span class="item-text">Logout</span>
                   </a>

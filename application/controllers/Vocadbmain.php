@@ -74,11 +74,6 @@ class Vocadbmain extends MY_Controller {
 		}
 	}
 	
-	public function welcome(){
-		$this->mynav=TRUE;
-		$this->_render('welcome_message');
-	}
-	
 	public function home(){
 		$this->_render('home');
 	}
@@ -124,18 +119,6 @@ class Vocadbmain extends MY_Controller {
 		}
 		
 	}
-	
-	public function logout() {
-
-	// Removing session data
-		$sess_array = array(
-		'email' => ''
-		);
-		$this->session->unset_userdata('logged_in', $sess_array);
-		$data['message_display'] = 'Successfully Logout';
-		$this->_render('login_form', $data);
-	}
-	
 	
 	public function new_user_registration(){
 		$data = array(
@@ -250,13 +233,38 @@ class Vocadbmain extends MY_Controller {
 	/*
 		User management After Log IN
 	*/
+	
+	//redirect if not logged in
+	public function not_logged_in()
+	{
+		if( !$this->session->userdata('email') )
+		{
+			redirect(base_url(), 'refresh');
+		}
+	}
+	
+	public function logout() 
+	{
+		$this->session->sess_destroy();
+		redirect(base_url(), 'refresh');
+	}
+	
+	public function welcome()
+	{
+		$this->not_logged_in();
+		$this->mynav=TRUE;
+		$this->_render('welcome_message');
+	}
+	
 	public function feat()
 	{
+		$this->not_logged_in();
 		$this->mynav = TRUE;
 		$this->_render('stats');
 	}
 	
 	public function stats(){
+		$this->not_logged_in();
 		$this->mynav = TRUE;
 		$query = $this->database_model->read_user_information($this->session->userdata('email'));
 		$apikey = $query[0]->apikey;
@@ -279,12 +287,28 @@ class Vocadbmain extends MY_Controller {
 	
 	public function pricing()
 	{
+		$this->not_logged_in();
 		$this->mynav = TRUE;
 		$this->_render('stats');
 	}
 	
 	public function documentation()
 	{
+		$this->not_logged_in();
+		$this->mynav = TRUE;
+		$this->_render('stats');
+	}
+	
+	public function contact()
+	{
+		$this->not_logged_in();
+		$this->mynav = TRUE;
+		$this->_render('stats');
+	}
+	
+	public function accountsettings()
+	{
+		$this->not_logged_in();
 		$this->mynav = TRUE;
 		$this->_render('stats');
 	}
