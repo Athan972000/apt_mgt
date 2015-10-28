@@ -36,7 +36,7 @@ var text_result = JSON.parse('<?php echo json_encode($Nvoca['text_result']); ?>'
 var dateArray = new Array();
 var lengthArray= new Array();
 
-for( i=0; i<=text_result.length; i++ )
+for( i=0; i<text_result.length; i++ )
 {
 	if(i==0){
 		dateArray.push(text_result[i].date);
@@ -46,13 +46,14 @@ for( i=0; i<=text_result.length; i++ )
 		for(j=i;j<text_result.length;j++){
 			if(dateArray[i-1]==text_result[j].date){
 				lengthArray[i-1]+=text_result[j].length;
+				break;
 			}
 			else{
 				dateArray.push(text_result[j].date);
 				lengthArray.push(text_result[j].length);
-				i=j;
+				
 				break;
-			}
+			}			
 		}
 	}
 	

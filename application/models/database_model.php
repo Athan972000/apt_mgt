@@ -110,7 +110,7 @@ Class Database_Model extends CI_Model {
 		$row = $query->row();
 		return $row->password;
 	}
-	//get data from api_usage_text table
+	//get data from api_usage tables
 	public function get_usage($apikey,$table)
 	{
 		$this->db->select('datetime');
@@ -132,6 +132,28 @@ Class Database_Model extends CI_Model {
 		
 		return NULL;
 	}
+	
+	public function get_usage_admin($table){
+		$this->db->select('datetime');
+		$this->db->select('length');
+		$this->db->from($table);
+		$query = $this->db->get();
+		if($query->num_rows() > 0){
+			$data = array();
+			foreach($query->result_array() as $key => $value){
+				$old =  $value['datetime'];
+				$temp = strtotime($old);
+				$newDate = date('m-d-Y',$temp);
+				$data[$key]['date'] = $newDate;
+				$data[$key]['length'] =(int)$value['length'];
+			}
+			return $data;
+		}
+		
+		return NULL;
+	}
+	
+	
 	
 	
 	
