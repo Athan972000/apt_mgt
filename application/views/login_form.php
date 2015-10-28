@@ -1,13 +1,11 @@
-
 <?php
-	defined('BASEPATH') OR exit('No direct script access allowed');?>
-	<body>
-		<?php
-			if (isset($this->session->userdata['logged_in'])) {
-			header(base_url().'login_process');
-			}
-		?>
-		<script>
+defined('BASEPATH') OR exit('No direct script access allowed');
+if (isset($this->session->userdata['logged_in'])) 
+{
+	header(base_url().'login_process');
+}
+?>
+<script>
 		var base_url = "<?php echo base_url();?>";
 		  // This is called with the results from from FB.getLoginStatus().
 		  function statusChangeCallback(response) {
@@ -70,6 +68,13 @@
 		  });
 
 		  };
+		  function logout_fb()
+		  {
+			  FB.logout(function(response) {
+				  console.log(response);
+				});
+		  }
+			
 
 		  // Load the SDK asynchronously
 		  (function(d, s, id) {
@@ -197,7 +202,7 @@
 					{
 						if(msg)
 						{
-							// console.log("login success");
+							console.log("login success");
 							$('#name').parent('div').removeClass("has-error");
 							$('#password').parent('div').removeClass("has-error");
 							console.log(msg);
@@ -213,7 +218,7 @@
 						}
 						else
 						{
-							// console.log("login fail");
+							console.log("login fail");
 							$('#name').parent('div').addClass("has-error");
 							$('#password').parent('div').addClass("has-error");
 							$("#loginchecker").html("Email and/or Password does not match").addClass("has-error");

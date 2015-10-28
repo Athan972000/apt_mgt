@@ -74,15 +74,10 @@ class Vocadbmain extends MY_Controller {
 		}
 	}
 	
-	public function welcome(){
-		$this->mynav=TRUE;
-		$this->_render('welcome_message');
-	}
-	
 	public function home(){
 		$this->_render('home');
 	}
-	
+
 	public function stats(){
 		$this->mynav = TRUE;
 		$query = $this->database_model->read_user_information($this->session->userdata('email'));
@@ -101,9 +96,9 @@ class Vocadbmain extends MY_Controller {
 		$this->_render('stats',$data);
 		
 	}
-	
+
 	public function login_process(){
-		
+		// $this->is_logged_in();
 		// if(isset($this->session->userdata['logged_in'])){
 			// $this->load->view('welcome');
 		// }else{
@@ -144,18 +139,6 @@ class Vocadbmain extends MY_Controller {
 		}
 		
 	}
-	
-	public function logout() {
-
-	// Removing session data
-		$sess_array = array(
-		'email' => ''
-		);
-		$this->session->unset_userdata('logged_in', $sess_array);
-		$data['message_display'] = 'Successfully Logout';
-		$this->_render('login_form', $data);
-	}
-	
 	
 	public function new_user_registration(){
 		$data = array(
@@ -254,8 +237,100 @@ class Vocadbmain extends MY_Controller {
 	{
 		$data['email'] = $this->session->userdata('email');
 		$this->load->view("confirm_require",$data);
-		// echo "confirm page";
-		//resend confirm
+		$this->is_logged_in();
+	}
+	
+	//check if logged in
+	public function is_logged_in()
+	{
+		$email = $this->session->userdata('email');
+		if( $this->database_model->check_confirmation_email($email) )
+		{
+			redirect(base_url().'welcome', 'refresh');
+		}
+	}
+	
+	/*
+		User management After Log IN
+	*/
+	
+	//redirect if not logged in
+	public function not_logged_in()
+	{
+		if( !$this->session->userdata('email') )
+		{
+			redirect(base_url(), 'refresh');
+		}
+	}
+	
+	public function logout() 
+	{
+		$this->session->sess_destroy();
+		redirect(base_url(), 'refresh');
+	}
+	
+	public function welcome()
+	{
+		$this->not_logged_in();
+		$this->mynav=TRUE;
+		$this->_render('welcome_message');
+	}
+	
+	public function feat()
+	{
+		$this->not_logged_in();
+		$this->mynav = TRUE;
+		$this->_render('stats');
+	}
+	
+	public function stats(){
+		$this->not_logged_in();
+		$this->mynav = TRUE;
+		$query = $this->database_model->read_user_information($this->session->userdata('email'));
+		$apikey = $query[0]->apikey;
+		$data['text_result'] = $this->database_model->get_usage($apikey,'api_usage_text');
+		// $data['word_result'] = $this->database_model->get_usage_word($apikey);
+		// $data['definition_result'] = $this->database_model->get_usage_definition($apikey);
+		$this->_render('stats',$data);
+	}
+	
+	// public function admin_stats(){
+		// $this->mynav = TRUE;
+		// $query = $this->database_model->read_user_information($this->session->userdata('email'));
+		// $apikey = $query[0]->apikey;
+		// $data['text_result'] = $this->database_model->get_usage_text($apikey);
+		// $data['word_result'] = $this->database_model->get_usage_word($apikey);
+		// $data['definition_result'] = $this->database_model->get_usage_definition($apikey);
+		// $this->_render('stats',$data);
+		
+	// }
+	
+	public function pricing()
+	{
+		$this->not_logged_in();
+		$this->mynav = TRUE;
+		$this->_render('stats');
+	}
+	
+	public function documentation()
+	{
+		$this->not_logged_in();
+		$this->mynav = TRUE;
+		$this->_render('stats');
+	}
+	
+	public function contact()
+	{
+		$this->not_logged_in();
+		$this->mynav = TRUE;
+		$this->_render('stats');
+	}
+	
+	public function accountsettings()
+	{
+		$this->not_logged_in();
+		$this->mynav = TRUE;
+		$this->_render('stats');
 	}
 }
 ?>
