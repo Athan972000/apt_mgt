@@ -3,22 +3,26 @@
 <style type="text/css">
 canvas{
         width: 100% !important;
-        max-width: 800px;
+		max-width: 800px;
+		height: 400px;
+		max-height: 600px;
         height: auto !important;
     }
 </style>
 	<script src="<?php echo base_url().'resources/js/Chart.js'?>"></script>
-	<div class="row-fluid">
+	<div class="row container-fluid">
         <div class="graph span6">
             <h3 class="title"> The Chart</h3>
             <canvas id="myChart" width="100%" height="100%"></canvas>
         </div>
-		<button id="total">Total</button>
-        <button id="text">Text</button>
-		<button id="word">Word</button>
-		<button id="defi">Definition</button>
+		<br/>
+		<button class="btn btn-primary btn-lg" id="total">Total</button>
+        <button class="btn btn-primary btn-lg" id="text">Text</button>
+		<button class="btn btn-primary btn-lg" id="word">Word</button>
+		<button class="btn btn-primary btn-lg" id="defi">Definition</button>
 	</div>
 	<script type="text/javascript">
+	$(window).on('resize',function(){location.reload();});
 var text_result = JSON.parse('<?php echo json_encode($Nvoca['text_result']); ?>');
 var dateArray = new Array();
 var lengthArray= new Array();
