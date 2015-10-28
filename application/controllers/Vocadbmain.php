@@ -285,11 +285,11 @@ class Vocadbmain extends MY_Controller {
 		
 	// }
 	
-	public function pricing()
+	public function billing()
 	{
 		$this->not_logged_in();
 		$this->mynav = TRUE;
-		$this->_render('stats');
+		$this->_render('billing');
 	}
 	
 	public function documentation()

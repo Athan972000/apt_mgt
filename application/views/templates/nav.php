@@ -25,7 +25,7 @@
                   </a>
                </li>
                <li>
-                  <a href="<?php echo base_url()."pricing"; ?>" title="Pricing" data-toggle="collapse-next" class="has-submenu">
+                  <a href="<?php echo base_url()."billing"; ?>" title="Billing" data-toggle="collapse-next" class="has-submenu">
                      <em class="fa fa-money"></em>
                      <span class="item-text">Billing</span>
                   </a>
