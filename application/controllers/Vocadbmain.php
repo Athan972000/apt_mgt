@@ -54,7 +54,7 @@ class Vocadbmain extends MY_Controller {
 		// echo $confirm;exit();
 		if( $check && $confirm )
 		{
-			redirect(base_url().'welcome', 'refresh');
+			redirect(base_url().'feat', 'refresh');
 		}
 		else if ( $check && !$confirm )
 		{
@@ -227,7 +227,7 @@ class Vocadbmain extends MY_Controller {
 		$email = $this->session->userdata('email');
 		if( $this->database_model->check_confirmation_email($email) )
 		{
-			redirect(base_url().'welcome', 'refresh');
+			redirect(base_url().'feat', 'refresh');
 		}
 	}
 	
@@ -250,41 +250,29 @@ class Vocadbmain extends MY_Controller {
 		redirect(base_url(), 'refresh');
 	}
 	
-	public function welcome()
-	{
-		$this->not_logged_in();
-		$this->mynav=TRUE;
-		$this->_render('welcome_message');
-	}
-	
 	public function feat()
 	{
 		$this->not_logged_in();
 		$this->mynav = TRUE;
-		$this->_render('stats');
+		$this->_render('feat');
 	}
 	
 	public function stats(){
 		$this->mynav = TRUE;
-		$query = $this->database_model->read_user_information($this->session->userdata('email'));
-		$apikey = $query[0]->apikey;	
-		$data['text_result'] = $this->database_model->get_usage($apikey,'api_usage_text');
-		// $data['word_result'] = $this->database_model->get_usage($apikey,'api_usage_word');
-		// $data['definition_result'] = $this->database_model->get_usage($apikey,'api_usage_definition');
-	    $this->_render('stats',$data);
-	}
-	
-	public function admin_stats(){
-		$this->mynav = TRUE;		
-		$data['text_result'] = $this->database_model->get_usage_total_admin();
-		
-		// echo "<pre>";
-		// print_r( $data['text_result'] );
-		// exit();
-		
+		$adminchecker = TRUE;
+		if( $adminchecker )
+		{
+			$data['text_result'] = $this->database_model->get_usage_admin();
+		}
+		else
+		{
+			$query = $this->database_model->read_user_information($this->session->userdata('email'));
+			$data['text_result'] = $this->database_model->get_usage_users($query[0]->apikey);
+		}
+	    
 		$this->_render('stats',$data);
 	}
-	
+
 	public function billing()
 	{
 		$this->not_logged_in();
@@ -296,21 +284,21 @@ class Vocadbmain extends MY_Controller {
 	{
 		$this->not_logged_in();
 		$this->mynav = TRUE;
-		$this->_render('stats');
+		$this->_render('docu');
 	}
 	
 	public function contact()
 	{
 		$this->not_logged_in();
 		$this->mynav = TRUE;
-		$this->_render('stats');
+		$this->_render('contact');
 	}
 	
 	public function accountsettings()
 	{
 		$this->not_logged_in();
 		$this->mynav = TRUE;
-		$this->_render('stats');
+		$this->_render('accountsettings');
 	}
 }
 ?>

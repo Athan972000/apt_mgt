@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?><!DOCTYPE html>
+
 <body>
 <div style="height: 100%; padding: 50px 0; background-color: white" class="row row-table">
 	<div class="col-lg-3  align-middle">
@@ -17,3 +18,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </div>
 	
 </body>
+

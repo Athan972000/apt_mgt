@@ -10,14 +10,14 @@
 	</style>
 	<?php echo $scripts; ?>
 	</head>
-    <body class="two-column docs normal-width" style="background-color:white;">
+    <body style="background-color:white;">
 		<?php echo $header ?>
-		<div class="row no-gutter">
+		<div class="container-fluid row no-gutter">
 			<?php if($mynav): ?>
-			<div class="col-xs-2 "><?php echo $nav; ?></div>
-			<div class="col-xs-10"><?php echo $content; ?></div>
+			<div style="width:250px;min-width:250px;" class="col-xs-4"><?php echo $nav; ?></div>
+			<div class="col-xs-8"><?php echo $content; ?></div>
 			<?php else: ?>
-			<div class="col-xs-12 "><?php echo $content; ?></div>
+			<div class="col-xs-12"><?php echo $content; ?></div>
 			<?php endif; ?>
         </div>
 		<?php echo $footer; ?>
