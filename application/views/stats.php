@@ -31,37 +31,18 @@ canvas{
 	<script type="text/javascript">
 var text_result = JSON.parse('<?php echo json_encode($Nvoca['text_result']); ?>');
 
-// console.log(text_result);
-// console.log(text_result[0].date+" "+text_result[0].length);
 var dateArray = new Array();
 var lengthArray= new Array();
 
-for( i=0; i<text_result.length; i++ )
+dateArray = Object.keys(text_result);
+
+for( i=0; i<dateArray.length; i++ )
 {
-	if(i==0){
-		dateArray.push(text_result[i].date);
-		lengthArray.push(text_result[i].length);
-	}
-	else{
-		for(j=i;j<text_result.length;j++){
-			if(dateArray[i-1]==text_result[j].date){
-				lengthArray[i-1]+=text_result[j].length;
-				break;
-			}
-			else{
-				dateArray.push(text_result[j].date);
-				lengthArray.push(text_result[j].length);
-				
-				break;
-			}			
-		}
-	}
-	
-	// dateArray.push(text_result[i].date);
-	// lengthArray.push(text_result[i].length);
+	lengthArray.push( text_result[dateArray[i]] );
+	// console.log( text_result[dateArray[i]] )
 }
-console.log(dateArray);
-console.log(lengthArray);
+// console.log(dateArray);
+// console.log(lengthArray);
 var data = {
     labels: dateArray,
     datasets: [
