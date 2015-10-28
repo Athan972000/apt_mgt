@@ -133,24 +133,30 @@ Class Database_Model extends CI_Model {
 		return NULL;
 	}
 	
-	public function get_usage_admin($table){
-		$this->db->select('datetime');
-		$this->db->select('length');
-		$this->db->from($table);
-		$query = $this->db->get();
-		if($query->num_rows() > 0){
-			$data = array();
-			foreach($query->result_array() as $key => $value){
-				$old =  $value['datetime'];
-				$temp = strtotime($old);
-				$newDate = date('m-d-Y',$temp);
-				$data[$key]['date'] = $newDate;
-				$data[$key]['length'] =(int)$value['length'];
-			}
-			return $data;
-		}
+	public function get_usage_total_admin()
+	{
+		$total_arr = [];
 		
-		return NULL;
+		$sql = "SELECT * FROM api_usage_text";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->row_array();
+			foreach ($query->result_array() as $row)
+			{
+				if( isset( $total_arr[date('m-d-Y',strtotime($row['datetime']))] ) )
+				{
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+				}
+				else
+				{
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+				}
+			}
+		}
+
+		
+		return $total_arr;
 	}
 	
 	

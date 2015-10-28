@@ -276,8 +276,11 @@ class Vocadbmain extends MY_Controller {
 	
 	public function admin_stats(){
 		$this->mynav = TRUE;		
-		$data['text_result'] = $this->database_model->get_usage_admin('api_usage_text');
+		$data['total'] = $this->database_model->get_usage_total_admin();
 		
+		echo "<pre>";
+		print_r( $data['total'] );
+		exit();
 		
 		$this->_render('stats',$data);
 	}
