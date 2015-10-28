@@ -86,25 +86,23 @@ class Vocadbmain extends MY_Controller {
 	public function stats(){
 		$this->mynav = TRUE;
 		$query = $this->database_model->read_user_information($this->session->userdata('email'));
-		// $data['apikey'] = $query[0]->apikey;
-		$data['text_result'] = $this->database_model->get_usage_text($query[0]->apikey);
+		$apikey = $query[0]->apikey;
+		$data['text_result'] = $this->database_model->get_usage($apikey,'api_usage_text');
+		// $data['word_result'] = $this->database_model->get_usage_word($apikey);
+		// $data['definition_result'] = $this->database_model->get_usage_definition($apikey);
 		$this->_render('stats',$data);
 	}
 	
-	public function get_usage_text_chart_data(){
-		$apikey = $this->input->post('apikey');
-		echo json_encode($this->database_model->get_usage_text($apikey));
-	}
-	
-	public function get_usage_word_chart_data(){
-		$apikey = $this->input->post('apikey');
-		echo json_encode($this->database_model->get_usage_word($apikey));
-	}
-	
-	public function get_usage_definition_chart_data(){
-		$apikey = $this->input->post('apikey');
-		echo json_encode($this->database_model->get_usage_definition($apikey));
-	}
+	// public function admin_stats(){
+		// $this->mynav = TRUE;
+		// $query = $this->database_model->read_user_information($this->session->userdata('email'));
+		// $apikey = $query[0]->apikey;
+		// $data['text_result'] = $this->database_model->get_usage_text($apikey);
+		// $data['word_result'] = $this->database_model->get_usage_word($apikey);
+		// $data['definition_result'] = $this->database_model->get_usage_definition($apikey);
+		// $this->_render('stats',$data);
+		
+	// }
 	
 	public function login_process(){
 		

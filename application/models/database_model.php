@@ -111,11 +111,11 @@ Class Database_Model extends CI_Model {
 		return $row->password;
 	}
 	//get data from api_usage_text table
-	public function get_usage_text($apikey)
+	public function get_usage($apikey,$table)
 	{
 		$this->db->select('datetime');
 		$this->db->select('length');
-		$this->db->from('api_usage_text');
+		$this->db->from($table);
 		$this->db->where('apikey',$apikey);
 		$query = $this->db->get();
 		if($query->num_rows() > 0){
@@ -133,47 +133,8 @@ Class Database_Model extends CI_Model {
 		return NULL;
 	}
 	
-	public function get_usage_word($apikey){
-		$this->db->select('datetime');
-		$this->db->select('length');
-		$this->db->from('api_usage_word');
-		$this->db->where('apikey',$apikey);
-		$query = $this->db->get();
-		if($query->num_rows() > 0){
-			$data = array();
-			foreach($query->result_array() as $key => $value){
-				$old =  $value['datetime'];
-				$temp = strtotime($old);
-				$newDate = date('m-d-Y',$temp);
-				$data[$key]['date'] = $newDate;
-				$data[$key]['length'] =(int)$value['length'];
-			}
-			return $data;
-		}
-		
-		return NULL;
-	}
 	
-	public function get_usage_definition($apikey){
-		$this->db->select('datetime');
-		$this->db->select('length');
-		$this->db->from('api_usage_definition');
-		$this->db->where('apikey',$apikey);
-		$query = $this->db->get();
-		if($query->num_rows() > 0){
-			$data = array();
-			foreach($query->result_array() as $key => $value){
-				$old =  $value['datetime'];
-				$temp = strtotime($old);
-				$newDate = date('m-d-Y',$temp);
-				$data[$key]['date'] = $newDate;
-				$data[$key]['length'] =(int)$value['length'];
-			}
-			return $data;
-		}
-		
-		return NULL;
-	}
+	
 	
 	
 	
