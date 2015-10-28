@@ -5,16 +5,28 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Highcharts Example</title>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<style type="text/css">
+canvas{
+        width: 100% !important;
+        max-width: 800px;
+        height: auto !important;
+    }
+</style>
+</head>
+<body>
 
-	</head>
-	<body>
 	
-	<canvas id="myChart" width="500" height="400"></canvas>
-<script src="<?php echo base_url().'resources/js/Chart.js'?>"></script>
+	<script src="<?php echo base_url().'resources/js/Chart.js'?>"></script>
+	<div class="row-fluid">
+        <div class="graph span6">
+            <h3 class="title"> The Chart</h3>
+            <canvas id="myChart" width="500" height="400"></canvas>
+        </div>
+        
+	</div>
 
-<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
-	</body>
+</body>
 	
 	<script type="text/javascript">
 var text_result = JSON.parse('<?php echo json_encode($Nvoca['text_result']); ?>');
