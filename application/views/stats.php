@@ -59,16 +59,7 @@ canvas{
 			</div>
         </div>
 		<br/>
-		<table class='table table-striped table-hover'>
-		<?php 		
-		// echo "<pre>";
-		// print_r($Nvoca['text_result']);
-		// exit();
-		// foreach( $Nvoca['text_result'] as $key => $value )
-		// {
-				// echo "<th>".$key."</th>";
-		// }		
-		?>
+		<table id="chart_table" align="center" style="width:50%" class='table table-striped table-hover'>
 		</table>
 	</div>
 <script type="text/javascript">
@@ -79,7 +70,8 @@ var amountorcount = 'count';
 //Total
 $('#total').click(function(){
 	var data = construct_data('total');
-	
+	construct_table( data.labels, data.datasets[0].data );
+
 	if(typeof(vocadbchart) != 'undefined')
 		vocadbchart.destroy();
 	vocadbchart = new Chart(ctx).Line(data);
@@ -89,6 +81,7 @@ $('#total').click(function(){
 //Text
 $('#text').click(function(){
 	var data = construct_data('text');
+	construct_table( data.labels, data.datasets[0].data );
 	vocadbchart.destroy();
 	vocadbchart = new Chart(ctx).Line(data);
 	$(".active").removeClass('active');
@@ -98,6 +91,7 @@ $('#text').click(function(){
 //Word
 $('#word').click(function(){
 	var data = construct_data('word');
+	construct_table( data.labels, data.datasets[0].data );
 	vocadbchart.destroy();
 	vocadbchart = new Chart(ctx).Line(data);
 	$(".active").removeClass('active');
@@ -107,6 +101,7 @@ $('#word').click(function(){
 //Definition
 $('#defi').click(function(){
 	var data = construct_data('defi');
+	construct_table( data.labels, data.datasets[0].data );
 	vocadbchart.destroy();
 	vocadbchart = new Chart(ctx).Line(data);
 	$(".active").removeClass('active');
@@ -140,6 +135,16 @@ function construct_data(ext)
 	return data;
 }
 
+function construct_table(tblabels,tbdatas)
+{
+	$('#chart_table').html("");
+	for( x=0; x < tblabels.length; x++)
+	{
+		$('#chart_table').append(
+		"<tr><td>"+tblabels[x]+"</td><td>"+tbdatas[x]+"</td></tr>");
+	}
+}
+
 $('#count').click(function(){
 	amountorcount = 'count';
 	$('.byitem').find('button.active').trigger( 'click' );
@@ -156,7 +161,7 @@ $('#m1').click(function(){
 		data:{num: 1},
 		success: function(res)
 		{
-			console.log(res);
+			// console.log(res);
 			text_result = JSON.parse( res );
 			$('.byitem').find('button.active').trigger( 'click' );
 		}
@@ -170,7 +175,7 @@ $('#m3').click(function(){
 		data:{num: 3},
 		success: function(res)
 		{
-			console.log(res);
+			// console.log(res);
 			text_result = JSON.parse( res );
 			$('.byitem').find('button.active').trigger( 'click' );
 		}
