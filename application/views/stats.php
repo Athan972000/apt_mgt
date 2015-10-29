@@ -149,6 +149,47 @@ $('#amnt').click(function(){
 	$('.byitem').find('button.active').trigger( 'click' );
 });
 
+$('#m1').click(function(){
+	$.ajax({
+		url: base_url+"monthstats",
+		type:'POST',
+		data:{num: 1},
+		success: function(res)
+		{
+			console.log(res);
+			text_result = JSON.parse( res );
+			$('.byitem').find('button.active').trigger( 'click' );
+		}
+	});
+});
+
+$('#m3').click(function(){
+	$.ajax({
+		url: base_url+"monthstats",
+		type:'POST',
+		data:{num: 3},
+		success: function(res)
+		{
+			console.log(res);
+			text_result = JSON.parse( res );
+			$('.byitem').find('button.active').trigger( 'click' );
+		}
+	});
+});
+
+$('#m6').click(function(){
+	$.ajax({
+		url: base_url+"monthstats",
+		type:'POST',
+		data: {num: 6},
+		success: function(res)
+		{
+			// console.log(res);
+			text_result = JSON.parse( res );
+			$('.byitem').find('button.active').trigger( 'click' );
+		}
+	});
+});
 
 $( "#total" ).trigger( "click" );
 </script>

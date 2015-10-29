@@ -272,6 +272,12 @@ class Vocadbmain extends MY_Controller {
 	    
 		$this->_render('stats',$data);
 	}
+	public function monthstats()
+	{
+		$num = $this->input->post('num');
+		// echo $num;
+		echo json_encode($this->database_model->get_usage_admin($num));
+	}
 
 	public function billing()
 	{
