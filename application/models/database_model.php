@@ -141,8 +141,14 @@ Class Database_Model extends CI_Model {
 		$api_usage_word = [];
 		$api_usage_definition = [];
 		
+		$today = date('Y-m-d H:i:s');
+		$minus2months = date('Y-m-d H:i:s',(strtotime ( '-6 month' , strtotime ( $today) ) ));
+		$where = "WHERE datetime<='".$today."' AND datetime>='".$minus2months."'";
+		// $sql = "SELECT * FROM api_usage_text ".$where." ORDER BY datetime";
+		// echo $sql;exit();
+		
 		//TEXT
-		$sql = "SELECT * FROM api_usage_text ORDER BY datetime";
+		$sql = "SELECT * FROM api_usage_text ".$where." ORDER BY datetime";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
@@ -172,7 +178,7 @@ Class Database_Model extends CI_Model {
 		}
 		
 		//WORD
-		$sql = "SELECT * FROM api_usage_word ORDER BY datetime";
+		$sql = "SELECT * FROM api_usage_word ".$where." ORDER BY datetime";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
@@ -202,7 +208,7 @@ Class Database_Model extends CI_Model {
 		}
 		
 		//Definition
-		$sql = "SELECT * FROM api_usage_definition ORDER BY datetime";
+		$sql = "SELECT * FROM api_usage_definition ".$where." ORDER BY datetime";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{

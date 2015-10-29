@@ -3,9 +3,9 @@
 <style type="text/css">
 canvas{
         width: 100% !important;
-		max-width: 800px;
+
+		max-width: 100%;
 		height: 600px;
-		width: 800px;
 		max-height: 600px;
         height: auto !important;
     }
@@ -24,6 +24,9 @@ canvas{
 		<br/>
 		<table class='table table-striped table-hover'>
 		<?php 		
+		// echo "<pre>";
+		// print_r($Nvoca['text_result']);
+		// exit();
 		foreach( $Nvoca['text_result'] as $key => $value )
 		{
 				echo "<th>".$key."</th>";
@@ -31,11 +34,8 @@ canvas{
 		?>
 		</table>
 	</div>
-	<script type="text/javascript">
-	$(window).on('resize',function(){location.reload();});
+<script type="text/javascript">
 var text_result = JSON.parse('<?php echo json_encode($Nvoca['text_result']); ?>');
-var dateArray = new Array();
-var lengthArray= new Array();
 var ctx = $("#myChart").get(0).getContext("2d");
 var vocadbchart;
 //Total
@@ -79,7 +79,7 @@ function construct_data(ext)
 {
 
 	var dateArray = Object.keys(text_result[ext]);
-	lengthArray = [];
+	var lengthArray = [];
 	for( i=0; i<dateArray.length; i++ )
 	{
 		lengthArray.push( text_result[ext][dateArray[i]] );

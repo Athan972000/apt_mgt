@@ -300,5 +300,28 @@ class Vocadbmain extends MY_Controller {
 		$this->mynav = TRUE;
 		$this->_render('accountsettings');
 	}
+	
+	public function insert()
+	{
+		$date = date('Y-m-d H:i:s', strtotime('2015-03-28 00:00:00'));
+		// $date = strtotime('2015-03-31 05:47:19');
+		echo $date."<br/>";
+		echo date('Y-m-d H:i:s',(strtotime ( '-1 month' , strtotime ( $date) ) ));
+		
+		// for($x=1;$x<=65;$x++)
+		// {
+			// $thisdate = date('Y-m-d H:i:s',(strtotime ( '-'. $x .' day' , strtotime ( $date) ) ));
+			// $data = array(
+			// 'auto' => '',
+			// 'apikey' => '3066',
+			// 'word' => 'Hi',
+			// 'datetime' => $thisdate,
+			// 'length' => '2',
+			// 'type' => '1'
+			// );
+
+			// $this->db->insert('api_usage_definition',$data);
+		// }
+	}
 }
 ?>
