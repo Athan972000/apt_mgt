@@ -15,7 +15,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <div style="padding-left:100px">
 
-<div class="panel-group">
+<div class="panel-group" align="center">
   <div class="panel panel-primary">
     <div class="panel-heading">      
        <h4 data-toggle="collapse" href="#pricing"style="font-color:white;" class="panel-title">Pricing</h4>
@@ -23,9 +23,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div id="pricing" class="panel-collapse collapse">
       <div align="left"  >
 	  <div>
-		<p style="padding-left:20px;">vocaDB API pricing is based on usage. Extraction of words usage is calculated in millions of characters (M), where 1 M = 106 characters.</p>
+		<p style="padding-left:40px;">vocaDB API pricing is based on usage. Extraction of words usage is calculated in millions of characters (M), where 1 M = 106 characters.</p>
 			
-		<p style="padding-left:20px;">When charging in local currency, vocaDB will convert the prices listed into applicable local currency pursuant to the conversion rates published by leading financial institutions.</p>
+		<p style="padding-left:40px;">When charging in local currency, vocaDB will convert the prices listed into applicable local currency pursuant to the conversion rates published by leading financial institutions.</p>
 	 </div>
 	 <ul>
 	  <li><strong>Usage fees:</strong>
@@ -55,7 +55,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   </div>
 </div>
 
-<div class="panel-group">
+<div class="panel-group" align="center">
   <div class="panel panel-primary">
     <div class="panel-heading">
       <h4 class="panel-title" data-toggle="collapse" href="#balance">
@@ -87,7 +87,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <p class="due">Total Amount Due</p>
                     </div>
                     <div class="col-xs-12 col-sm-4 col-md-4">
-                        <p class="due value">P1,312.99</p>
+                        <p class="due value">$1,312.99</p>
                     </div>
                 </div>
                 <br class="clear">
@@ -114,7 +114,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <p>Unbilled usage</p>
                     </div>
                     <div class="col-xs-12 col-sm-4 col-md-4">
-                        <p class="value">P1,225.99</p>
+                        <p class="value">$1,225.99</p>
                     </div>
                 </div>
             <br class="clear">
@@ -125,8 +125,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					<input type="hidden" name="cmd" value="_xclick">
 					<input type="hidden" name="business" value="xavier.valenzuela@gmail.com">
 					<input type="hidden" name="currency_code" value="USD">
-					<input type="hidden" name="item_name" value="Teddy Bear">
-					<input type="hidden" name="amount" value="12.99">
+					<input type="hidden" name="item_name" value="VocaDB Billing">
+					<input type="hidden" name="amount" value="1312.99">
 					<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
 					<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
 					</form>
