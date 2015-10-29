@@ -13,9 +13,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="panel-group">
   <div class="panel panel-primary">
     <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" href="#pricing">Pricing</a>
-      </h4>
+      
+       <h4 data-toggle="collapse" href="#pricing"style="font-color:white;" class="panel-title">Pricing</h4>
+      
     </div>
     <div id="pricing" class="panel-collapse collapse">
       <div align="left"  >
@@ -59,7 +59,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <a data-toggle="collapse" href="#balance">Balance</a>
       </h4>
     </div>
-    <div id="balance" class="panel-collapse collapse">
+    <div id="balance" class="panel-collapse in">
        <div class="row">
 	   <br>
 				<div class="col-xs-12 col-sm-8 col-md-8">
