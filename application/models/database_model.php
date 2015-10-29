@@ -133,7 +133,7 @@ Class Database_Model extends CI_Model {
 		return NULL;
 	}
 	
-	public function get_usage_admin()
+	public function get_usage_admin($monthdeduct)
 	{
 		$return = [];
 		$total_arr = [];
@@ -142,7 +142,7 @@ Class Database_Model extends CI_Model {
 		$api_usage_definition = [];
 		
 		$today = date('Y-m-d H:i:s');
-		$minus2months = date('Y-m-d H:i:s',(strtotime ( '-6 month' , strtotime ( $today) ) ));
+		$minus2months = date('Y-m-d H:i:s',(strtotime ( '-'.$monthdeduct.' month' , strtotime ( $today) ) ));
 		$where = "WHERE datetime<='".$today."' AND datetime>='".$minus2months."'";
 		// $sql = "SELECT * FROM api_usage_text ".$where." ORDER BY datetime";
 		// echo $sql;exit();
@@ -158,20 +158,24 @@ Class Database_Model extends CI_Model {
 				//api_usage_text
 				if( isset( $api_usage_text[date('m-d-Y',strtotime($row['datetime']))] ) )
 				{
-					$api_usage_text[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+					$api_usage_text[date('m-d-Y',strtotime($row['datetime']))]['amount'] += $row['length'];
+					$api_usage_text[date('m-d-Y',strtotime($row['datetime']))]['count']++;
 				}
 				else
 				{
-					$api_usage_text[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+					$api_usage_text[date('m-d-Y',strtotime($row['datetime']))]['amount'] = $row['length'];
+					$api_usage_text[date('m-d-Y',strtotime($row['datetime']))]['count'] = 1;
 				}
 				//total_arr
 				if( isset( $total_arr[date('m-d-Y',strtotime($row['datetime']))] ) )
 				{
-					$total_arr[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['amount'] += $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['count']++;
 				}
 				else
 				{
-					$total_arr[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['amount'] = $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['count'] = 1;
 				}
 				
 			}
@@ -188,20 +192,24 @@ Class Database_Model extends CI_Model {
 				//api_usage_word
 				if( isset( $api_usage_word[date('m-d-Y',strtotime($row['datetime']))] ) )
 				{
-					$api_usage_word[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+					$api_usage_word[date('m-d-Y',strtotime($row['datetime']))]['amount'] += $row['length'];
+					$api_usage_word[date('m-d-Y',strtotime($row['datetime']))]['count']++;
 				}
 				else
 				{
-					$api_usage_word[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+					$api_usage_word[date('m-d-Y',strtotime($row['datetime']))]['amount'] = $row['length'];
+					$api_usage_word[date('m-d-Y',strtotime($row['datetime']))]['count'] = 1;
 				}
 				//total_arr
 				if( isset( $total_arr[date('m-d-Y',strtotime($row['datetime']))] ) )
 				{
-					$total_arr[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['amount'] += $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['count']++;
 				}
 				else
 				{
-					$total_arr[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['amount'] = $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['count'] = 1;
 				}
 				
 			}
@@ -218,20 +226,24 @@ Class Database_Model extends CI_Model {
 				//api_usage_definition
 				if( isset( $api_usage_definition[date('m-d-Y',strtotime($row['datetime']))] ) )
 				{
-					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))]['amount'] += $row['length'];
+					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))]['count']++;
 				}
 				else
 				{
-					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))]['amount'] = $row['length'];
+					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))]['count'] = 1;
 				}
 				//total_arr
 				if( isset( $total_arr[date('m-d-Y',strtotime($row['datetime']))] ) )
 				{
-					$total_arr[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['amount'] += $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['count']++;
 				}
 				else
 				{
-					$total_arr[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['amount'] = $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['count'] = 1;
 				}
 				
 			}

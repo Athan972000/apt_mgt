@@ -9,17 +9,54 @@ canvas{
 		max-height: 600px;
         height: auto !important;
     }
+.chart_buttons
+{
+	margin: 0px;
+	padding: 0px 20px;
+}
+.byitem
+{
+	text-align:left;
+	z-index: 9999;
+	position: relative;
+	margin-right:25%;
+}
+
+.byusage
+{
+	text-align: right;
+	position:relative;
+	bottom: 46px;
+}
+.bydate
+{
+	text-align: center;
+}
 </style>
 	
 	<div class="row container-fluid">
         <div class="graph span6">
             <h3 class="title"> The Chart</h3>
             <canvas id="myChart"></canvas>
-		<br/>
-		<button class="btn btn-primary btn-lg" id="total">Total</button>
-        <button class="btn btn-primary btn-lg" id="text">Text</button>
-		<button class="btn btn-primary btn-lg" id="word">Word</button>
-		<button class="btn btn-primary btn-lg" id="defi">Definition</button>
+			<br/>
+		
+			<div class="chart_buttons">
+				<div class="byitem">
+					<button class="btn btn-primary btn-lg" id="total">Total</button>
+					<button class="btn btn-default btn-lg" id="text">Text</button>
+					<button class="btn btn-default btn-lg" id="word">Word</button>
+					<button class="btn btn-default btn-lg" id="defi">Definition</button>
+				</div>
+				<div class="byusage">
+					<button class="btn btn-primary btn-lg" id="count">Count</button>
+					<button class="btn btn-default btn-lg" id="amnt">Amount</button>
+				</div>
+				<div class="bydate">
+					<button class="btn btn-default btn-lg" id="m1">1 month</button>
+					<button class="btn btn-default btn-lg" id="m3">3 months</button>
+					<button class="btn btn-primary btn-lg" id="m6">6 months</button>
+				</div>
+			</div>
         </div>
 		<br/>
 		<table class='table table-striped table-hover'>
@@ -27,10 +64,10 @@ canvas{
 		// echo "<pre>";
 		// print_r($Nvoca['text_result']);
 		// exit();
-		foreach( $Nvoca['text_result'] as $key => $value )
-		{
-				echo "<th>".$key."</th>";
-		}		
+		// foreach( $Nvoca['text_result'] as $key => $value )
+		// {
+				// echo "<th>".$key."</th>";
+		// }		
 		?>
 		</table>
 	</div>
@@ -38,6 +75,7 @@ canvas{
 var text_result = JSON.parse('<?php echo json_encode($Nvoca['text_result']); ?>');
 var ctx = $("#myChart").get(0).getContext("2d");
 var vocadbchart;
+var amountorcount = 'count';
 //Total
 $('#total').click(function(){
 	var data = construct_data('total');
@@ -77,12 +115,11 @@ $('#defi').click(function(){
 
 function construct_data(ext)
 {
-
 	var dateArray = Object.keys(text_result[ext]);
 	var lengthArray = [];
 	for( i=0; i<dateArray.length; i++ )
 	{
-		lengthArray.push( text_result[ext][dateArray[i]] );
+		lengthArray.push( text_result[ext][dateArray[i]][amountorcount] );
 	}
 	var data = {
 		labels: dateArray,
@@ -102,6 +139,16 @@ function construct_data(ext)
 	};
 	return data;
 }
+
+$('#count').click(function(){
+	amountorcount = 'count';
+	$('.byitem').find('button.active').trigger( 'click' );
+});
+$('#amnt').click(function(){
+	amountorcount = 'amount';
+	$('.byitem').find('button.active').trigger( 'click' );
+});
+
 
 $( "#total" ).trigger( "click" );
 </script>

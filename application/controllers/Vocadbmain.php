@@ -262,7 +262,7 @@ class Vocadbmain extends MY_Controller {
 		$adminchecker = TRUE;
 		if( $adminchecker )
 		{
-			$data['text_result'] = $this->database_model->get_usage_admin();
+			$data['text_result'] = $this->database_model->get_usage_admin(1);
 		}
 		else
 		{

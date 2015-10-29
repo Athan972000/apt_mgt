@@ -15,7 +15,7 @@
 		<div class="container-fluid row no-gutter">
 			<?php if($mynav): ?>
 			<div style="width:250px;min-width:250px;" class="col-xs-4"><?php echo $nav; ?></div>
-			<div style="padding-left: 15px; padding-top:80px;"align="center" class="col-xs-8"><?php echo $content; ?></div>
+			<div style="padding-left: 15px; padding-top:80px;" class="col-xs-8"><?php echo $content; ?></div>
 			<?php else: ?>
 			<div class="col-xs-12"><?php echo $content; ?></div>
 			<?php endif; ?>
