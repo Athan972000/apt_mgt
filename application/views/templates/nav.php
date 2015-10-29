@@ -1,8 +1,8 @@
 
 
-<aside class="aside">
+
          <!-- START Sidebar (left)-->
-         <nav class="sidebar" style="height:100%;">
+         <nav class="sidebar" style="min-height:150%;">
             <ul class="nav">
 				<li style="background-color:#4486F6">
 					<a href="#">
@@ -74,5 +74,4 @@
             </ul>
          </nav>
          <!-- END Sidebar (left)-->
-      </aside>
       

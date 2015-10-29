@@ -1,5 +1,8 @@
 <script src="<?php echo base_url().'resources/js/Chart.js'?>"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css">
+  
+   
 <style type="text/css">
 canvas{
         width: 100% !important;
@@ -59,8 +62,14 @@ canvas{
 			</div>
         </div>
 		<br/>
-		<table id="chart_table" align="center" style="width:50%" class='table table-striped table-hover'>
+		
+		<table id="datatable1" align="center" style="width:50%" class='display table table-striped table-hover'>
 		</table>
+		<!--
+		<table align="center" class="display table table-striped table-hover" style="width:50%" id="datatable1">
+		<tbody><tr><td>09-30-2015</td><td>16</td></tr><tr><td>10-01-2015</td><td>16</td></tr><tr><td>10-02-2015</td><td>16</td></tr><tr><td>10-03-2015</td><td>16</td></tr><tr><td>10-04-2015</td><td>16</td></tr><tr><td>10-05-2015</td><td>16</td></tr><tr><td>10-06-2015</td><td>16</td></tr><tr><td>10-07-2015</td><td>16</td></tr><tr><td>10-08-2015</td><td>16</td></tr><tr><td>10-09-2015</td><td>16</td></tr><tr><td>10-10-2015</td><td>16</td></tr><tr><td>10-11-2015</td><td>16</td></tr><tr><td>10-12-2015</td><td>16</td></tr><tr><td>10-13-2015</td><td>16</td></tr><tr><td>10-14-2015</td><td>16</td></tr><tr><td>10-15-2015</td><td>16</td></tr><tr><td>10-16-2015</td><td>16</td></tr><tr><td>10-17-2015</td><td>16</td></tr><tr><td>10-18-2015</td><td>16</td></tr><tr><td>10-19-2015</td><td>16</td></tr><tr><td>10-20-2015</td><td>16</td></tr><tr><td>10-21-2015</td><td>16</td></tr><tr><td>10-22-2015</td><td>16</td></tr><tr><td>10-23-2015</td><td>16</td></tr><tr><td>10-24-2015</td><td>16</td></tr><tr><td>10-25-2015</td><td>16</td></tr><tr><td>10-26-2015</td><td>16</td></tr><tr><td>10-27-2015</td><td>16</td></tr><tr><td>10-28-2015</td><td>32</td></tr><tr><td>10-29-2015</td><td>9</td></tr></tbody></table>
+		-->
+		
 	</div>
 <script type="text/javascript">
 var text_result = JSON.parse('<?php echo json_encode($Nvoca['text_result']); ?>');
@@ -137,12 +146,18 @@ function construct_data(ext)
 
 function construct_table(tblabels,tbdatas)
 {
-	$('#chart_table').html("");
+	$('#datatable1').html("");
+	if(typeof(mytable) != 'undefined')
+		mytable.destroy();
+	$('#datatable1').html(
+		"<thead><tr><th>"+"Date"+"</th><th>"+"Amount/Count"+"</th></tr></thead><tbody>");
 	for( x=0; x < tblabels.length; x++)
 	{
-		$('#chart_table').append(
+		$('#datatable1').append(
 		"<tr><td>"+tblabels[x]+"</td><td>"+tbdatas[x]+"</td></tr>");
 	}
+	$('#datatable1').append("</tbody>");
+	mytable = $('#datatable1').DataTable();
 }
 
 $('#count').click(function(){
@@ -195,7 +210,12 @@ $('#m6').click(function(){
 		}
 	});
 });
+$(document).ready(function() {
+	$( "#total" ).trigger( "click" );
+	mytable = $('#datatable1').DataTable();
+	} );
 
-$( "#total" ).trigger( "click" );
 </script>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
 
