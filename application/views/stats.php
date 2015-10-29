@@ -4,7 +4,8 @@
 canvas{
         width: 100% !important;
 		max-width: 800px;
-		height: 400px;
+		height: 600px;
+		width: 800px;
 		max-height: 600px;
         height: auto !important;
     }
@@ -13,15 +14,22 @@ canvas{
 	<div class="row container-fluid">
         <div class="graph span6">
             <h3 class="title"> The Chart</h3>
-            <canvas id="myChart" width="100%" height="100%"></canvas>
-        </div>
+            <canvas id="myChart"></canvas>
 		<br/>
 		<button class="btn btn-primary btn-lg" id="total">Total</button>
         <button class="btn btn-primary btn-lg" id="text">Text</button>
 		<button class="btn btn-primary btn-lg" id="word">Word</button>
 		<button class="btn btn-primary btn-lg" id="defi">Definition</button>
+        </div>
 		<br/>
-		<?php echo "<pre>";print_r($Nvoca['text_result']); ?>
+		<table class='table table-striped table-hover'>
+		<?php 		
+		foreach( $Nvoca['text_result'] as $key => $value )
+		{
+				echo "<th>".$key."</th>";
+		}		
+		?>
+		</table>
 	</div>
 	<script type="text/javascript">
 	$(window).on('resize',function(){location.reload();});
@@ -32,107 +40,49 @@ var ctx = $("#myChart").get(0).getContext("2d");
 var vocadbchart;
 //Total
 $('#total').click(function(){
-	dateArray = Object.keys(text_result.total);
-	lengthArray = [];
-	for( i=0; i<dateArray.length; i++ )
-	{
-		lengthArray.push( text_result.total[dateArray[i]] );
-	}
-	var data = {
-		labels: dateArray,
-		datasets: [
-			{
-				
-				label: "Total",
-				fillColor: "rgba(151,187,205,0.2)",
-				strokeColor: "rgba(151,187,205,1)",
-				pointColor: "rgba(151,187,205,1)",
-				pointStrokeColor: "#fff",
-				pointHighlightFill: "#fff",
-				pointHighlightStroke: "rgba(220,220,220,1)",
-				data: lengthArray
-			},
-		]
-	};
-	// vocadbchart.removeData();
+	var data = construct_data('total');
+	
 	if(typeof(vocadbchart) != 'undefined')
 		vocadbchart.destroy();
 	vocadbchart = new Chart(ctx).Line(data);
 	$(this).siblings().removeClass('active');
 	$(this).addClass('active');
-	// console.log(lengthArray);
 });
-	
 //Text
 $('#text').click(function(){
-	dateArray = Object.keys(text_result.text);
-	lengthArray = [];
-	for( i=0; i<dateArray.length; i++ )
-	{
-		lengthArray.push( text_result.text[dateArray[i]] );
-	}
-	var data = {
-		labels: dateArray,
-		datasets: [
-			{
-				
-				label: "My First dataset",
-				fillColor: "rgba(151,187,205,0.2)",
-				strokeColor: "rgba(151,187,205,1)",
-				pointColor: "rgba(151,187,205,1)",
-				pointStrokeColor: "#fff",
-				pointHighlightFill: "#fff",
-				pointHighlightStroke: "rgba(220,220,220,1)",
-				data: lengthArray
-			},
-		]
-	};
-	// new Chart(ctx).Line(data);
+	var data = construct_data('text');
 	vocadbchart.destroy();
 	vocadbchart = new Chart(ctx).Line(data);
 	$(".active").removeClass('active');
 	$(this).addClass('active');
-	// console.log(lengthArray);
 });
 
 //Word
 $('#word').click(function(){
-	dateArray = Object.keys(text_result.word);
-	lengthArray = [];
-	for( i=0; i<dateArray.length; i++ )
-	{
-		lengthArray.push( text_result.word[dateArray[i]] );
-	}
-	var data = {
-		labels: dateArray,
-		datasets: [
-			{
-				
-				label: "My First dataset",
-				fillColor: "rgba(151,187,205,0.2)",
-				strokeColor: "rgba(151,187,205,1)",
-				pointColor: "rgba(151,187,205,1)",
-				pointStrokeColor: "#fff",
-				pointHighlightFill: "#fff",
-				pointHighlightStroke: "rgba(220,220,220,1)",
-				data: lengthArray
-			},
-		]
-	};
+	var data = construct_data('word');
 	vocadbchart.destroy();
 	vocadbchart = new Chart(ctx).Line(data);
 	$(".active").removeClass('active');
 	$(this).addClass('active');
-	// console.log(lengthArray);
 });
 
-//Word
+//Definition
 $('#defi').click(function(){
-	dateArray = Object.keys(text_result.defi);
+	var data = construct_data('defi');
+	vocadbchart.destroy();
+	vocadbchart = new Chart(ctx).Line(data);
+	$(".active").removeClass('active');
+	$(this).addClass('active');
+});
+
+function construct_data(ext)
+{
+
+	var dateArray = Object.keys(text_result[ext]);
 	lengthArray = [];
 	for( i=0; i<dateArray.length; i++ )
 	{
-		lengthArray.push( text_result.defi[dateArray[i]] );
+		lengthArray.push( text_result[ext][dateArray[i]] );
 	}
 	var data = {
 		labels: dateArray,
@@ -150,12 +100,8 @@ $('#defi').click(function(){
 			},
 		]
 	};
-	vocadbchart.destroy();
-	vocadbchart = new Chart(ctx).Line(data);
-	$(".active").removeClass('active');
-	$(this).addClass('active');
-	// console.log(lengthArray);
-});
+	return data;
+}
 
 $( "#total" ).trigger( "click" );
 </script>

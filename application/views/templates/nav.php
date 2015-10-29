@@ -2,7 +2,7 @@
 
 <aside class="aside">
          <!-- START Sidebar (left)-->
-         <nav class="sidebar">
+         <nav class="sidebar" style="height:100%;">
             <ul class="nav">
 				<li style="background-color:#4486F6">
 					<a href="#">
