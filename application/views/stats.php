@@ -35,12 +35,25 @@ canvas{
 {
 	text-align: center;
 }
+.panel-heading:hover{
+	cursor:pointer;
+}
 </style>
 	
+	<div class="panel-group" style="padding-left:350px">
+	  <div class="panel panel-primary">
+		<div class="panel-heading" align ="center">      
+			<h4 data-toggle="collapse" href="#myChart" class="panel-title">Usage Chart</h4>
+		</div>
+	   
+		<div id="collapse1" class="panel-collapse collapse in" style="padding:10px">
+		  <canvas id="myChart" class="collapse in"></canvas> 
+		</div>
+	  </div>
+	</div>
 	<div class="row container-fluid">
         <div class="graph span6">
-            <h3 class="title"> The Chart</h3>
-            <canvas id="myChart"></canvas>
+            
 			<br/>
 		
 			<div class="chart_buttons">
@@ -81,9 +94,11 @@ $('#total').click(function(){
 	var data = construct_data('total');
 	construct_table( data.labels, data.datasets[0].data );
 
-	if(typeof(vocadbchart) != 'undefined')
-		vocadbchart.destroy();
-	vocadbchart = new Chart(ctx).Line(data);
+	if ($("#myChart").hasClass('collapse in')) {
+		if(typeof(vocadbchart) != 'undefined')
+			vocadbchart.destroy();
+		vocadbchart = new Chart(ctx).Line(data);
+	}
 	$(this).siblings().removeClass('active');
 	$(this).addClass('active');
 });
@@ -91,8 +106,10 @@ $('#total').click(function(){
 $('#text').click(function(){
 	var data = construct_data('text');
 	construct_table( data.labels, data.datasets[0].data );
-	vocadbchart.destroy();
-	vocadbchart = new Chart(ctx).Line(data);
+	if ($("#myChart").hasClass('collapse in')) {
+		vocadbchart.destroy();
+		vocadbchart = new Chart(ctx).Line(data);
+	}
 	$(".active").removeClass('active');
 	$(this).addClass('active');
 });
@@ -101,8 +118,10 @@ $('#text').click(function(){
 $('#word').click(function(){
 	var data = construct_data('word');
 	construct_table( data.labels, data.datasets[0].data );
-	vocadbchart.destroy();
-	vocadbchart = new Chart(ctx).Line(data);
+	if ($("#myChart").hasClass('collapse in')) {
+		vocadbchart.destroy();
+		vocadbchart = new Chart(ctx).Line(data);
+	}
 	$(".active").removeClass('active');
 	$(this).addClass('active');
 });
@@ -111,8 +130,10 @@ $('#word').click(function(){
 $('#defi').click(function(){
 	var data = construct_data('defi');
 	construct_table( data.labels, data.datasets[0].data );
-	vocadbchart.destroy();
-	vocadbchart = new Chart(ctx).Line(data);
+	if ($("#myChart").hasClass('collapse in')) {
+		vocadbchart.destroy();
+		vocadbchart = new Chart(ctx).Line(data);
+	}
 	$(".active").removeClass('active');
 	$(this).addClass('active');
 });
@@ -136,6 +157,7 @@ function construct_data(ext)
 				pointColor: "rgba(151,187,205,1)",
 				pointStrokeColor: "#fff",
 				pointHighlightFill: "#fff",
+				showXLabels: 3,
 				pointHighlightStroke: "rgba(220,220,220,1)",
 				data: lengthArray
 			},
