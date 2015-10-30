@@ -135,11 +135,11 @@ Class Database_Model extends CI_Model {
 	
 	public function get_usage_admin($monthdeduct)
 	{
-		$return = [];
-		$total_arr = [];
-		$api_usage_text = [];
-		$api_usage_word = [];
-		$api_usage_definition = [];
+		$return = array();
+		$total_arr = array();
+		$api_usage_text = array();
+		$api_usage_word = array();
+		$api_usage_definition = array();
 		
 		$today = date('Y-m-d H:i:s');
 		$minus2months = date('Y-m-d H:i:s',(strtotime ( '-'.$monthdeduct.' month' , strtotime ( $today) ) ));
@@ -260,11 +260,11 @@ Class Database_Model extends CI_Model {
 	//users
 	public function get_usage_users($apikey)
 	{
-		$return = [];
-		$total_arr = [];
-		$api_usage_text = [];
-		$api_usage_word = [];
-		$api_usage_definition = [];
+		$return = array();
+		$total_arr = array();
+		$api_usage_text = array();
+		$api_usage_word = array();
+		$api_usage_definition = array();
 		
 		//TEXT	
 		$sql = "SELECT * FROM api_usage_text WHERE apikey ='".$apikey."' ORDER BY datetime";
