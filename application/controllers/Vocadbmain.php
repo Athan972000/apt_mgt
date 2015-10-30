@@ -131,7 +131,7 @@ class Vocadbmain extends MY_Controller {
 			'company' => $this->input->post('company'),
 			'platform' =>  $this->input->post('platform'),
 			'how' => $this->input->post('how'),
-			'nationality' => $this->input->post('nationality'),
+			'nationality' => $this->input->post('vocadb_lang'),
 			'confirm' => $this->input->post('confirm'),
 			'link' => $this->input->post('link')
 			
@@ -141,7 +141,7 @@ class Vocadbmain extends MY_Controller {
 			// $this->_render('login_form');
 			if($this->input->post('confirm') )
 			{
-				$this->send_confirm_email($data['email'],$data['password']);
+				$this->send_confirm_email( $this->input->post('email'), $this->input->post('password') );
 			}
 			echo $result;
 		}

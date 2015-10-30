@@ -58,17 +58,17 @@ canvas{
 		
 			<div class="chart_buttons">
 				<div class="byitem">
-					<button class="btn btn-primary btn-lg" id="total">Total</button>
+					<button class="btn btn-primary btn-lg active" id="total">Total</button>
 					<button class="btn btn-default btn-lg" id="text">Text</button>
 					<button class="btn btn-default btn-lg" id="word">Word</button>
 					<button class="btn btn-default btn-lg" id="defi">Definition</button>
 				</div>
 				<div class="byusage">
-					<button class="btn btn-primary btn-lg" id="count">Count</button>
+					<button class="btn btn-primary btn-lg active" id="count">Count</button>
 					<button class="btn btn-default btn-lg" id="amnt">Amount</button>
 				</div>
 				<div class="bydate">
-					<button class="btn btn-primary btn-lg" id="m1">1 month</button>
+					<button class="btn btn-primary btn-lg active" id="m1">1 month</button>
 					<button class="btn btn-default btn-lg" id="m3">3 months</button>
 					<button class="btn btn-default btn-lg" id="m6">6 months</button>
 				</div>
@@ -109,8 +109,7 @@ $('#total').click(function(){
 			vocadbchart.destroy();
 		vocadbchart = new Chart(ctx).Line(data);
 	}
-	$(this).siblings().removeClass('active');
-	$(this).addClass('active');
+	buttonchange( $(this) );
 });
 //Text
 $('#text').click(function(){
@@ -120,8 +119,7 @@ $('#text').click(function(){
 		vocadbchart.destroy();
 		vocadbchart = new Chart(ctx).Line(data);
 	}
-	$(".active").removeClass('active');
-	$(this).addClass('active');
+	buttonchange( $(this) );
 });
 
 //Word
@@ -132,8 +130,7 @@ $('#word').click(function(){
 		vocadbchart.destroy();
 		vocadbchart = new Chart(ctx).Line(data);
 	}
-	$(".active").removeClass('active');
-	$(this).addClass('active');
+	buttonchange( $(this) );
 });
 
 //Definition
@@ -144,8 +141,7 @@ $('#defi').click(function(){
 		vocadbchart.destroy();
 		vocadbchart = new Chart(ctx).Line(data);
 	}
-	$(".active").removeClass('active');
-	$(this).addClass('active');
+	buttonchange( $(this) );
 });
 
 function construct_data(ext)
@@ -194,14 +190,17 @@ function construct_table(tblabels,tbdatas)
 
 $('#count').click(function(){
 	amountorcount = 'count';
+	buttonchange( $(this) );
 	$('.byitem').find('button.active').trigger( 'click' );
 });
 $('#amnt').click(function(){
 	amountorcount = 'amount';
+	buttonchange( $(this) );
 	$('.byitem').find('button.active').trigger( 'click' );
 });
 
 $('#m1').click(function(){
+	var thisselector = $(this);
 	$.ajax({
 		url: base_url+"monthstats",
 		type:'POST',
@@ -211,11 +210,14 @@ $('#m1').click(function(){
 			// console.log(res);
 			text_result = JSON.parse( res );
 			$('.byitem').find('button.active').trigger( 'click' );
+			buttonchange( thisselector );
 		}
 	});
+	
 });
 
 $('#m3').click(function(){
+	var thisselector = $(this);
 	$.ajax({
 		url: base_url+"monthstats",
 		type:'POST',
@@ -225,11 +227,13 @@ $('#m3').click(function(){
 			// console.log(res);
 			text_result = JSON.parse( res );
 			$('.byitem').find('button.active').trigger( 'click' );
+			buttonchange( thisselector );
 		}
 	});
 });
 
 $('#m6').click(function(){
+	var thisselector = $(this);
 	$.ajax({
 		url: base_url+"monthstats",
 		type:'POST',
@@ -239,9 +243,17 @@ $('#m6').click(function(){
 			// console.log(res);
 			text_result = JSON.parse( res );
 			$('.byitem').find('button.active').trigger( 'click' );
+			buttonchange( thisselector );
 		}
 	});
 });
+
+function buttonchange(content)
+{
+	content.siblings().removeClass('active').removeClass('btn-primary').addClass('btn-default');
+	content.addClass('active').removeClass('btn-default').addClass('btn-primary');
+}
+
 $(document).ready(function() {
 	$( "#total" ).trigger( "click" );
 	mytable = $('#datatable1').DataTable();

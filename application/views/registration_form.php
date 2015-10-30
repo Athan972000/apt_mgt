@@ -83,7 +83,7 @@ var confirm = ".$confirm.";
 								</div>
 								
 								<div class="form-group has-feedback">
-									<select required name='nationality'  id='nationality'  class='form-control' ><option value='en'>English</option>
+									<select required name='vocadb_lang'  id='vocadb_lang'  class='form-control' ><option value='en'>English</option>
 										<option value='ar'>Arabic - ‫العربية‬ (ar)</option>
 											<option value='hy'>Armenian - հայերեն (hy)</option>
 											<option value='bn'>Bengali - বাঙালি (bn)</option>
@@ -184,11 +184,9 @@ var confirm = ".$confirm.";
 						name: $("input[name=lname]").val(),
 						platform: $("input[name=platform]").val(),
 						how: $("textarea[name=how]").val(),
-						nationality: $("select[name=nationality]").val(),
-						//temp
+						vocadb_lang: $("select[name=vocadb_lang]").val(),
 						confirm: confirm,
 						link: link
-						//end temp
 					},
 					success: function(check)
 					{
