@@ -160,8 +160,17 @@ var confirm = ".$confirm.";
 						}
 						else
 						{
-							$('#vocamodalmsg').html("Confirmation email sent!");
-							setTimeout(openUrl, 3000);
+							if(confirm)
+							{
+								$('#vocamodalmsg').html("Registration Successful. You may now login");
+								setTimeout(openUrl, 3000);
+							}
+							else
+							{
+								$('#vocamodalmsg').html("Confirmation email sent!");
+								setTimeout(openUrl, 3000);
+							}
+							
 						}
 						$('#vocadbmodal').modal('show');
 					}               

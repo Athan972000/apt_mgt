@@ -139,20 +139,23 @@ class Vocadbmain extends MY_Controller {
 		$result = $this->database_model->registration_insert($data);
 		if($result===true){
 			// $this->_render('login_form');
-			$this->send_confirm_email($data['email'],$data['password']);
+			if($this->input->post('confirm') )
+			{
+				$this->send_confirm_email($data['email'],$data['password']);
+			}
 			echo $result;
 		}
 		else
 		{
-			echo $result;
-			$data['dbError'] = $result;
-			$this->_render('register',$data);
+			echo FALSE;
+			// $data['dbError'] = $result;
+			// $this->_render('register',$data);
 		}
 	}
 	
 	public function send_confirm_email($email,$password)
 	{
-		$data['link'] = base_url()."verify?email=".$email."&verify_key=".$email.$password;
+		$data['link'] = base_url()."verify?email=".$email."&verify_key=".md5($email.$password);
 		
 		$config['mailtype'] = 'html';
 		$config['charset']  = 'UTF-8';
