@@ -51,21 +51,21 @@ var confirm = ".$confirm.";
 									<input type="text" type="company" name="company" id="company" placeholder="Company" class="form-control" 
 									required 
 									/>
-									<span class="fa fa-lock form-control-feedback text-muted"></span>
+									
 								</div>
 							
 								<div class="form-group has-feedback">
 									<input <?php if(isset($Nvoca['fb_email'])){echo $Nvoca['fb_email'];}?>  type="text" type="email" name="email" id="name" placeholder="Email address" class="form-control" 
 									required data-parsley-type="email" 
 									/>
-									<span class="fa fa-lock form-control-feedback text-muted"></span>
+									
 								</div>
 
 								<div class="form-group has-feedback">
 									<input <?php if(isset($Nvoca['fb_name'])){echo $Nvoca['fb_name'];}?> type="text" type="lname" name="lname" id="lname" placeholder="Name" class="form-control" 
 									required 
 									/>
-									<span class="fa fa-lock form-control-feedback text-muted"></span>
+									
 								</div>
 								
 								
@@ -74,32 +74,70 @@ var confirm = ".$confirm.";
 									<input type="text" type="platform" name="platform" id="platform" placeholder="Platform? e.g. iOS,Android" class="form-control" 
 									required 
 									/>
-									<span class="fa fa-lock form-control-feedback text-muted"></span>
+									
 								</div>
 								
 								<div class="form-group has-feedback">
 									<textarea style="resize: none;" class="form-control" required type="search" name="how" placeholder="How to use? e.g. App and/or Web"></textarea>
-									<span class="fa fa-lock form-control-feedback text-muted"></span>
+									
 								</div>
 								
 								<div class="form-group has-feedback">
-									<input type="text" type="nationality" name="nationality" id="nationality" placeholder="Nationality? Chinese, Japanese, Korean." class="form-control" 
-									required 
-									/>
-									<span class="fa fa-lock form-control-feedback text-muted"></span>
+									<select required name='nationality'  id='nationality'  class='form-control' ><option value='en'>English</option>
+										<option value='ar'>Arabic - ‫العربية‬ (ar)</option>
+											<option value='hy'>Armenian - հայերեն (hy)</option>
+											<option value='bn'>Bengali - বাঙালি (bn)</option>
+											<option value='bg'>Bulgarian - ‪български (bg)</option>
+											<option value='zh-CN'>Chinese Simplified  - ‪简体中文(zh-CN)</option>
+											<option value='zh-TW'>Chinese Traditional - ‪繁體中文(zh-TW)</option>
+											<option value='hr'>Croatian - ‪Hrvatski (hr)</option>
+											<option value='cs'>Czech - ‪Čeština (cs)</option>
+											<option value='da'>Danish - ‪Dansk (da)</option>
+											<option value='nl'>Dutch - ‪Nederlands (nl)</option>
+											<option value='en'>English - United States (en)</option>
+											<option value='tl'>Filipino - Pilipino (tl)</option>
+											<option value='fi'>Finnish - ‪Suomi (fi)</option>
+											<option value='fr'>French - ‪Français (fr)</option>
+											<option value='ka'>Georgian - ქართული(ka)</option>
+											<option value='de'>German - ‪Deutsch (de)</option>
+											<option value='el'>Greek - ‪Ελληνικά (el)</option>
+											<option value='hi'>Hindi - ‪हिन्दी (hi)</option>
+											<option value='hu'>Hungarian - ‪magyar (hu)</option>
+											<option value='id'>Indonesian - ‪Bahasa Indonesia (id)</option>
+											<option value='it'>Italian - ‪Italiano (it)</option>
+											<option value='ja'>Japanese - ‪日本語 (ja)</option>
+											<option value='ko'>Korean - ‪한국어 (ko)</option>
+											<option value='ms'>Malay - ‪Bahasa Melayu (ms)</option>
+											<option value='no'>Norwegian - ‪norsk (no)</option>
+											<option value='fa'>Persian - فارسی (fa)</option>
+											<option value='pl'>Polish - ‪polski (pl)</option>
+											<option value='pt'>Portuguese - ‪português  (pt)</option>
+											<option value='ro'>Romanian - ‪română (ro)</option>
+											<option value='ru'>Russian - ‪Русский (ru)</option>
+											<option value='sl'>Slovenian - ‪slovenščina (sl)</option>
+											<option value='es'>Spanish - ‪Español (es)</option>
+											<option value='sv'>Swedish - ‪Svenska (sv)</option>
+											<option value='ta'>Tamil - தமிழ்(ta)</option>
+											<option value='th'>Thai - ‪ไทย (th)</option>
+											<option value='tr'>Turkish - ‪Türkçe (tr)</option>
+											<option value='uk'>Ukrainian - ‪Українська (uk)</option>
+											<option value='vi'>Vietnamese - ‪Tiếng Việt(vi)</option>
+									</select>
+
+									
 								</div>
 
 								<div class="form-group has-feedback">
 									<input type="password" name="password" id="password" placeholder="Password" class="form-control"
 									required data-parsley-type="alphanum"
 									/>
-									<span class="fa fa-lock form-control-feedback text-muted"></span>
+									
 								</div>
 								<div class="form-group has-feedback">
 									<input type="password" name="repassword" id="repassword" placeholder="Confirm Password" class="form-control"
 									required data-parsley-equalto='#password'
 									/>
-									<span class="fa fa-lock form-control-feedback text-muted"></span>
+									
 								</div>
 							
 								<div class="clearfix">
@@ -146,7 +184,7 @@ var confirm = ".$confirm.";
 						name: $("input[name=lname]").val(),
 						platform: $("input[name=platform]").val(),
 						how: $("textarea[name=how]").val(),
-						nationality: $("input[name=nationality]").val(),
+						nationality: $("select[name=nationality]").val(),
 						//temp
 						confirm: confirm,
 						link: link

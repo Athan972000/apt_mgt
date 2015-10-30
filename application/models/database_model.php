@@ -84,7 +84,7 @@ Class Database_Model extends CI_Model {
 		else
 		{
 			$row = $query->row();
-			// echo $key." ".$row->email.$row->password;
+			echo $key." ".$row->email.$row->password;
 			if( $key == md5($row->email.$row->password) )
 			{
 				return TRUE;
