@@ -76,8 +76,19 @@ canvas{
         </div>
 		<br/>
 		
-		<table id="datatable1" align="center" style="width:50%" class='display table table-striped table-hover'>
-		</table>
+		<div class="panel-group" style="padding-left:350px">
+		  <div class="panel panel-primary">
+			<div class="panel-heading" align ="center">      
+				<h4 data-toggle="collapse" href="#datatable1" class="panel-title">Usage Table</h4>
+			</div>
+		   
+			<div id="collapse1" class="panel-collapse collapse in" style="padding:10px">
+			  <table id="datatable1" align="center" style="width:50%" class='display table table-striped table-hover collapse in'>
+			</table>
+			</div>
+		  </div>
+		</div>
+		
 		<!--
 		<table align="center" class="display table table-striped table-hover" style="width:50%" id="datatable1">
 		<tbody><tr><td>09-30-2015</td><td>16</td></tr><tr><td>10-01-2015</td><td>16</td></tr><tr><td>10-02-2015</td><td>16</td></tr><tr><td>10-03-2015</td><td>16</td></tr><tr><td>10-04-2015</td><td>16</td></tr><tr><td>10-05-2015</td><td>16</td></tr><tr><td>10-06-2015</td><td>16</td></tr><tr><td>10-07-2015</td><td>16</td></tr><tr><td>10-08-2015</td><td>16</td></tr><tr><td>10-09-2015</td><td>16</td></tr><tr><td>10-10-2015</td><td>16</td></tr><tr><td>10-11-2015</td><td>16</td></tr><tr><td>10-12-2015</td><td>16</td></tr><tr><td>10-13-2015</td><td>16</td></tr><tr><td>10-14-2015</td><td>16</td></tr><tr><td>10-15-2015</td><td>16</td></tr><tr><td>10-16-2015</td><td>16</td></tr><tr><td>10-17-2015</td><td>16</td></tr><tr><td>10-18-2015</td><td>16</td></tr><tr><td>10-19-2015</td><td>16</td></tr><tr><td>10-20-2015</td><td>16</td></tr><tr><td>10-21-2015</td><td>16</td></tr><tr><td>10-22-2015</td><td>16</td></tr><tr><td>10-23-2015</td><td>16</td></tr><tr><td>10-24-2015</td><td>16</td></tr><tr><td>10-25-2015</td><td>16</td></tr><tr><td>10-26-2015</td><td>16</td></tr><tr><td>10-27-2015</td><td>16</td></tr><tr><td>10-28-2015</td><td>32</td></tr><tr><td>10-29-2015</td><td>9</td></tr></tbody></table>
