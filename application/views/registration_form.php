@@ -126,20 +126,22 @@ var confirm = ".$confirm.";
 
 									
 								</div>
-
-								<div class="form-group has-feedback">
-									<input type="password" name="password" id="password" placeholder="Password" class="form-control"
-									required data-parsley-type="alphanum"
-									/>
-									
-								</div>
-								<div class="form-group has-feedback">
-									<input type="password" name="repassword" id="repassword" placeholder="Confirm Password" class="form-control"
-									required data-parsley-equalto='#password'
-									/>
-									
-								</div>
-							
+<?php if( isset($Nvoca['cancel_pass']) )
+{
+	echo '
+			<input type="hidden" name="password" id="password" value="0"/>
+	';
+}
+else
+{
+	echo '<div class="form-group has-feedback">
+			<input type="password" name="password" id="password" placeholder="Password" class="form-control" required data-parsley-type="alphanum"/>
+		</div>
+		<div class="form-group has-feedback">
+			<input type="password" name="repassword" id="repassword" placeholder="Confirm Password" class="form-control"required data-parsley-equalto="#password"/>
+		</div>';
+}
+?>
 								<div class="clearfix">
 									<div class="checkbox c-checkbox pull-left mt0">
 										<label>
@@ -158,7 +160,6 @@ var confirm = ".$confirm.";
 					</div>
 			</div>
 		</div>
-		<script type="text/javascript" src="<?php echo base_url()."resources/vendor/jquery.min.js"; ?>"></script>
 		<script type="text/javascript">
 		function openUrl()
 		{

@@ -1,4 +1,5 @@
 <script src="<?php echo base_url().'resources/js/Chart.js'?>"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script> -->
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css">
   
@@ -38,12 +39,24 @@ canvas{
 .panel-heading:hover{
 	cursor:pointer;
 }
+#datatable1_paginate
+{
+	position: absolute;
+	right: 0px;
+	top: 30px;
+}
+#datatable1_info
+{
+	position: absolute;
+	left: 0px;
+	top: 30px;
+}
 </style>
 	
-	<div class="panel-group" style="padding-left:350px">
+	<div class="panel-group">
 	  <div class="panel panel-primary">
 		<div class="panel-heading" align ="center">      
-			<h4 data-toggle="collapse" href="#myChart" class="panel-title">Usage Chart</h4>
+			<h4 data-toggle="collapse" href="#myChart" class="panel-title">Usage Chart<span style="position:absolute;right:30px;"><em class="fa fa-chevron-down"></em></span></h4>
 		</div>
 	   
 		<div id="collapse1" class="panel-collapse collapse in" style="padding:10px">
@@ -76,14 +89,14 @@ canvas{
         </div>
 		<br/>
 		
-		<div class="panel-group" style="padding-left:350px">
+		<div class="panel-group">
 		  <div class="panel panel-primary">
 			<div class="panel-heading" align ="center">      
-				<h4 data-toggle="collapse" href="#datatable1" class="panel-title">Usage Table</h4>
+				<h4 href="#datatable1" class="panel-title">Usage Table</h4>
 			</div>
 		   
-			<div id="collapse1" class="panel-collapse collapse in" style="padding:10px">
-			  <table id="datatable1" align="center" style="width:50%" class='display table table-striped table-hover collapse in'>
+			<div id="collapse1" class="panel-collapse collapse in" style="padding:10px 10px 70px">
+			  <table id="datatable1" align="center" style="width:50%;position: relative; top: 45px;" class='display table table-striped table-hover'>
 			</table>
 			</div>
 		  </div>
@@ -163,9 +176,9 @@ function construct_data(ext)
 				pointColor: "rgba(151,187,205,1)",
 				pointStrokeColor: "#fff",
 				pointHighlightFill: "#fff",
-				showXLabels: 3,
 				pointHighlightStroke: "rgba(220,220,220,1)",
 				data: lengthArray
+
 			},
 		]
 	};
@@ -257,6 +270,7 @@ function buttonchange(content)
 $(document).ready(function() {
 	$( "#total" ).trigger( "click" );
 	mytable = $('#datatable1').DataTable();
+	// $("#scalingnav").height( $("#scalingcontent").height() );
 	} );
 
 </script>

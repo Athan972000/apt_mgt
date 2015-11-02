@@ -8,15 +8,14 @@ class Vocadbmain extends MY_Controller {
 		$this->load->helper('url');
 		$this->load->library('session');
 		$this->load->model('database_model');
-		
 		$this->mynav = FALSE; //true=implement side-nav to all pages
 		$this->css[] = "resources/app/css/bootstrap.css";
 		$this->css[] = "resources/app/css/app.css";
 		$this->css[] = "resources/vendor/fontawesome/css/font-awesome.min.css";
-		$this->css[] = "resources/vendor/animo/animate+animo.css";
-		$this->css[] = "resources/vendor/csspinner/csspinner.min.css";
-		$this->js[] = "resources/vendor/modernizr/modernizr.js";
-		$this->js[] = "resources/vendor/fastclick/fastclick.js";
+		// $this->css[] = "resources/vendor/animo/animate+animo.css";
+		// $this->css[] = "resources/vendor/csspinner/csspinner.min.css";
+		// $this->js[] = "resources/vendor/modernizr/modernizr.js";
+		// $this->js[] = "resources/vendor/fastclick/fastclick.js";
     }
 	
 	public function index()
@@ -30,6 +29,7 @@ class Vocadbmain extends MY_Controller {
 		{
 			$fb['fb_email'] = "readonly='readonly' value='".$this->session->userdata('email')."'";
 			$fb['fb_confirm'] = 1;
+			$fb['cancel_pass'] = 1;
 		}
 		else
 		{
@@ -79,51 +79,65 @@ class Vocadbmain extends MY_Controller {
 	}
 	
 	public function login_process(){
-		// $this->is_logged_in();
-		// if(isset($this->session->userdata['logged_in'])){
-			// $this->load->view('welcome');
-		// }else{
-			// $this->_render('login_form');
-		// }
+		$return = array();
+		
+		$extracheck = $this->input->post('fromfb');
 		$data = array(
 			'email' => $this->input->post('email'),
 			'password' => $this->input->post('password')
 		);
-		//check db to verify user login info
 		$result = $this->database_model->login($data);
-		if($result){
+		if($result || $extracheck){
 			$email = $this->input->post('email');
 			$result = $this->database_model->read_user_information($email);
 			$confirm = $this->database_model->check_confirmation_email($email);
-			if($result){
-				$session_data = array(
-				'email' => $result[0]->email,
-				'name' => $result[0]->last_name
-				);
-			}
-			$this->session->set_userdata($session_data);
-			
-			if($confirm)
+			if($result)
 			{
-				$return = "confirmed";
+				$session_data = array(
+				'email' => $this->input->post('email'),
+				'name' => $result[0]->last_name,
+				'pic' => $this->input->post('pic')
+				);
+				$this->session->set_userdata($session_data);
+				
+				if($confirm)
+				{
+					$return['link'] = base_url()."feat";
+					$return['msg'] = "Logging in..";
+				}
+				else
+				{
+					$return['link'] = base_url()."confirm";
+					$return['msg'] = "Please verify your email address";
+				}
 			}
 			else
 			{
-				$return = "notconfirmed";
+				$session_data = array(
+				'email' => $this->input->post('email'),
+				'name' => $this->input->post('name'),
+				'pic' => $this->input->post('pic')
+				);
+				$this->session->set_userdata($session_data);
+				
+				$return['link'] = base_url()."register";
+				$return['msg'] = "Account not yet registered.";
 			}
-			echo $return;
+			$return['state'] = TRUE;
 		}
 		else{
 			// $data = array('error_message'=>'Invalid Username or Password');
 			// $this->_render('login_form',$data);
-			echo FALSE;
+			$return['state'] = FALSE;
+			$return['link'] = "";
+			$return['msg'] = "Check email/password";
 		}
-		
+		echo json_encode($return);
 	}
 	
 	public function new_user_registration(){
 		$data = array(
-			'apikey' => rand(10000000000000000000000000000000, 99999999999999999999999999999999),
+			'apikey' => $this->gen_api_key(),
 			'email' => $this->input->post('email'),
 			'password' => $this->input->post('password'),
 			'last_name' => $this->input->post('name'),
@@ -263,15 +277,15 @@ class Vocadbmain extends MY_Controller {
 	public function stats(){
 		$this->mynav = TRUE;
 		$adminchecker = TRUE;
-		if( $adminchecker )
-		{
-			$data['text_result'] = $this->database_model->get_usage_admin(1);
-		}
-		else
-		{
-			$query = $this->database_model->read_user_information($this->session->userdata('email'));
-			$data['text_result'] = $this->database_model->get_usage_users($query[0]->apikey);
-		}
+		// if( $adminchecker )
+		// {
+			// $data['text_result'] = $this->database_model->get_usage_admin(1);
+		// }
+		// else
+		// {
+		$query = $this->database_model->read_user_information($this->session->userdata('email'));
+		$data['text_result'] = $this->database_model->get_usage_users($query[0]->apikey);
+
 	    
 		$this->_render('stats',$data);
 	}
@@ -331,6 +345,19 @@ class Vocadbmain extends MY_Controller {
 
 			// $this->db->insert('api_usage_definition',$data);
 		// }
+	}
+	/*
+		API key generation
+	*/
+	private function gen_api_key()
+	{
+		$key=date("Y/m/d")."vocaDB".date("h:i:sa");
+		$time = microtime(); 
+		$time = explode( " " , $time ); 
+		$time = $time[0] + $time[1]; 
+		$key = md5($time.$key);// 32 character hex number , // md5(string,raw) 
+		// echo $key."<br>";
+		return $key;
 	}
 }
 ?>

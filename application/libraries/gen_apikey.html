@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+    <head>
+	<meta charset="utf-8">	
+	<link rel="shortcut icon" href="http://www.vocadb.co.kr/dic/images/vocadb.ico">
+	<link rel="stylesheet" href="http://www.vocadb.co.kr/dic/js/vocat.css">
+	<base target='_blank'>
+	<title>Generate vocaDB API</title>
+</head>
+<body >
+	<div class='header'>
+	<a href='http://www.vocadb.co.kr'><img src='http://www.vocadb.co.kr/dic/images/logo_blue_white.png' width='150' height='50' border='0' ></a>
+		<h2 >Management vocaDB API</h2> 
+	</div>
+	<?php
+	require_once 'Secure_word.php';	
+?>
+<div style='width:100%; margin:0 auto;'>
+	<div style='width:25%; margin:0 auto; float:left; padding:3%;'>
+	<div class='request_form'>
+	<h2>1. Sign Up</h2>
+	<form  action='gen_apikey.php' method='post' ><br>
+		<label><div class='circle'></div> Name * </label>
+			<input class='input_request_key' required  type='search' name='names-mail' placeholder='Your name' ><br>
+		<label><div class='circle'></div>  Email *</label>
+           		<input class='input_request'  required  type='email'  name='emails-mail' placeholder='your @ mail' ><br>
+		<label><div class='circle'></div> Company * </label>
+			<input class='input_request' required type='text' name='companys-mail'  ><br>
+		<label><div class='circle'></div> Language </label>
+			<select class='input_request' style='font-size:90%; padding:3px;' name='nation-mail'  >
+		<option value="en" selected>English(en)</option><option value='ar' >Arabic (ar)</option><option value='ko' >Korean (ko)</option><option value='ja'>Japanese (ja)</option><option value='zh-TW'>Chinese Tradi (zh-TW)</option><option value='zh-CN'>Chinese simp (zh-CN)</option><option value='ar'>Arabic (ar)</option><option value='hy'>Armenian (hy)</option><option value='bn'>Bengali (bn)</option><option value='bg'>Bulgarian (bg)</option><option value='hr'>Croatian (hr)</option><option value='cs'>Czech (cs)</option><option value='da'>Danish (da)</option><option value='nl'>Dutch (nl)</option><option value='tl'>Filipino (tl)</option><option value='fi'>Finnish (fi)</option><option value='fr'>French (fr)</option><option value='ka'>Georgian (ka)</option><option value='de'>German (de)</option><option value='el'>Greek (el)</option><option value='hi'>Hindi (hi)</option><option value='hu'>Hungarian (hu)</option><option value='id'>Indonesian (id)</option><option value='it'>Italian (it)</option><option value='ms'>Malay (ms)</option><option value='no'>Norwegian (no)</option><option value='fa'>Persian (fa)</option><option value='pl'>Polish (pl)</option><option value='pt'>Portuguese (pt)</option><option value='ro'>Romanian (ro)</option><option value='ru'>Russian (ru)</option><option value='sl'>Slovenian (sl)</option><option value='es'>Spanish (es)</option><option value='sv'>Swedish (sv)</option><option value='ta'>Tamil (ta)</option><option value='th'>Thai (th)</option><option value='tr'>Turkish (tr)</option><option value='uk'>Ukrainian (uk)</option><option value='vi'>Vietnamese (vi)</option>
+		</select><br>
+
+		<label><div class='circle'></div> How to use *</label>
+			<textarea class='input_request' required  type='text' name='msgs-mail'  placeholder='App and/or Web'  ></textarea><br>
+		<label><div class='circle'></div>  Security Code *</label>
+			<input class='input_request' type='text' name='scode' required  <?php echo "placeholder='".$secure_code."'"; ?> autocomplete='off'><br>	
+		<label><div class='circle'></div> Choose a work</label><br>
+			<input checked='checked' type='radio' value='0' name='mod'>New
+			<input type='radio' value='2' name='mod'>Update All<br><br>
+		<input class='submit_request' type='reset'  value='reset'><input class='submit_request' type='submit'  value='Submit' ><br>
+	</form>
+	</div>
+	</div>
+
+	<div style='width:25%; margin:0 auto; float:left; padding:3%;'>
+	<div class='request_form'>
+	<h2>2. Issue APIKEY</h2> 
+	<form  action='gen_apikey.php' method='post' ><br>
+		<label><div class='circle'></div> Name * </label>
+			<input class='input_request_key' required  type='search' name='names-mail' value='yun' ><br>
+		<label><div class='circle'></div>  Email *</label>
+		<input class='input_request'  required  type='email'  name='emails-mail' value='vocadb@gmail.com' ><br>
+		<label><div class='circle'></div>  Security Code *</label>
+		<input class='input_request' type='text' name='scode' required  value='2687' autocomplete='off'><br>
+		<input type='radio' checked='checked' value='1' name='mod'>issue API <br><br>
+		<input class='submit_request' type='reset'  value='reset'><input class='submit_request' type='submit'  value='Submit' ><br><br>
+		<p class='input_request'> Put a issued apikey in here using ajax</p>
+	</form>
+	</div>
+	</div>
+	
+	<div style='width:25%; margin:0 auto; float:left; padding:3%;'>
+	<div class='request_form'>
+	<h2>3. Search Client.</h2>
+	<form  action='gen_apikey.php' method='post' ><br>
+		<label><div class='circle'></div> Name * </label>
+			<input class='input_request_key' required  type='search' name='names-mail' value='yun' ><br>
+		<label><div class='circle'></div>  Email *</label>
+		<input class='input_request'  required  type='email'  name='emails-mail' value='vocadb@gmail.com' ><br>
+		<label><div class='circle'></div>  Security Code *</label>
+		<input class='input_request' type='text' name='scode' required  value='2687' autocomplete='off'><br>
+		<input type='radio' checked='checked' value='3' name='mod'>Search<br><br>
+		<input class='submit_request' type='reset'  value='reset'><input class='submit_request' type='submit'  value='Submit' ><br>
+	</form>
+	</div>
+	</div>
+
+	</div>	
+</body>
+</html>

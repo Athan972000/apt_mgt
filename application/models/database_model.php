@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 Class Database_Model extends CI_Model {
+
+	public function __construct() {
+        parent::__construct();
+    }
 	
 	//insert registration data into DB0
 	public function registration_insert($data){
@@ -258,16 +262,25 @@ Class Database_Model extends CI_Model {
 	}
 	
 	//users
-	public function get_usage_users($apikey)
+	public function get_usage_users($monthdeduct,$apikey)
 	{
+		//TEXT	
+		$sql = "SELECT * FROM api_usage_text WHERE apikey ='".$apikey."' ORDER BY datetime";
+		
 		$return = array();
 		$total_arr = array();
 		$api_usage_text = array();
 		$api_usage_word = array();
 		$api_usage_definition = array();
 		
-		//TEXT	
-		$sql = "SELECT * FROM api_usage_text WHERE apikey ='".$apikey."' ORDER BY datetime";
+		$today = date('Y-m-d H:i:s');
+		$minus2months = date('Y-m-d H:i:s',(strtotime ( '-'.$monthdeduct.' month' , strtotime ( $today) ) ));
+		$where = "WHERE datetime<='".$today."' AND datetime>='".$minus2months."' AND apikey ='".$apikey."'";
+		// $sql = "SELECT * FROM api_usage_text ".$where." ORDER BY datetime";
+		// echo $sql;exit();
+		
+		//TEXT
+		$sql = "SELECT * FROM api_usage_text ".$where." ORDER BY datetime";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
@@ -277,27 +290,31 @@ Class Database_Model extends CI_Model {
 				//api_usage_text
 				if( isset( $api_usage_text[date('m-d-Y',strtotime($row['datetime']))] ) )
 				{
-					$api_usage_text[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+					$api_usage_text[date('m-d-Y',strtotime($row['datetime']))]['amount'] += $row['length'];
+					$api_usage_text[date('m-d-Y',strtotime($row['datetime']))]['count']++;
 				}
 				else
 				{
-					$api_usage_text[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+					$api_usage_text[date('m-d-Y',strtotime($row['datetime']))]['amount'] = $row['length'];
+					$api_usage_text[date('m-d-Y',strtotime($row['datetime']))]['count'] = 1;
 				}
 				//total_arr
 				if( isset( $total_arr[date('m-d-Y',strtotime($row['datetime']))] ) )
 				{
-					$total_arr[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['amount'] += $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['count']++;
 				}
 				else
 				{
-					$total_arr[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['amount'] = $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['count'] = 1;
 				}
 				
 			}
 		}
 		
 		//WORD
-		$sql = "SELECT * FROM api_usage_word WHERE apikey ='".$apikey."' ORDER BY datetime";
+		$sql = "SELECT * FROM api_usage_word ".$where." ORDER BY datetime";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
@@ -307,27 +324,31 @@ Class Database_Model extends CI_Model {
 				//api_usage_word
 				if( isset( $api_usage_word[date('m-d-Y',strtotime($row['datetime']))] ) )
 				{
-					$api_usage_word[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+					$api_usage_word[date('m-d-Y',strtotime($row['datetime']))]['amount'] += $row['length'];
+					$api_usage_word[date('m-d-Y',strtotime($row['datetime']))]['count']++;
 				}
 				else
 				{
-					$api_usage_word[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+					$api_usage_word[date('m-d-Y',strtotime($row['datetime']))]['amount'] = $row['length'];
+					$api_usage_word[date('m-d-Y',strtotime($row['datetime']))]['count'] = 1;
 				}
 				//total_arr
 				if( isset( $total_arr[date('m-d-Y',strtotime($row['datetime']))] ) )
 				{
-					$total_arr[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['amount'] += $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['count']++;
 				}
 				else
 				{
-					$total_arr[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['amount'] = $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['count'] = 1;
 				}
 				
 			}
 		}
 		
 		//Definition
-		$sql = "SELECT * FROM api_usage_definition WHERE apikey ='".$apikey."' ORDER BY datetime";
+		$sql = "SELECT * FROM api_usage_definition ".$where." ORDER BY datetime";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
@@ -337,20 +358,24 @@ Class Database_Model extends CI_Model {
 				//api_usage_definition
 				if( isset( $api_usage_definition[date('m-d-Y',strtotime($row['datetime']))] ) )
 				{
-					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))]['amount'] += $row['length'];
+					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))]['count']++;
 				}
 				else
 				{
-					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))]['amount'] = $row['length'];
+					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))]['count'] = 1;
 				}
 				//total_arr
 				if( isset( $total_arr[date('m-d-Y',strtotime($row['datetime']))] ) )
 				{
-					$total_arr[date('m-d-Y',strtotime($row['datetime']))] += $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['amount'] += $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['count']++;
 				}
 				else
 				{
-					$total_arr[date('m-d-Y',strtotime($row['datetime']))] = $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['amount'] = $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['count'] = 1;
 				}
 				
 			}
@@ -362,6 +387,7 @@ Class Database_Model extends CI_Model {
 		$return['defi'] = $api_usage_definition;
 		
 		return $return;
+
 	}
 	
 	

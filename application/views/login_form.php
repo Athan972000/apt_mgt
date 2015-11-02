@@ -35,16 +35,17 @@ if (isset($this->session->userdata['logged_in']))
 		  // code below.
 		  function checkLoginState() {
 			  console.log("checkloginstate");
-			FB.getLoginStatus(function(response) {
+			FB.login(function(response) {
 			  statusChangeCallback(response);
-			});
+			},{ scope: 'email' });
 		  }
 
 		  window.fbAsyncInit = function() {
 		  FB.init({
-			appId      : '421187494738493',
+			appId      : '642467622561438',
 			//local server app id :421425981381311			
 			//actual server app id: 421187494738493 
+			//new app id: 642467622561438
 			cookie     : true,  // enable cookies to allow the server to access 
 								// the session
 			xfbml      : true,  // parse social plugins on this page
@@ -89,17 +90,44 @@ if (isset($this->session->userdata['logged_in']))
 		  // successful.  See statusChangeCallback() for when this call is made.
 		  function testAPI() {
 			console.log('Welcome!  Fetching your information.... ');
-			FB.api('/me?fields=name,email', function(response) {
+			FB.api('/me?fields=name,email,picture', function(response) {
 			console.log(JSON.stringify(response));
 			  console.log('Successful login for: ' + response.email);
 			  // document.getElementById('status').innerHTML =
 				// 'Thanks for logging in, ' + response.name + '!';
-				window.location = base_url+"check_user?email="+response.email+"&name="+response.name;
+				// console.log(response.picture.data.url);
+				// window.location = base_url+"check_user?email="+response.email+"&name="+response.name;
+				$.ajax({
+					url: base_url+"login_process",
+					type:'POST',
+					data:
+					{
+						email: response.email,
+						name: response.name,
+						pic: response.picture.data.url,
+						fromfb: true
+					},
+					success: function(msg)
+					{
+						var result = JSON.parse(msg);
+						$('#vocamodalmsg').html(result.msg);
+						$('#vocadbmodal').modal('show');
+						if(result.state)
+						{
+							setTimeout(openUrl(result.link), 4000);
+						}
+					}
+				});
+				
 			});
 		  }
+		function openUrl(url)
+		{
+			window.location = url;
+		}
 		</script>
 		<div style="height: 100%; padding: 50px 0; background-color: #2c3037" class="row row-table">
-			<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12 align-middle">
+			<div class="col-lg-4 col-md-6 col-sm-8 col-xs-10 align-middle">
 				<?php
 					if (isset($logout_message)) {
 						echo "<div class='message'>";
@@ -135,10 +163,7 @@ if (isset($this->session->userdata['logged_in']))
 									echo validation_errors();
 									echo "</div>";
 								?>
-								<div align = "right">
-									<a href="<?php echo base_url().'register' ?>">To SignUp Click Here</a>
-								</div>
-								
+
 								<div class="form-group has-feedback">
 									<input required type="text" name="email" id="name" placeholder="* Email Address" class="form-control"
 									data-toggle="popover" data-placement="top" data-content="Not a valid Email Address."
@@ -161,10 +186,9 @@ if (isset($this->session->userdata['logged_in']))
 								</div>
 								<button type="submit" class="btn btn-block btn-primary" name="submit"> Login</button><br />
 								
-								<fb:login-button onlogin="checkLoginState();">Log in using Facebook</fb:login-button>
-
-								<div id="status">
-								</div>
+								<!-- <fb:login-button onlogin="checkLoginState();">Log in using Facebook</fb:login-button> -->
+								<div class="fb-login-button" onlogin="checkLoginState();" data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="false"></div>
+									<a style="position:relative;right:0px;" href="<?php echo base_url().'register' ?>">To SignUp</a>
 
 							</div>
 						</div>
@@ -173,10 +197,7 @@ if (isset($this->session->userdata['logged_in']))
 			</div>
 		</div>
 		
-		<script type="text/javascript" src="<?php echo base_url()."resources/vendor/jquery/jquery.min.js"; ?>"></script>
 		<script type="text/javascript">
-		var base_url = '<?php echo base_url();?>';
-		
 		$('form').submit(function (e) {
 			e.preventDefault();
 			var name = $('#name').val();
@@ -200,32 +221,38 @@ if (isset($this->session->userdata['logged_in']))
 					},
 					success: function(msg)
 					{
-						if(msg)
+						var result = JSON.parse(msg);
+						$('#vocamodalmsg').html(result.msg);
+						$('#vocadbmodal').modal('show');
+						if(result.state)
 						{
-							console.log("login success");
-							$('#name').parent('div').removeClass("has-error");
-							$('#password').parent('div').removeClass("has-error");
-							console.log(msg);
-							if(msg == "confirmed")
-							{
-								console.log("in confirmed")
-								window.location = base_url+'feat';
-							}
-							else
-							{
-								window.location = base_url+'confirm';
-							}
+							setTimeout(openUrl(result.link), 4000);
 						}
 						else
 						{
-							console.log("login fail");
 							$('#name').parent('div').addClass("has-error");
 							$('#password').parent('div').addClass("has-error");
-							$("#loginchecker").html("Email and/or Password does not match").addClass("has-error");
 						}
 					}
 				});
 			}
 		});
 		</script>
-	</body>
+<!-- Modal for footer -->
+<div class="modal fade" id="vocadbmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Login</h4>
+      </div>
+      <div class="modal-body">
+        <p id="vocamodalmsg" ></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
