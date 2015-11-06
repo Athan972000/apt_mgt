@@ -25,7 +25,7 @@ class MY_Controller extends CI_Controller {
         $data['title'] = $this->title;
 		$data['mynav'] = $this->mynav;
         $data['head'] = $this->load->view('templates/head', $data, true);
-        $data['nav'] = $this->load->view('templates/nav', $data, true);
+        $data['nav'] = $this->load->view($this->viewnav, $data, true);
         $data['header'] = $this->load->view('templates/header', $data, true);
 		$data['footer'] = $this->load->view('templates/footer',$data, true);
 		$data['scripts'] = $this->load->view('templates/scripts', $data, true);
@@ -33,9 +33,5 @@ class MY_Controller extends CI_Controller {
 
         $this->load->view('templates/skeleton', $data);
     }
-	
-	
-	
-	
 }
 ?>

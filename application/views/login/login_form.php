@@ -1,9 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-if (isset($this->session->userdata['logged_in'])) 
-{
-	header(base_url().'login_process');
-}
 ?>
 <script>
 		var base_url = "<?php echo base_url();?>";
@@ -95,10 +91,8 @@ if (isset($this->session->userdata['logged_in']))
 			  console.log('Successful login for: ' + response.email);
 			  // document.getElementById('status').innerHTML =
 				// 'Thanks for logging in, ' + response.name + '!';
-				// console.log(response.picture.data.url);
-				// window.location = base_url+"check_user?email="+response.email+"&name="+response.name;
 				$.ajax({
-					url: base_url+"login_process",
+					url: base_url+"login/login_process",
 					type:'POST',
 					data:
 					{
@@ -126,34 +120,28 @@ if (isset($this->session->userdata['logged_in']))
 			window.location = url;
 		}
 		</script>
+<style>
+.login_header
+{
+	background-color: #4486F6;
+	border-radius: 3px;
+	padding-bottom: 20px;
+}
+</style>
 		<div style="height: 100%; padding: 50px 0; background-color: #2c3037" class="row row-table">
-			<div class="col-lg-4 col-md-6 col-sm-8 col-xs-10 align-middle">
-				<?php
-					if (isset($logout_message)) {
-						echo "<div class='message'>";
-						echo $logout_message;
-						echo "</div>";
-					}
-				?>
-				<?php
-					if (isset($message_display)) {
-						echo "<div class='message'>";
-						echo $message_display;
-						echo "</div>";
-					}
-				?>
-				<div  class="panel panel-default panel-flat">
+			<div class="col-lg-4 col-md-7 col-sm-8 col-xs-12" align="center">
+				<div class="panel panel-default panel-flat" style="max-width:600px; min-width:300px;">
            
 					<div id="main">
 						<div id="login">
-							<p class="text-center mb-lg">
+							<p class="login_header text-center mb-lg">
 							<br>
 								<a href="#">
 									<img src="<?php echo base_url()."resources/images/logo_blue_white.png"; ?>" alt="Image" class="block-center img-rounded">
 								</a>
 							</p>
 
-							<div class="panel-body">	
+							<div class="panel-body" style="margin-top: 30px;">	
 								<?php 
 									echo form_open('login_process'); 
 									echo "<div class='error_msg'>";
@@ -165,9 +153,7 @@ if (isset($this->session->userdata['logged_in']))
 								?>
 
 								<div class="form-group has-feedback">
-									<input required type="text" name="email" id="name" placeholder="* Email Address" class="form-control"
-									data-toggle="popover" data-placement="top" data-content="Not a valid Email Address."
-									/>
+									<input required type="text" name="email" id="name" placeholder="* Email Address" class="form-control"/>
 									
 								</div>
 								<div class="form-group has-feedback">
@@ -175,21 +161,27 @@ if (isset($this->session->userdata['logged_in']))
 									
 								</div>
 								
-								<div class="clearfix">
-									<div class="checkbox c-checkbox pull-left mt0">
+								<div class="clearfix" height="15px;">
+									<!--<div class="checkbox c-checkbox pull-left mt0">
 										<label>
 										   <input type="checkbox" value="">
 										   <span class="fa fa-check"></span>Remember Me</label>							
-									</div>
-									<div class="pull-right"><a href="#" class="text-muted">Forgot your password?</a>
-									</div>
+									</div>-->
+									&nbsp;
 								</div>
-								<button type="submit" class="btn btn-block btn-primary" name="submit"> Login</button><br />
+								<button type="submit" class="btn btn-block btn-primary" name="submit"> Login</button>
+								<br />
 								
-								<!-- <fb:login-button onlogin="checkLoginState();">Log in using Facebook</fb:login-button> -->
-								<div class="fb-login-button" onlogin="checkLoginState();" data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="false"></div>
-									<a style="position:relative;right:0px;" href="<?php echo base_url().'register' ?>">To SignUp</a>
-
+								<div class="clearfix">
+									<!-- <fb:login-button onlogin="checkLoginState();">Log in using Facebook</fb:login-button> -->
+									<div class="pull-left"><a style="position:relative;right:0px;" href="<?php echo base_url().'login/register' ?>">
+										<button type="button" class="btn btn-default">Register here!</button>
+									</a></div>
+									<button type="button" onclick="checkLoginState();" class="btn btn-primary" style="background-color: rgb(69, 97, 157); font-size: 20px;"><span class="fa fa-facebook"></span></button>
+									<button type="button" onclick="donothing();" class="btn btn-primary" style="background-color: #5EA9DD; font-size: 20px;"><span class="fa fa-twitter"></span></button>
+									<button type="button" onclick="donothing();" class="btn btn-primary" style="background-color: #CC2127; font-size: 20px;"><span class="fa fa-pinterest"></span></button>
+									<div class="pull-right"><a id="forgotpass" href="#" class="text-muted">Forgot your password?</a></div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -198,11 +190,16 @@ if (isset($this->session->userdata['logged_in']))
 		</div>
 		
 		<script type="text/javascript">
+		function donothing()
+		{
+			return;
+		}
+		
 		$('form').submit(function (e) {
 			e.preventDefault();
 			var name = $('#name').val();
 			var emailregex = /.+@.+/;
-			if( !name || !name.match(emailregex) )
+			if( !name )//|| !name.match(emailregex)
 			{
 				$('#name').parent('div').addClass("has-error");
 				$('#name').popover('show');
@@ -212,7 +209,7 @@ if (isset($this->session->userdata['logged_in']))
 				$('#name').parent('div').removeClass("has-error");
 				
 				$.ajax({
-					url: base_url+"login_process",
+					url: base_url+"login/login_process",
 					type:'POST',
 					data:
 					{
@@ -222,7 +219,9 @@ if (isset($this->session->userdata['logged_in']))
 					success: function(msg)
 					{
 						var result = JSON.parse(msg);
-						$('#vocamodalmsg').html(result.msg);
+						$('.modal-footer :first-child').css('display','none');
+						$('#vocamodalmsg').html(result.msg).css('height','20px');
+						$('#myModalLabel').html('Login');
 						$('#vocadbmodal').modal('show');
 						if(result.state)
 						{
@@ -237,22 +236,71 @@ if (isset($this->session->userdata['logged_in']))
 				});
 			}
 		});
+		
+		$('#forgotpass').on('click',function(e){
+			e.preventDefault();
+			$('#vocamodalmsg').html($('fieldset').html()).css('height',$('fieldset').css('height'));
+			$('#myModalLabel').html('Password Recovery');
+			$('.modal-footer :first-child').css('display','inline');
+			$('#vocadbmodal').modal('show');
+		});
+		
+		$( document ).ready(function(){
+			$('.modal-footer :first-child').on('click',function(){
+				
+				$.ajax({
+					url: base_url+"login/forgotpass",
+					type:'POST',
+					data:
+					{
+						email: $('#vocamodalmsg input').val(),
+					},
+					success: function(msg)
+					{
+						if(msg)
+						{
+							$('#vocamodalmsg input').parent('div').removeClass('has-error');
+							$('#vocamodalmsg input').parent('div').addClass('has-success');
+							$('#vocamodalmsg .help-block').html('An email has been sent to your Email address with your login information.');
+						}
+						else
+						{
+							//error
+							$('#vocamodalmsg input').parent('div').removeClass('has-success');
+							$('#vocamodalmsg input').parent('div').addClass('has-error');
+							$('#vocamodalmsg .help-block').html('email not yet registered, please proceed to <a href="<?php echo base_url().'login/register' ?>">registration</a>.');
+						}
+					}
+				});
+			});
+		});
+			
 		</script>
 <!-- Modal for footer -->
-<div class="modal fade" id="vocadbmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="vocadbmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
         <h4 class="modal-title" id="myModalLabel">Login</h4>
       </div>
       <div class="modal-body">
         <p id="vocamodalmsg" ></p>
       </div>
       <div class="modal-footer">
+		<button style="display: none;" type="button" class="btn btn-primary">Retrieve Password</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
+<fieldset style="display: none;">
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Email Address</label>
+		<div class="col-sm-10">
+			<input type="text" class="form-control">
+			<span class="help-block m-b-none">Your login information will be sent into your email address.</span>
+		</div>
+	</div>
+</fieldset>
 </body>

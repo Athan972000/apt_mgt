@@ -18,11 +18,11 @@ class Vocadbmain extends MY_Controller {
 		// $this->js[] = "resources/vendor/fastclick/fastclick.js";
     }
 	
+	
 	public function index()
 	{
         $this->_render("login_form");
 	}
-	
 	public function register(){
 		$fb = array();
 		if( $this->session->has_userdata('email') )
@@ -45,37 +45,10 @@ class Vocadbmain extends MY_Controller {
 		$this->_render("registration_form", $fb);
 	}
 	
-	public function check_user()
+	public function home()
 	{
-		$email = $this->input->get("email");
-		$name = $this->input->get("name");
-		$check = $this->database_model->read_user_information($email);
-		$confirm = $this->database_model->check_confirmation_email($email);
-		// echo $confirm;exit();
-		if( $check && $confirm )
-		{
-			redirect(base_url().'feat', 'refresh');
-		}
-		else if ( $check && !$confirm )
-		{
-			//land on email confirmation
-			redirect(base_url().'confirm', 'refresh');
-		}
-		else
-		{	
-			$newdata = array(
-				'name'  => $name,
-				'email'     => $email
-			);
-
-			$this->session->set_userdata($newdata);
-			redirect(base_url().'register', 'refresh');
-			// $this->register($email,$name);
-		}
-	}
-	
-	public function home(){
 		$this->_render('home');
+		$this->is_logged_in();
 	}
 	
 	public function login_process(){
@@ -284,11 +257,22 @@ class Vocadbmain extends MY_Controller {
 		// else
 		// {
 		$query = $this->database_model->read_user_information($this->session->userdata('email'));
-		$data['text_result'] = $this->database_model->get_usage_users($query[0]->apikey);
+		// echo $query[0]->apikey;
+		// var_dump($query);
+		// exit();
+		$data['text_result'] = $this->database_model->get_usage_users(1,$query[0]->apikey);
 
 	    
 		$this->_render('stats',$data);
 	}
+	
+	public function monthstats_users()
+	{
+		$num = $this->input->post('num');
+		$query = $this->database_model->read_user_information($this->session->userdata('email'));
+		echo json_encode($this->database_model->get_usage_users($num,$query[0]->apikey));
+	}
+	
 	public function monthstats()
 	{
 		$num = $this->input->post('num');
@@ -324,30 +308,23 @@ class Vocadbmain extends MY_Controller {
 		$this->_render('accountsettings');
 	}
 	
-	public function insert()
+	public function test()
 	{
-		$date = date('Y-m-d H:i:s', strtotime('2015-03-28 00:00:00'));
+		// $date = date('Y-m-d H:i:s', strtotime('2015-03-28 00:00:00'));
 		// $date = strtotime('2015-03-31 05:47:19');
-		echo $date."<br/>";
-		echo date('Y-m-d H:i:s',(strtotime ( '-1 month' , strtotime ( $date) ) ));
+		// echo $date."<br/>";
+		// echo date('Y-m-d H:i:s',(strtotime ( '-1 month' , strtotime ( $date) ) ));
+		echo "random pass generator:";
 		
-		// for($x=1;$x<=65;$x++)
-		// {
-			// $thisdate = date('Y-m-d H:i:s',(strtotime ( '-'. $x .' day' , strtotime ( $date) ) ));
-			// $data = array(
-			// 'auto' => '',
-			// 'apikey' => '3066',
-			// 'word' => 'Hi',
-			// 'datetime' => $thisdate,
-			// 'length' => '2',
-			// 'type' => '1'
-			// );
-
-			// $this->db->insert('api_usage_definition',$data);
-		// }
+		$characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+		$string = '';
+		 for ($i = 0; $i < 8; $i++) {
+			  $string .= $characters[rand(0, strlen($characters) - 1)];
+		 }
+		 echo "<br/>".$string;
 	}
 	/*
-		API key generation
+		API key generator
 	*/
 	private function gen_api_key()
 	{
@@ -358,6 +335,19 @@ class Vocadbmain extends MY_Controller {
 		$key = md5($time.$key);// 32 character hex number , // md5(string,raw) 
 		// echo $key."<br>";
 		return $key;
+	}
+	/*
+		Random Password generator
+	*/
+	private function gen_random_password()
+	{
+		$characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+		$string = '';
+		for ($i = 0; $i < 8; $i++) 
+		{
+			$string .= $characters[rand(0, strlen($characters) - 1)];
+		}
+		return $string;
 	}
 }
 ?>

@@ -390,9 +390,17 @@ Class Database_Model extends CI_Model {
 
 	}
 	
+	public function save_pic_link($email,$pic_link)
+	{
+		$this->db->where('email', $email);
+		$this->db->update('api_users', array('photo_link' => $pic_link) ); 
+	}
 	
-	
-	
+	public function accountsettings_edit_info($email,$value,$target)
+	{
+		$this->db->where('email', $email);
+		$this->db->update('api_users', array($target => $value)); 
+	}
 	
 	
 	

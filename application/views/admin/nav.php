@@ -26,25 +26,32 @@ if ( $this->session->userdata('pic') != NULL ){$image = $this->session->userdata
                </li>
                <!-- END user info-->
                <!-- START Menu-->
-               <li>
-                  <a href="<?php echo base_url()."feat"; ?>" title="Features"  class="no-submenu">
+               <!--<li>
+                  <a href="<?php echo base_url(); ?>" title="Features"  class="no-submenu">
                      <em class="fa fa-check-square"></em>
                      <span class="item-text">Features</span>
                   </a>
                   
-               </li>
+               </li>-->
                <li>
-                  <a href="<?php echo base_url()."stats"; ?>" title="Usage"  class="no-submenu">
+                  <a href="<?php echo base_url()."admin/stats"; ?>" title="Usage"  class="no-submenu">
                      <em class="fa fa-bar-chart-o"></em>
                      <span class="item-text">Usage Statistics</span>
                   </a>
                </li>
-               <li>
-                  <a href="<?php echo base_url()."billing"; ?>" title="Billing" data-toggle="collapse-next" class="has-submenu">
-                     <em class="fa fa-money"></em>
-                     <span class="item-text">Billing</span>
+			   <li>
+                  <a href="<?php echo base_url()."admin/users"; ?>" title="Usage"  class="no-submenu">
+                     <em class="fa fa-users"></em>
+                     <span class="item-text">Users</span>
                   </a>
                </li>
+               <li>
+                  <a href="<?php echo base_url()."admin/income_stats"; ?>" title="Billing" data-toggle="collapse-next" class="has-submenu">
+                     <em class="fa fa-money"></em>
+                     <span class="item-text">Income</span>
+                  </a>
+               </li>
+			   <!--
                <li>
                   <a href="<?php echo base_url()."documentation"; ?>" title="Documentation"  class="no-submenu">
                     <em class="fa fa-book"></em>
@@ -56,13 +63,19 @@ if ( $this->session->userdata('pic') != NULL ){$image = $this->session->userdata
                      <em class="fa fa-envelope"></em>
                      <span class="item-text">Contact Us</span>
                   </a>
-               </li>
+               </li>-->
 			   <li>
+                  <a href="<?php echo base_url()."admin/adminsettings"; ?>"  class="no-submenu">
+                     <em class="fa fa-wrench"></em>
+                     <span class="item-text">Admin Settings</span>
+                  </a>
+               </li>
+			   <!--<li>
                   <a href="<?php echo base_url()."accountsettings"; ?>" title="Account_Settings"  class="no-submenu">
                      <em class="fa fa-cog"></em>
                      <span class="item-text">Account Settings</span>
                   </a>
-               </li>
+               </li>-->
 			   <li>
                   <a href="<?php echo base_url()."logout"; ?>" title="Contact"  class="no-submenu">
                      <em class="fa fa-sign-out"></em>

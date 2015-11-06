@@ -1,9 +1,7 @@
-<script src="<?php echo base_url().'resources/js/Chart.js'?>"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script> -->
+<!-- <script src="<?php //echo base_url().'resources/js/Chart.js'?>"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css">
-  
-   
 <style type="text/css">
 canvas{
         width: 100% !important;
@@ -56,11 +54,11 @@ canvas{
 	<div class="panel-group">
 	  <div class="panel panel-primary">
 		<div class="panel-heading" align ="center">      
-			<h4 data-toggle="collapse" href="#myChart" class="panel-title">Usage Chart<span style="position:absolute;right:30px;"><em class="fa fa-chevron-down"></em></span></h4>
+			<h4 id="chart_h4" data-toggle="collapse" href="#myChart" class="panel-title">Usage Chart<span style="position:absolute;right:30px;"><em class="fa fa-chevron-down"></em></span></h4>
 		</div>
 	   
 		<div id="collapse1" class="panel-collapse collapse in" style="padding:10px">
-		  <canvas id="myChart" class="collapse in"></canvas> 
+		  <canvas id="myChart" class="collapse"></canvas> 
 		</div>
 	  </div>
 	</div>
@@ -159,6 +157,14 @@ $('#defi').click(function(){
 
 function construct_data(ext)
 {
+	if( typeof(text_result.total.length) == 'undefined' )
+	{
+		$("#myChart").addClass('in');
+	}
+	else
+	{
+		$("#myChart").removeClass('in');
+	}
 	var dateArray = Object.keys(text_result[ext]);
 	var lengthArray = [];
 	for( i=0; i<dateArray.length; i++ )
@@ -182,6 +188,11 @@ function construct_data(ext)
 			},
 		]
 	};
+	if( lengthArray.length <= 0 )
+	{
+		// $("#myChart").html("No value.");
+	}
+	
 	return data;
 }
 
@@ -215,7 +226,7 @@ $('#amnt').click(function(){
 $('#m1').click(function(){
 	var thisselector = $(this);
 	$.ajax({
-		url: base_url+"monthstats",
+		url: base_url+"monthstats_users",
 		type:'POST',
 		data:{num: 1},
 		success: function(res)
@@ -232,7 +243,7 @@ $('#m1').click(function(){
 $('#m3').click(function(){
 	var thisselector = $(this);
 	$.ajax({
-		url: base_url+"monthstats",
+		url: base_url+"monthstats_users",
 		type:'POST',
 		data:{num: 3},
 		success: function(res)
@@ -248,7 +259,7 @@ $('#m3').click(function(){
 $('#m6').click(function(){
 	var thisselector = $(this);
 	$.ajax({
-		url: base_url+"monthstats",
+		url: base_url+"monthstats_users",
 		type:'POST',
 		data: {num: 6},
 		success: function(res)
@@ -268,6 +279,13 @@ function buttonchange(content)
 }
 
 $(document).ready(function() {
+	// console.log(text_result.length);
+	if( typeof(text_result.total.length) == 'undefined' )
+	{
+		// $('#chart_h4').trigger( "click" );
+		$("#myChart").addClass('in');
+		// console.log('nothing to show');
+	}
 	$( "#total" ).trigger( "click" );
 	mytable = $('#datatable1').DataTable();
 	// $("#scalingnav").height( $("#scalingcontent").height() );

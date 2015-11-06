@@ -18,7 +18,7 @@ var base_url = '<?php echo base_url();?>';
 $('#resend').on("click", function(e){
 	e.preventDefault();
 	$.ajax({
-		url: base_url+"resend_confirm",
+		url: base_url+"login/resend_confirm",
 		type:'POST',
 		data:
 		{

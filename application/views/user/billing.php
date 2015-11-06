@@ -13,12 +13,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </style>
 <body>
 
-<div style="padding-left:100px">
+<div>
 
 <div class="panel-group" align="center">
   <div class="panel panel-primary">
     <div class="panel-heading">      
-       <h4 data-toggle="collapse" href="#pricing"style="font-color:white;" class="panel-title">Pricing<span style="position:absolute;right:15px;"><em class="fa fa-chevron-down"></em></span></h4>
+       <h4 data-toggle="collapse" href="#pricing"style="font-color:white;" class="panel-title">Pricing<span style="position:absolute;right:30px;"><em class="fa fa-chevron-down"></em></span></h4>
     </div>
     <div id="pricing" class="panel-collapse collapse">
       <div align="left"  >
