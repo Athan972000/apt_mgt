@@ -107,7 +107,13 @@ class Login extends MY_Controller {
 				}
 				else
 				{
-					$return['link'] = base_url()."login/confirm";
+					$session_data = array(
+					'email' => $result[0]->email,
+					'pic' => $result[0]->photo_link,
+					'confirm' => 1
+					);
+					$this->session->set_userdata($session_data);
+					$return['link'] = base_url()."confirm";
 					$return['msg'] = "Please verify your email address";
 				}
 			}

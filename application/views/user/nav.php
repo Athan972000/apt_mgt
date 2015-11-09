@@ -1,6 +1,13 @@
 <?php
 $image = base_url()."resources/app/img/user/noimage.jpg";
 if ( $this->session->userdata('pic') != NULL ){$image = $this->session->userdata('pic');}
+$confirm_disabler = null;
+if ( $mynav === 'disabled' )
+{
+	
+	$confirm_disabler = 'class="disabled"';
+}
+
 ?>
  <!-- START Sidebar (left)-->
          <nav class="sidebar" style="min-height:100%;">
@@ -26,27 +33,27 @@ if ( $this->session->userdata('pic') != NULL ){$image = $this->session->userdata
                </li>
                <!-- END user info-->
                <!-- START Menu-->
-               <li>
-                  <a href="<?php echo base_url(); ?>" title="Features"  class="no-submenu">
+               <li <?php echo $confirm_disabler; ?>>
+                  <a href="<?php if($confirm_disabler){echo base_url()."confirm";}else{echo base_url();}; ?>" title="Features"  class="no-submenu">
                      <em class="fa fa-check-square"></em>
                      <span class="item-text">Features</span>
                   </a>
                   
                </li>
-               <li>
-                  <a href="<?php echo base_url()."stats"; ?>" title="Usage"  class="no-submenu">
+               <li <?php echo $confirm_disabler; ?>>
+                  <a href="<?php if($confirm_disabler){echo base_url()."confirm";}else{echo base_url()."stats";}; ?>" title="Usage"  class="no-submenu">
                      <em class="fa fa-bar-chart-o"></em>
                      <span class="item-text">Usage Statistics</span>
                   </a>
                </li>
-               <li>
-                  <a href="<?php echo base_url()."billing"; ?>" title="Billing" data-toggle="collapse-next" class="has-submenu">
+               <li <?php echo $confirm_disabler; ?>>
+                  <a href="<?php if($confirm_disabler){echo base_url()."confirm";}else{echo base_url()."billing";}; ?>" title="Billing" data-toggle="collapse-next" class="has-submenu">
                      <em class="fa fa-money"></em>
                      <span class="item-text">Billing</span>
                   </a>
                </li>
-               <li>
-                  <a href="<?php echo base_url()."documentation"; ?>" title="Documentation"  class="no-submenu">
+               <li <?php echo $confirm_disabler; ?>>
+                  <a href="<?php if($confirm_disabler){echo base_url()."confirm";}else{echo base_url()."documentation";}; ?>" title="Documentation"  class="no-submenu">
                     <em class="fa fa-book"></em>
                     <span class="item-text">Documentation</span>
                   </a>               

@@ -22,10 +22,24 @@ class Users extends MY_Controller {
 	
 	public function not_logged_in()
 	{
-		if( !$this->session->userdata('email') )
+		if( $this->session->has_userdata('confirm') )
+		{
+			if( uri_string() != 'confirm' && uri_string() != 'contact' && uri_string() != 'accountsettings' && uri_string() != 'logout' )
+			{
+				$this->mynav = 'disabled';
+				redirect(base_url().'confirm', 'refresh');
+			}
+		}
+		else if( !$this->session->has_userdata('email') )
 		{
 			redirect(base_url().'login', 'refresh');
 		}
+	}
+	
+	public function confirm()
+	{
+        // redirect(base_url(), 'refresh');
+		$this->_render('user/confirm_require');
 	}
 	
 	public function index()
@@ -87,10 +101,10 @@ class Users extends MY_Controller {
 		$this->css[] = base_url() . "resources/vendor/csspinner/csspinner.min.css";
 		$query = $this->database_model->read_user_information($this->session->userdata('email'));
 		$user_info = $query[0];
-		if($user_info->link != 'vocabdb')
-		{
+		// if($user_info->link != 'vocabdb')
+		// {
 			$data['user_info'] = $user_info;
-		}
+		// }
 		
 		$this->_render('user/accountsettings',$data);
 	}
