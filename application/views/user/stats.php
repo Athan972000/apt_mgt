@@ -14,26 +14,9 @@ canvas{
 .chart_buttons
 {
 	margin: 0px;
-	padding: 0px 20px;
-}
-.byitem
-{
-	text-align:left;
-	z-index: 9999;
-	position: relative;
-	margin-right:25%;
+	padding: 40px 20px;
 }
 
-.byusage
-{
-	text-align: right;
-	position:relative;
-	bottom: 46px;
-}
-.bydate
-{
-	text-align: center;
-}
 .panel-heading:hover{
 	cursor:pointer;
 }
@@ -49,15 +32,40 @@ canvas{
 	left: 0px;
 	top: 30px;
 }
-</style>
+
+#table_msg, #chart_msg
+{
+	font-size: 16px;
+	text-align: center;
+}
+.byusage tr
+{
+		text-align: right;
+}
+.show_apikey
+{
+	font-size: 17px;
+	text-align: center;
+	padding: 15px;
+}
+.show_apikey input
+{
+	border: 0px solid black;
+	border-bottom: 1px solid black;
+	text-align: center;
 	
-	<div class="panel-group">
+}
+</style>
+	<div class="show_apikey">
+		<label>API Key: <input size="32" class="form-group" type="text" value="<?php echo $Nvoca['api_key']; ?>" readonly="true" />
+	</div>
+	<div class="panel-group" style="cursor:default;" >
 	  <div class="panel panel-primary">
 		<div class="panel-heading" align ="center">      
-			<h4 id="chart_h4" data-toggle="collapse" href="#myChart" class="panel-title">Usage Chart<span style="position:absolute;right:30px;"><em class="fa fa-chevron-down"></em></span></h4>
+			<h4 id="chart_h4" href="#myChart" class="panel-title">Usage Chart</h4> <!-- <span style="position:absolute;right:30px;"><em class="fa fa-chevron-down"></em></span> -->
 		</div>
 	   
-		<div id="collapse1" class="panel-collapse collapse in" style="padding:10px">
+		<div id="collapse1" class="panel-collapse collapse in" style="padding:10px;text-align: center;"><span id="chart_msg">No Data</span>
 		  <canvas id="myChart" class="collapse"></canvas> 
 		</div>
 	  </div>
@@ -68,31 +76,36 @@ canvas{
 			<br/>
 		
 			<div class="chart_buttons">
-				<div class="byitem">
-					<button class="btn btn-primary btn-lg active" id="total">Total</button>
-					<button class="btn btn-default btn-lg" id="text">Text</button>
-					<button class="btn btn-default btn-lg" id="word">Word</button>
-					<button class="btn btn-default btn-lg" id="defi">Definition</button>
+				<div class="col-xs-4 byitem">
+					<button class="btn btn-primary active" id="total">Total</button>
+					<button class="btn btn-default" id="text">Text</button>
+					<button class="btn btn-default" id="word">Word</button>
+					<button class="btn btn-default" id="defi">Definition</button>
 				</div>
-				<div class="byusage">
-					<button class="btn btn-primary btn-lg active" id="count">Count</button>
-					<button class="btn btn-default btn-lg" id="amnt">Amount</button>
+				<div class="col-xs-4 bydate">
+					<button class="btn btn-primary active" id="m1">1 month</button>
+					<button class="btn btn-default" id="m3">3 months</button>
+					<button class="btn btn-default" id="m6">6 months</button>
 				</div>
-				<div class="bydate">
-					<button class="btn btn-primary btn-lg active" id="m1">1 month</button>
-					<button class="btn btn-default btn-lg" id="m3">3 months</button>
-					<button class="btn btn-default btn-lg" id="m6">6 months</button>
+				<div class="col-xs-4 byusage">
+					<table>
+					<tr><td>
+					<label class="radio_usage"><input type="radio" name="amountorcount" checked value="count"/>Count</label>
+					</td></tr>
+					<tr><td>
+					<label class="radio_usage"><input type="radio" name="amountorcount" value="amount"/>Amount</label>
+					</td></tr>
+					</table>
 				</div>
 			</div>
         </div>
-		<br/>
+		<br/><br/><br/><br/><br/><br/>
 		
 		<div class="panel-group">
 		  <div class="panel panel-primary">
 			<div class="panel-heading" align ="center">      
 				<h4 href="#datatable1" class="panel-title">Usage Table</h4>
 			</div>
-		   
 			<div id="collapse1" class="panel-collapse collapse in" style="padding:10px 10px 70px">
 			  <table id="datatable1" align="center" style="width:50%;position: relative; top: 45px;" class='display table table-striped table-hover'>
 			</table>
@@ -110,10 +123,18 @@ var text_result = JSON.parse('<?php echo json_encode($Nvoca['text_result']); ?>'
 var ctx = $("#myChart").get(0).getContext("2d");
 var vocadbchart;
 var amountorcount = 'count';
+var current_height = $("#scalingnav").height();
 //Total
 $('#total').click(function(){
-	var data = construct_data('total');
-	construct_table( data.labels, data.datasets[0].data );
+	var ext = 'total';
+	var data = construct_data(ext);
+	var dateArray = Object.keys(text_result[ext]);
+	var lengthArray = [];
+	for( i=0; i<dateArray.length; i++ )
+	{
+		lengthArray.push( text_result[ext][dateArray[i]][amountorcount] );
+	}
+	construct_table( dateArray, lengthArray );
 
 	if ($("#myChart").hasClass('collapse in')) {
 		if(typeof(vocadbchart) != 'undefined')
@@ -124,8 +145,15 @@ $('#total').click(function(){
 });
 //Text
 $('#text').click(function(){
-	var data = construct_data('text');
-	construct_table( data.labels, data.datasets[0].data );
+	var ext = 'text';
+	var data = construct_data(ext);
+	var dateArray = Object.keys(text_result[ext]);
+	var lengthArray = [];
+	for( i=0; i<dateArray.length; i++ )
+	{
+		lengthArray.push( text_result[ext][dateArray[i]][amountorcount] );
+	}
+	construct_table( dateArray, lengthArray );
 	if ($("#myChart").hasClass('collapse in')) {
 		vocadbchart.destroy();
 		vocadbchart = new Chart(ctx).Line(data);
@@ -135,8 +163,15 @@ $('#text').click(function(){
 
 //Word
 $('#word').click(function(){
-	var data = construct_data('word');
-	construct_table( data.labels, data.datasets[0].data );
+	var ext = 'word';
+	var data = construct_data(ext);
+	var dateArray = Object.keys(text_result[ext]);
+	var lengthArray = [];
+	for( i=0; i<dateArray.length; i++ )
+	{
+		lengthArray.push( text_result[ext][dateArray[i]][amountorcount] );
+	}
+	construct_table( dateArray, lengthArray );
 	if ($("#myChart").hasClass('collapse in')) {
 		vocadbchart.destroy();
 		vocadbchart = new Chart(ctx).Line(data);
@@ -146,8 +181,15 @@ $('#word').click(function(){
 
 //Definition
 $('#defi').click(function(){
-	var data = construct_data('defi');
-	construct_table( data.labels, data.datasets[0].data );
+	var ext = 'defi';
+	var data = construct_data(ext);
+	var dateArray = Object.keys(text_result[ext]);
+	var lengthArray = [];
+	for( i=0; i<dateArray.length; i++ )
+	{
+		lengthArray.push( text_result[ext][dateArray[i]][amountorcount] );
+	}
+	construct_table( dateArray, lengthArray );
 	if ($("#myChart").hasClass('collapse in')) {
 		vocadbchart.destroy();
 		vocadbchart = new Chart(ctx).Line(data);
@@ -160,10 +202,12 @@ function construct_data(ext)
 	if( typeof(text_result.total.length) == 'undefined' )
 	{
 		$("#myChart").addClass('in');
+		$("#chart_msg").html('');
 	}
 	else
 	{
 		$("#myChart").removeClass('in');
+		$("#chart_msg").html('No Data');
 	}
 	var dateArray = Object.keys(text_result[ext]);
 	var lengthArray = [];
@@ -171,12 +215,32 @@ function construct_data(ext)
 	{
 		lengthArray.push( text_result[ext][dateArray[i]][amountorcount] );
 	}
+	if( dateArray.length > 10 )
+	{
+		var skip_count = Math.round(dateArray.length/10);
+		var ctr = 0;
+		console.log(skip_count);
+		for( i=1;i<dateArray.length;i++ )
+		{
+			if(ctr == skip_count)
+			{
+				ctr = 0;
+			}
+			else
+			{
+				if(i+1 != dateArray.length)
+				{
+					ctr++;
+					dateArray[i] = "";
+				}
+				
+			}
+		}
+	}
 	var data = {
 		labels: dateArray,
 		datasets: [
 			{
-				
-				label: "My First dataset",
 				fillColor: "rgba(151,187,205,0.2)",
 				strokeColor: "rgba(151,187,205,1)",
 				pointColor: "rgba(151,187,205,1)",
@@ -198,18 +262,47 @@ function construct_data(ext)
 
 function construct_table(tblabels,tbdatas)
 {
-	$('#datatable1').html("");
-	if(typeof(mytable) != 'undefined')
-		mytable.destroy();
-	$('#datatable1').html(
-		"<thead><tr><th>"+"Date"+"</th><th>"+"Amount/Count"+"</th></tr></thead><tbody>");
-	for( x=0; x < tblabels.length; x++)
+	if( tblabels.length <= 0  && tbdatas.length <= 0 )
 	{
-		$('#datatable1').append(
-		"<tr><td>"+tblabels[x]+"</td><td>"+tbdatas[x]+"</td></tr>");
+		if(typeof(mytable) != 'undefined')
+		{
+			mytable.destroy();
+		}
+		$('#datatable1').html("");
+		$('#datatable1').html(
+			"<thead><tr><th>"+"No Data"+"</th></tr></thead><tbody>&nbsp;</tbody>");
+		mytable = $('#datatable1').DataTable();
+		$("#datatable1_length").css('display','none');
+		$("#datatable1_info").css('display','none');
+		$("#datatable1_filter").css('display','none');
+		$("#datatable1_paginate").css('display','none');
 	}
-	$('#datatable1').append("</tbody>");
-	mytable = $('#datatable1').DataTable();
+	else
+	{
+		$('#datatable1').html("");
+		if(typeof(mytable) != 'undefined')
+			mytable.destroy();
+		$('#datatable1').html(
+			"<thead><tr><th>"+"Date"+"</th><th>"+"Amount/Count"+"</th></tr></thead><tbody>");
+		for( x=0; x < tblabels.length; x++)
+		{
+			$('#datatable1').append(
+			"<tr><td>"+tblabels[x]+"</td><td>"+tbdatas[x]+"</td></tr>");
+		}
+		$('#datatable1').append("</tbody>");
+		mytable = $('#datatable1').DataTable();
+	}
+
+	if( $("#scalingcontent").height() > $("#scalingnav").height() )
+	{
+		$("#scalingnav").height( $("#scalingcontent").height()+40 );
+		$("#scalingright").height( $("#scalingcontent").height()+40 );
+	}
+	else if ( current_height > $("#scalingcontent").height() )
+	{
+		$("#scalingnav").height( current_height );
+		$("#scalingright").height( current_height );
+	}
 }
 
 $('#count').click(function(){
@@ -220,6 +313,11 @@ $('#count').click(function(){
 $('#amnt').click(function(){
 	amountorcount = 'amount';
 	buttonchange( $(this) );
+	$('.byitem').find('button.active').trigger( 'click' );
+});
+
+$('input[name="amountorcount"]').change(function(e){
+	amountorcount = $(this).val();
 	$('.byitem').find('button.active').trigger( 'click' );
 });
 
@@ -289,8 +387,7 @@ $(document).ready(function() {
 	$( "#total" ).trigger( "click" );
 	mytable = $('#datatable1').DataTable();
 	// $("#scalingnav").height( $("#scalingcontent").height() );
-	} );
-
+});
 </script>
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>

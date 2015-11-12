@@ -112,7 +112,14 @@ Class Database_Model extends CI_Model {
 		$sql = "SELECT password FROM api_users WHERE email = '".$email."'";
 		$query = $this->db->query($sql);
 		$row = $query->row();
-		return $row->password;
+		if( $row )
+		{
+			return $row->password;
+		}
+		else
+		{
+			return null;
+		}
 	}
 	//get data from api_usage tables
 	public function get_usage($apikey,$table)
@@ -156,7 +163,6 @@ Class Database_Model extends CI_Model {
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
-			$row = $query->row_array();
 			foreach ($query->result_array() as $row)
 			{
 				//api_usage_text
@@ -190,7 +196,6 @@ Class Database_Model extends CI_Model {
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
-			$row = $query->row_array();
 			foreach ($query->result_array() as $row)
 			{
 				//api_usage_word
@@ -224,7 +229,6 @@ Class Database_Model extends CI_Model {
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
-			$row = $query->row_array();
 			foreach ($query->result_array() as $row)
 			{
 				//api_usage_definition
@@ -264,9 +268,6 @@ Class Database_Model extends CI_Model {
 	//users
 	public function get_usage_users($monthdeduct,$apikey)
 	{
-		//TEXT	
-		$sql = "SELECT * FROM api_usage_text WHERE apikey ='".$apikey."' ORDER BY datetime";
-		
 		$return = array();
 		$total_arr = array();
 		$api_usage_text = array();
@@ -284,7 +285,6 @@ Class Database_Model extends CI_Model {
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
-			$row = $query->row_array();
 			foreach ($query->result_array() as $row)
 			{
 				//api_usage_text
@@ -318,7 +318,6 @@ Class Database_Model extends CI_Model {
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
-			$row = $query->row_array();
 			foreach ($query->result_array() as $row)
 			{
 				//api_usage_word
@@ -352,7 +351,6 @@ Class Database_Model extends CI_Model {
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
-			$row = $query->row_array();
 			foreach ($query->result_array() as $row)
 			{
 				//api_usage_definition
@@ -402,8 +400,104 @@ Class Database_Model extends CI_Model {
 		$this->db->update('api_users', array($target => $value)); 
 	}
 	
+	public function accountsettings_change_email($current_email, $new_email)
+	{
+		$data = array(
+			'confirm' => '0',
+			'email' => $new_email
+			);
+		$this->db->where('email', $current_email);
+		$this->db->update('api_users', $data); 
+	}
 	
+	public function change_password($email,$new_pass)
+	{
+		$data = array(
+			'password' => $new_pass
+			);
+		$this->db->where('email', $email);
+		$this->db->update('api_users', $data); 
+	}
 	
+	public function get_billing_user($apikey,$ext)
+	{
+		$result = array();
+
+		$firstday = date('Y-m-01');
+		$minus1 = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $firstday) ) ));
+		$minuslast = date('Y-m-d',(strtotime ( 'last day of this month' , strtotime ( $minus1) ) ));
+		
+		$where = "WHERE datetime>='".$minus1."' AND datetime<='".$minuslast."' AND apikey ='".$apikey."'";
+		$sql = "SELECT SUM(length)as sum_text FROM api_usage_".$ext." ".$where." ORDER BY datetime";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->row_array();
+			$result = $row['sum_text'];
+		}
+		else
+		{
+			$result = 0;
+		}
+		return $result;
+	}
 	
+	public function get_remaining_billing($apikey,$day1,$daylast)
+	{
+		$result = 0;
+		$where = "WHERE datetime>='".$day1."' AND datetime<='".$daylast."' AND apikey ='".$apikey."'";
+		
+		//text
+		$sql = "SELECT SUM(length)as sum_text FROM api_usage_text ".$where." ORDER BY datetime";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->row_array();
+			$result += $row['sum_text'];
+		}
+		else
+		{
+			$result += 0;
+		}
+		//word
+		$sql = "SELECT SUM(length)as sum_text FROM api_usage_word ".$where." ORDER BY datetime";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->row_array();
+			$result += $row['sum_text'];
+		}
+		else
+		{
+			$result += 0;
+		}
+		//definition
+		$sql = "SELECT SUM(length)as sum_text FROM api_usage_definition ".$where." ORDER BY datetime";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->row_array();
+			$result += $row['sum_text'];
+		}
+		else
+		{
+			$result += 0;
+		}
+
+		return $result;
+	}
+	
+	public function get_past_billing($api_key,$start_date)
+	{
+		$result = array();
+		$sql = "SELECT * FROM api_billing_history WHERE apikey='".$api_key."'";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->result_array();
+			$result = $row;
+		}
+		return $result;
+	}
 }
 ?>

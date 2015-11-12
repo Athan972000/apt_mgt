@@ -89,7 +89,8 @@ class Login extends MY_Controller {
 				{
 					$session_data = array(
 					'email' => $result[0]->email,
-					'pic' => $result[0]->photo_link
+					'pic' => $result[0]->photo_link,
+					'confirm' => 1
 					);
 					$this->session->set_userdata($session_data);
 					$return['link'] = base_url()."admin/feat";
@@ -99,7 +100,8 @@ class Login extends MY_Controller {
 				{
 					$session_data = array(
 					'email' => $result[0]->email,
-					'pic' => $result[0]->photo_link
+					'pic' => $result[0]->photo_link,
+					'confirm' => 1
 					);
 					$this->session->set_userdata($session_data);
 					$return['link'] = base_url()."feat";
@@ -110,7 +112,7 @@ class Login extends MY_Controller {
 					$session_data = array(
 					'email' => $result[0]->email,
 					'pic' => $result[0]->photo_link,
-					'confirm' => 1
+					'confirm' => 0
 					);
 					$this->session->set_userdata($session_data);
 					$return['link'] = base_url()."confirm";
@@ -161,9 +163,11 @@ class Login extends MY_Controller {
 		$result = $this->database_model->registration_insert($data);
 		if($result===true){
 			// $this->_render('login_form');
-			if($this->input->post('confirm') )
+			$myconfirm = $this->input->post('confirm');//0 means notconfirmed, 1 means confirmed(from fb)
+			if( !$myconfirm )
 			{
-				$this->send_confirm_email( $this->input->post('email'), $this->input->post('password') );
+				$query = $this->database_model->read_user_information( $this->input->post('email') );
+				$this->send_confirm_email( $query[0]->email, $query[0]->password );
 			}
 			echo TRUE;
 		}
@@ -184,11 +188,22 @@ class Login extends MY_Controller {
 		
 		$config['mailtype'] = 'html';
 		$config['charset']  = 'UTF-8';
+		
+		$config = Array(
+			'protocol' => 'smtp',
+			'smtp_host' => 'ssl://smtp.googlemail.com',
+			'smtp_port' => 465,
+			'smtp_user' => 'vocadb.api@gmail.com',
+			'smtp_pass' => '$api$vocadb',
+			'mailtype'  => 'html', 
+			'charset'   => 'UTF-8'
+		);
+		
 		$this->load->library('email',$config);	
 		
 		$this->email->set_newline("\r\n");
 		$this->email->clear();
-		$this->email->from('vocabdb.api@gmail.com');
+		$this->email->from('vocadb.api@gmail.com');
 		
 		$sentto[] = $email;
 		// $sentto[] = 'vocadb.api@gmail.com';
@@ -197,10 +212,8 @@ class Login extends MY_Controller {
 		$this->email->subject('Email Confirmation');
 		// $this->email->message($this->load->view("mail_structure",$data,true));
 		$this->email->message($this->load->view("login/send_confirm",$data,true));
+		// return $this->email->send();
 		$this->email->send();
-		// if (!$this->email->send()) echo "Sorry to sending failure, Try it again";
-		// echo "<pre>";
-		// print_r($data);
 	}
 	public function resend_confirm()
 	{
@@ -209,13 +222,21 @@ class Login extends MY_Controller {
 
 		$data['link'] = base_url()."login/verify?email=".$email."&verify_key=".md5($email.$password);
 		
-		$config['mailtype'] = 'html';
-		$config['charset']  = 'UTF-8';
+		$config = Array(
+			'protocol' => 'smtp',
+			'smtp_host' => 'ssl://smtp.googlemail.com',
+			'smtp_port' => 465,
+			'smtp_user' => 'vocadb.api@gmail.com',
+			'smtp_pass' => '$api$vocadb',
+			'mailtype'  => 'html', 
+			'charset'   => 'UTF-8'
+		);
+		
 		$this->load->library('email',$config);	
 		
 		$this->email->set_newline("\r\n");
 		$this->email->clear();
-		$this->email->from('vocabdb.api@gmail.com');
+		$this->email->from('vocadb.api@gmail.com');
 		$sentto[] = $email;
 		$this->email->to($sentto);
 		$this->email->subject('Email Confirmation');
@@ -236,14 +257,25 @@ class Login extends MY_Controller {
 
 			$config['mailtype'] = 'html';
 			$config['charset']  = 'UTF-8';
+			
+			$config = Array(
+				'protocol' => 'smtp',
+				'smtp_host' => 'ssl://smtp.googlemail.com',
+				'smtp_port' => 465,
+				'smtp_user' => 'vocadb.api@gmail.com',
+				'smtp_pass' => '$api$vocadb',
+				'mailtype'  => 'html', 
+				'charset'   => 'UTF-8'
+			);
+			
 			$this->load->library('email',$config);	
 			
 			$this->email->set_newline("\r\n");
 			$this->email->clear();
-			$this->email->from('vocabdb.api@gmail.com');
+			$this->email->from('vocadb.api@gmail.com');
 			$sentto[] = $email;
 			$this->email->to($sentto);
-			$this->email->subject('Your New Password');
+			$this->email->subject('Your Login Information');
 			$this->email->message($this->load->view("login/send_password",$data,true));
 			$this->email->send();
 			echo TRUE;
@@ -252,7 +284,6 @@ class Login extends MY_Controller {
 		{
 			echo FALSE;
 		}
-		
 	}
 	
 	//verify page
@@ -265,6 +296,10 @@ class Login extends MY_Controller {
 		if($verify)
 		{
 			$this->database_model->confirmed($email);
+			if( $this->session->has_userdata('confirm') )
+			{
+				$this->session->set_userdata('confirm', 1);
+			}				
 			echo "Thank you for your confirmation.";
 		}
 		else

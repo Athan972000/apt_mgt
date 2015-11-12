@@ -160,7 +160,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 									<input required type="password" name="password" id="password" placeholder="* Password" class="form-control"/>
 									
 								</div>
-								
+								<div align="left" id="login_msg"></div>
 								<div class="clearfix" height="15px;">
 									<!--<div class="checkbox c-checkbox pull-left mt0">
 										<label>
@@ -219,10 +219,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					success: function(msg)
 					{
 						var result = JSON.parse(msg);
-						$('.modal-footer :first-child').css('display','none');
-						$('#vocamodalmsg').html(result.msg).css('height','20px');
-						$('#myModalLabel').html('Login');
-						$('#vocadbmodal').modal('show');
+						// $('.modal-footer :first-child').css('display','none');
+						// $('#vocamodalmsg').html(result.msg).css('height','20px');
+						// $('#myModalLabel').html('Login');
+						// $('#vocadbmodal').modal('show');
+						var color = 'red';
+						if( result.msg == "Logging in.." )
+						{
+							color = 'green';
+						}
+						
+						$('#login_msg').html(result.msg).css('color',color);
 						if(result.state)
 						{
 							setTimeout(openUrl(result.link), 4000);

@@ -2,9 +2,8 @@
 $image = base_url()."resources/app/img/user/noimage.jpg";
 if ( $this->session->userdata('pic') != NULL ){$image = $this->session->userdata('pic');}
 $confirm_disabler = null;
-if ( $mynav === 'disabled' )
+if ( $this->session->userdata('confirm') === 0 )
 {
-	
 	$confirm_disabler = 'class="disabled"';
 }
 
@@ -33,45 +32,46 @@ if ( $mynav === 'disabled' )
                </li>
                <!-- END user info-->
                <!-- START Menu-->
+               
                <li <?php echo $confirm_disabler; ?>>
-                  <a href="<?php if($confirm_disabler){echo base_url()."confirm";}else{echo base_url();}; ?>" title="Features"  class="no-submenu">
-                     <em class="fa fa-check-square"></em>
-                     <span class="item-text">Features</span>
-                  </a>
-                  
-               </li>
-               <li <?php echo $confirm_disabler; ?>>
-                  <a href="<?php if($confirm_disabler){echo base_url()."confirm";}else{echo base_url()."stats";}; ?>" title="Usage"  class="no-submenu">
+                  <a href="<?php if($confirm_disabler){echo base_url()."confirm";}else{echo base_url();}; ?>" title="Usage"  class="no-submenu">
                      <em class="fa fa-bar-chart-o"></em>
                      <span class="item-text">Usage Statistics</span>
                   </a>
                </li>
                <li <?php echo $confirm_disabler; ?>>
-                  <a href="<?php if($confirm_disabler){echo base_url()."confirm";}else{echo base_url()."billing";}; ?>" title="Billing" data-toggle="collapse-next" class="has-submenu">
+                  <a href="<?php if($confirm_disabler){echo "#";}else{echo base_url()."billing";}; ?>" title="Billing" data-toggle="collapse-next" class="has-submenu">
                      <em class="fa fa-money"></em>
                      <span class="item-text">Billing</span>
                   </a>
                </li>
-               <li <?php echo $confirm_disabler; ?>>
-                  <a href="<?php if($confirm_disabler){echo base_url()."confirm";}else{echo base_url()."documentation";}; ?>" title="Documentation"  class="no-submenu">
+			   <li>
+                  <a href="<?php echo base_url()."accountsettings"; ?>" title="Account Settings"  class="no-submenu">
+                     <em class="fa fa-cog"></em>
+                     <span class="item-text">Account Settings</span>
+                  </a>
+               </li>
+               <!--<li <?php echo $confirm_disabler; ?>>
+                  <a href="<?php if($confirm_disabler){echo "#";}else{echo base_url()."documentation";}; ?>" title="Documentation"  class="no-submenu">
                     <em class="fa fa-book"></em>
                     <span class="item-text">Documentation</span>
                   </a>               
+               </li>-->
+			   <li <?php echo $confirm_disabler; ?>>
+                  <a href="<?php if($confirm_disabler){echo "#";}else{echo base_url()."faq";}; ?>" title="FAQ"  class="no-submenu">
+                     <em class="fa fa-check-square"></em>
+                     <span class="item-text">FAQ</span>
+                  </a>
+                  
                </li>
                <li>
-                  <a href="<?php echo base_url()."contact"; ?>" title="Contact"  class="no-submenu">
+                  <a href="<?php echo base_url()."contact"; ?>" title="Contact Us"  class="no-submenu">
                      <em class="fa fa-envelope"></em>
                      <span class="item-text">Contact Us</span>
                   </a>
                </li>
 			   <li>
-                  <a href="<?php echo base_url()."accountsettings"; ?>" title="Account_Settings"  class="no-submenu">
-                     <em class="fa fa-cog"></em>
-                     <span class="item-text">Account Settings</span>
-                  </a>
-               </li>
-			   <li>
-                  <a href="<?php echo base_url()."logout"; ?>" title="Contact"  class="no-submenu">
+                  <a href="<?php echo base_url()."logout"; ?>" title="Log out"  class="no-submenu">
                      <em class="fa fa-sign-out"></em>
                      <span class="item-text">Logout</span>
                   </a>

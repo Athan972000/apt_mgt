@@ -82,39 +82,62 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 {
 	color: #d9534f;
 }
+#pic_upload_msg
+{
+	font-size: 11px;
+}
+#email_confirm_msg
+{
+	font-size:12px;
+	position:absolute;
+}
 </style>
 
 <br/><br/><br/>
 <ul class="as_nav nav nav-tabs nav-justified" role="tablist">
-    <li role="presentation" class="active"><a href="#gas" aria-controls="home" role="tab" data-toggle="tab">General Account Settings</a></li>
-    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Account Profile</a></li>
+    <li role="presentation"><a href="#gas" aria-controls="home" role="tab" data-toggle="tab">General Account Settings</a></li>
+    <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Account Profile</a></li>
 </ul>
-
 <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="gas">
+    <div role="tabpanel" class="tab-pane fade" id="gas">
 		<h4>General Account Settings</h4>
 		<hr/>
 		<table align="center">
 		<tr>
 			<td class="ctr_label"><label class="control-label">Email</label></td>
-			<td class="input_td"><input type="text" class="form-control" value="<?php echo $Nvoca['user_info']->email; ?>" readonly></td>
+			<td class="input_td">
+				<input type="text" class="form-control" required data-parsley-type="email"  data-input="email" value="<?php echo $Nvoca['user_info']->email; ?>" readonly>
+				<?php 
+				if( $Nvoca['user_info']->confirm )
+				{
+					echo "<p id='email_confirm_msg' style='color: green;'>Email confirmed</p>";
+				}
+				else
+				{
+					echo "<p id='email_confirm_msg' style='color: red;'>Not yet confirmed</p>";
+				}
+				?>
+			</td>
+			
 			<td class="button_td">
-				<button class="edit_button"><span class="fa fa-edit"></span></button>
-				<button style="display: none;" class="edit_button"><span class="fa fa-check-square-o"></span></button>	
+				<button class="edit_button" <?php if($Nvoca['user_info']->link == 'vocabdb'){echo 'voca-email="Edit"';}else{echo 'style="cursor:not-allowed"';}?> ><span class="fa fa-edit"></span></button>
+				<button style="display: none;" voca-email="Save" class="edit_button save_button"><span class="fa fa-check"></span></button>
+				<button style="display: none;" voca-email="Cancel" class="edit_button cancel_button"><span class="fa fa-times"></span></button>	
 			</td>
 		</tr>
 		<tr>
 			<td class="ctr_label"><label class="control-label">Password</label></td>
 			<td class="input_td"><input type="password" class="form-control" value="asd123" readonly></td>
 			<td class="button_td">
-				<button class="edit_button disabled"><span class="fa fa-edit"></span></button>
+				<button class="edit_button" <?php if($Nvoca['user_info']->link == 'vocabdb'){echo 'voca-pass="Edit"';}else{echo 'style="cursor:not-allowed"';}?> ><span class="fa fa-edit"></span></button>
+				<!--<button class="edit_button" voca-pass="Edit" ><span class="fa fa-edit"></span></button>-->
 			</td>
 		</tr>
 		</table>
 		<hr/>
 		<p align="right">*If you logged in/registered using Facebook/Twitter/Pinterest, you cannot edit these fields. Please contact us if you wish to change your email.</p>
 	</div>
-    <div role="tabpanel" class="tab-pane fade" id="profile">
+    <div role="tabpanel" class="tab-pane active" id="profile">
 		<h4>Profile</h4>
 		<hr/>
 		<table align="center">
@@ -155,6 +178,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<input type="hidden" name="this_pic" value="<?php echo $Nvoca['user_info']->photo_link; ?>"/>
 				<button id="pic_upload" class="btn btn-primary"><?php echo $btn_msg; ?></button>
 				<button id="pic_save" style="display: none;" title="Save" class="btn btn-info">Save?</button>
+				<p id="pic_upload_msg">
+				max file size: 2MB
+				</p>
 				<input style="display:none;" type="file" accept="image/x-png, image/gif, image/jpeg" />
 				
 			</td>
@@ -289,6 +315,46 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<p align="right">*Please be advised that we will not expose these informations to anyone.</p>
 	</div>
 </div>
+<!-- Modal for footer -->
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="vocadbmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+	<form id="changepass">
+    <div class="modal-content">
+    <div class="modal-header">
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+        <h4 class="modal-title" id="myModalLabel">Change Password</h4>
+    </div>
+    <div class="modal-body">
+		<div class="row">
+			<label class="col-sm-3 control-label">Current Password</label>
+			<div class="col-sm-9">
+				<input type="password" name="changepass_oldpass" class="form-control" required>
+				<p id="changepass_msg" style="display:none;color:red;font-size:12px;">Incorrect password.</p>
+			</div>
+		</div>
+		<br/>
+		<div class="row">
+			<label class="col-sm-3 control-label">New Password</label>
+			<div class="col-sm-9">
+				<input type="password" name="changepass_newpass" id="changepass_newpass" class="form-control" required data-parsley-type="alphanum">
+			</div>
+		</div>
+		<br/>
+		<div class="row">
+			<label class="col-sm-3 control-label">Confirm New Password</label>
+			<div class="col-sm-9">
+				<input type="password" name="changepass_confrmpass" class="form-control" required data-parsley-equalto="#changepass_newpass">
+			</div>
+		</div>
+    </div>
+    <div class="modal-footer">
+		<button type="submit" class="btn btn-primary">Change Password</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+    </div>
+	</form>
+  </div>
+</div>
 <script src="<?php echo base_url().'resources/'; ?>vendor/parsley/parsley.min.js"></script>
 <script>
 var uploaded_pics = {};
@@ -316,6 +382,10 @@ $("#pic_upload").siblings("input").change(function(e){
 				$("#pic_upload").siblings('img').attr('src',result.img_link);
 				$("#pic_save").css('display','inline');
 				$("input[name='this_pic']").val(result.img_path);
+			}
+			else
+			{
+				$('#pic_upload_msg').html("upload error, try again");
 			}
 			$("#pic_upload").removeClass("csspinner traditional disabled");
 		}
@@ -486,5 +556,96 @@ $(".edit_button[voca-lang-text='Save']").on("click",function(e){
 	{
 		selected_input.val( $(this).attr('old_data') );
 	}
+});
+//email
+$(".edit_button[voca-email='Edit']").on("click",function(e){
+	$(this).siblings('button').css("display","inline");
+	$(this).css("display","none");
+	var selected_input = $(this).parent('td').siblings('td.input_td').children('input');
+	selected_input.attr('readonly',false);
+	$(this).siblings(".edit_button[voca-email='Save']").attr("old_data", selected_input.val() );
+});
+$(".edit_button[voca-email='Cancel']").on("click",function(e){
+	$(this).siblings('button.edit_button[voca-email="Edit"]').css("display","inline");
+	$(this).siblings('button.edit_button[voca-email="Save"]').css("display","none");
+	$(this).css("display","none");
+	var selected_input =  $(this).parent('td').siblings('td.input_td').children('input');
+	selected_input.attr('readonly',true);
+	selected_input.val( $(this).siblings(".edit_button[voca-email='Save']").attr('old_data') );
+});
+$(".edit_button[voca-email='Save']").on("click",function(e){
+	$(this).siblings('button.edit_button[voca-email="Edit"]').css("display","inline");
+	$(this).siblings('button.edit_button[voca-email="Cancel"]').css("display","none");
+	$(this).css("display","none");
+	var selected_input = $(this).parent('td').siblings('td.input_td').children('input');
+	selected_input.attr('readonly',true);
+
+	if( selected_input.val() && selected_input.val() != $(this).attr('old_data') )
+	{
+		selected_input.parsley().validate();
+		if (selected_input.parsley().isValid()) 
+		{
+			// console.log("correct email"+selected_input.val());
+			$.ajax({
+				url: base_url+"account_change_email",
+				type:'POST',
+				data:{
+					val: selected_input.val(),
+				},
+				success: function()
+				{
+					location.reload();
+				}
+			});
+		}
+		else
+		{
+			// console.log("invalid email");
+			selected_input.val( $(this).attr('old_data') );
+		}
+	}
+	else
+	{
+		selected_input.val( $(this).attr('old_data') );
+	}
+});
+$(".edit_button[voca-pass='Edit']").on("click",function(e){
+	$('#vocadbmodal').modal('show');
+});
+$("#changepass").on("submit",function(e){
+	e.preventDefault();
+	var f = $(this);
+	f.parsley().validate();
+	if (f.parsley().isValid()) 
+	{
+		$.ajax({
+				url: base_url+"account_change_password",
+				type:'POST',
+				data:{
+					old_pass: $("input[name='changepass_oldpass']").val(),
+					new_pass: $("input[name='changepass_newpass']").val(),
+					cfrm_pass: $("input[name='changepass_confrmpass']").val()
+					
+				},
+				success: function(msg)
+				{
+					if(msg)
+					{
+						$("#changepass_msg").html('Change Password Successful').css('color','green');
+						$("#changepass_msg").css('display','inline');
+						$(".modal-footer button[type='submit']").addClass('disabled');
+					}
+					else
+					{
+						$("#changepass_msg").html('Incorrect password').css('color','red');
+						$("#changepass_msg").css('display','inline');
+					}
+				}
+			});
+	}
+});
+$('#vocadbmodal').on('hidden.bs.modal',function(){
+	$("#changepass input[type='password']").val("");
+	$("#changepass").parsley().reset();
 });
 </script>

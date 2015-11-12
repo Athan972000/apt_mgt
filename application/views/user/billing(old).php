@@ -9,18 +9,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 .panel-heading:hover {
   cursor:pointer;
  }
-.value
-{
-	font-size: 14px;
-}
-.breakdown
-{
-	font-size: 12px;
-	// text-align: right;
-	display: none;
-}
-</style>
 
+</style>
+<body>
 
 <div>
 
@@ -72,66 +63,60 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       </h4>
     </div>
     <div id="balance" class="panel-collapse in">
-		<div class="row">
-		<br>
-			<div class="col-xs-12 col-sm-8 col-md-8">
-				<p>Remaining balance from previous bill</p>
-			</div>
-			<div class="col-xs-12 col-sm-4 col-md-4">
-				<p class="value"><?php echo '$'.$Nvoca['remaining_bal']; ?></p>
-			</div>
-        </div>
+       <div class="row">
+	   <br>
+				<div class="col-xs-12 col-sm-8 col-md-8">
+					<p>Remaining balance from previous bill</p>
+				</div>
+				<div class="col-xs-12 col-sm-4 col-md-4">
+					<p class="value">P0.00</p>
+				</div>
+                </div>
                 <br class="clear">
-        <div class="row">
-			<div class="col-xs-12 col-sm-8 col-md-8">
-				<p>Current bill charges</p>
-			</div>
-			<div class="col-xs-12 col-sm-4 col-md-4">
-				<p class="value"><?php echo '$'.$Nvoca['current']; ?></p>
-			</div>
-        </div>
-               
-	<div class="breakdown">
-	 <br class="clear">
-		 <div class="row">
-			<div class="col-xs-12 col-sm-8 col-md-8">
-				<p>Text total</p>
-			</div>
-			<div class="col-xs-12 col-sm-4 col-md-4">
-				<p class="value"><?php echo '$'.$Nvoca['text_amount']; ?></p>
-			</div>
-        </div>
-                <br class="clear">
-		<div class="row">
-			<div class="col-xs-12 col-sm-8 col-md-8">
-				<p>Word total</p>
-			</div>
-			<div class="col-xs-12 col-sm-4 col-md-4">
-				<p class="value"><?php echo '$'.$Nvoca['definition_amount']; ?></p>
-			</div>
-        </div>
-                <br class="clear">
-		<div class="row">
-			<div class="col-xs-12 col-sm-8 col-md-8">
-				<p>Definition total</p>
-			</div>
-			<div class="col-xs-12 col-sm-4 col-md-4">
-				<p class="value"><?php echo '$'.$Nvoca['word_amount']; ?></p>
-			</div>
-        </div>
-                <br class="clear">
-    </div>
-	<hr>
-		<div class="row">
-            <div class="col-xs-12 col-sm-8 col-md-8">
-				<p class="due">Total Amount Due</p>
-            </div>
-            <div class="col-xs-12 col-sm-4 col-md-4">
-                <p class="due value"><?php echo '$'.($Nvoca['remaining_bal'] + $Nvoca['current']); ?></p>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-8 col-md-8">
+                        <p>Current bill charges</p>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <p class="value">P0.00</p>
                     </div>
                 </div>
-				<br class="clear">
-            <br class="clear">
+                <br class="clear">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-8 col-md-8">
+                        <p class="due">Total Amount Due</p>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <p class="due value">$1,312.99</p>
+                    </div>
+                </div>
+                <br class="clear">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-8 col-md-8">
+                        <p class="due">Payment due date</p>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <p class="due value">November 16, 2015</p>
+                    </div>
+                </div>
+                <br class="clear">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-8 col-md-8">
+                        <p>Minimum amount due</p>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <p class="value">P0.00</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-8 col-md-8">
+                        <p>Unbilled usage</p>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <p class="value">$1,225.99</p>
+                    </div>
+                </div>
             <br class="clear">
             <div >
  
@@ -152,11 +137,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </div>
 
 </div>
-<input type="hidden" name="notpaid_months" value="<?php echo $Nvoca['notpaid_months']; ?>">
-<?php
-	// echo "<pre>";
-	// print_r($Nvoca);
-	// echo "</pre>";
-?>
-
+	
+	
+   
+</body>
 

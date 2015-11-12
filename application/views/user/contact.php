@@ -2,17 +2,20 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?><!DOCTYPE html>
 <style>
-.left_contact
+#left_contact_div
 {
 	margin: 15px 0px;
 }
+.left_contact
+{
+	border-right: 10px white solid;
+}
 .right_contact
 {
-	border-left: 10px white solid;
-	text-align: left;
+	text-align: center;
 	list-style-type: none;
 	font-size: 16px;
-	padding: 20px 0px 20px 25px;
+	padding: 20px;
 	word-wrap:break-word;
 }
 .thisrow
@@ -21,6 +24,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	margin-top: 50px;
 	border: 10px white solid;
 	// border-left: 45px while solid;
+}
+.social_media_buttons button
+{
+	border-radius:50%;
+	font-size:30px;
+	padding: 10px;
+	width: 50px;
+	margin: 5px;
 }
 </style>
 <div align="center">
@@ -32,6 +43,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<br/><br/>
 	<div class="row thisrow">
 		<div class="col-xs-9 left_contact">
+			<div id="left_contact_div">
 			<h4>
 				Drop us a message
 			</h4><form>
@@ -45,30 +57,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					<textarea name="contnt" placeholder="Message" style="resize:vertical; max-height:300px; min-height:200px;" class="form-control" required></textarea>
 				</div>
             </fieldset>
-				<div class=" col-sm-12">
+				<div>
 					<button type="submit" style="width: 60%" class="btn btn-block btn-default">Send</button>
 				</div>
 			</form>
+			</div>
 		</div>
-		<div class="col-xs-3 right_contact">
-			<img style="height: 50px; border-radius:50%" src="<?php echo base_url();?>resources/images/vocadb-1-l-124x124.png"/>
-			<br/>
+		<div class="col-xs-3 right_contact" align="center">
+			OR Email us at<br/>
 			<span class="fa fa-envelope"></span> vocadb.api@gmail.com
-			<br/>
-			<span class="fa fa-phone"></span> (02)123-4567
-			<br/><br/>
-			<button type="button" class="btn btn-primary" style="border-radius:50%;font-size:30px;background-color: rgb(69, 97, 157);"><span class="fa fa-facebook"></span></button>
-			<br/>/vocadbsoftwaredevelopment	
-			<br/>
-			<button type="button" class="btn btn-primary" style="border-radius:50%;font-size:30px;background-color: #5EA9DD;"><span class="fa fa-twitter"></span></button>
-			<br/>@vocadbsoftwaredevelopment
-			<br/>
-			<button type="button" class="btn btn-primary" style="border-radius:50%;font-size:30px;background-color: #CC2127;"><span class="fa fa-pinterest"></span></button>
-			<br/>/vocadbsoftwaredevelopment
-			<br/>
-			<button type="button" class="btn btn-primary" style="border-radius:50%;font-size:30px;background-color: #00aff0;"><span class="fa fa-skype"></span></button>
-			<!-- skype:********?call -->
-			<br/>vocadbsoftwaredevelopment
+			<br/><br/><br/>
+			<span style="font-size:12px;">VocaDB API on Social Media:</span><br/>
+			<div class="social_media_buttons">
+			<button type="button" class="btn btn-primary" style="background-color: rgb(69, 97, 157);"><span class="fa fa-facebook"></span></button>
+			<button type="button" class="btn btn-primary" style="background-color: #5EA9DD;"><span class="fa fa-twitter"></span></button>
+			<button type="button" class="btn btn-primary" style="background-color: #CC2127;"><span class="fa fa-pinterest"></span></button>
+			<!--<button type="button" class="btn btn-primary" style="border-radius:50%;font-size:30px;background-color: #00aff0;"><span class="fa fa-skype"></span></button>
+			skype:********?call
+			<br/>vocadbsoftwaredevelopment-->
+			</div>
 			<br/>
 		</div>
 	</div>
@@ -94,17 +101,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <script>
 $('form').on("submit",function(e){
 	e.preventDefault();
-	$.ajax({
-		url: base_url+"send_message",
-		type:'POST',
-		data:{
-			subject: $("form input[name='subj']").val(),
-			content: $("form textarea[name='contnt']").val()
-		},
-		success: function()
-		{
-			$('#vocadbmodal').modal('show');
-		}			
-	});
+	if( $("form textarea[name='contnt']").val().length > 30 )
+	{
+		$.ajax({
+			url: base_url+"send_message_2",
+			type:'POST',
+			data:{
+				subject: $("form input[name='subj']").val(),
+				content: $("form textarea[name='contnt']").val()
+			},
+			success: function(result)
+			{
+				console.log(result);
+				$('#vocadbmodal').modal('show');
+			}			
+		});
+	}
 });
 </script>

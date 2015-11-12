@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 <div align="center">
 Please confirm you email address<br/>
-a confirmation email has been sent to <span id="email"><?php echo $email; ?></span><br/><br/>
+a confirmation email has been sent to <span id="email"><?php echo $Nvoca['email']; ?></span><br/><br/>
 If you don't see this email you can :<br/>
 <ul>
 	<li>Check you spam folder</li>
@@ -26,6 +26,7 @@ $('#resend').on("click", function(e){
 		success: function(msg)
 		{
 			// console.log(msg);
+			// $('#msg').html(msg);
 			$('#msg').html("Confirmation Email Sent");
 		}
 	});
