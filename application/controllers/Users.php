@@ -100,72 +100,158 @@ class Users extends MY_Controller {
 		$this->load->model('computation_model');
 		$query = $this->database_model->read_user_information($this->session->userdata('email'));
 		$api_key = $query[0]->apikey;
-		$current_total = array();
 		
-		$data['text_legnth'] = $text_usage = $this->database_model->get_billing_user($api_key,'text');
-		if($text_usage != 0)
-			$current_total[] = $data['text_amount'] = $this->computation_model->compute_length($text_usage);
-		
-		$data['definition_legnth'] = $definition_usage = $this->database_model->get_billing_user($api_key,'definition');
-		if($definition_usage != 0)
-			$current_total[] = $data['definition_amount'] = $this->computation_model->compute_length($definition_usage);
-		
-		$data['word_legnth'] = $word_usage = $this->database_model->get_billing_user($api_key,'word');
-		if($word_usage != 0)
-			$current_total[] = $data['word_amount'] = $this->computation_model->compute_length($word_usage);
-		
-		$remaining_bal = $this->get_remaining_bal($query[0]);
-		$data['remaining_bal'] = $remaining_bal['total_remaining'];
-		$data['notpaid_months'] = json_encode( $remaining_bal['notpaid_months'] );
-		
-		$data['current'] = $this->computation_model->compute_total( $current_total );
+		$billing = $this->database_model->get_billing_user($api_key);
+		$remaining_balance = 0;
+		$current = 0;
+		$ctr = false;
+		$notpaid_bill = array();
+		foreach($billing as $v)
+		{
+			if($v['amount_paid'] == null)
+			{
+				$notpaid_bill[$v['billing_id']] = $v['amount'];
+			}
+			if($ctr)
+			{
+				$remaining_balance += $v['amount'] - $v['amount_paid'];
+			}
+			else
+			{
+				$current = $v['amount'] - $v['amount_paid'];
+				$data['text_amount'] = $this->computation_model->compute_length($v['text']);
+				$data['definition_amount'] =  $this->computation_model->compute_length($v['definition']) ;			
+				$data['word_amount'] = $this->computation_model->compute_length( $v['word'] );
+			}
+			$ctr = true;
+		}
+		$data['current'] = $current;
+		$data['remaining_bal'] = $remaining_balance;
+		$data['notpaid_bill'] = json_encode($notpaid_bill);
+		$data['total_amount'] = $remaining_balance + $current;
+		// history
+		$data['billing_history'] = $this->database_model->get_billing_history($api_key);
 		
 		$this->_render('user/billing',$data);
 	}
 	
-	private function get_remaining_bal($my)
+	public function billing_complete()
 	{
-		$arr_result = $this->database_model->get_past_billing( $my->apikey,$my->start_date );
-		$notpaid_months = array();
-		$total_remaining_length = 0;
-		$today = date('Y-m-01');
+		$tx = $this->input->get('tx');
+		$your_pdt_identity_token = 'oNud59a3chLZxSNb5_wIsMIStzB9_2OHGYHbZjkl37aXPDzXA4b9y_0n3Gi';
 		
-		$start_date = $my->start_date;
-		$var_date = date('Y-m-01',(strtotime($start_date)));
-		while($today > $var_date)
+		// Init cURL
+		$request = curl_init();
+
+		// Set request options
+		curl_setopt_array($request, array
+		(
+		  CURLOPT_URL => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
+		  CURLOPT_POST => TRUE,
+		  CURLOPT_POSTFIELDS => http_build_query(array
+			(
+			  'cmd' => '_notify-synch',
+			  'tx' => $tx,
+			  'at' => $your_pdt_identity_token,
+			)),
+		  CURLOPT_RETURNTRANSFER => TRUE,
+		  CURLOPT_HEADER => FALSE,
+		  // CURLOPT_SSL_VERIFYPEER => TRUE,
+		  // CURLOPT_CAINFO => 'cacert.pem',
+		));
+
+		// Execute request and get response and status code
+		$response = curl_exec($request);
+		$status   = curl_getinfo($request, CURLINFO_HTTP_CODE);
+
+		// Close connection
+		curl_close($request);
+		
+		if($status == 200 AND strpos($response, 'SUCCESS') === 0)
 		{
-			$not_paid = TRUE;
-			foreach($arr_result as $k=>$v)
+			// Further processing
+			// Remove SUCCESS part (7 characters long)
+			$response = substr($response, 7);
+
+			// URL decode
+			$response = urldecode($response);
+
+			// Turn into associative array
+			preg_match_all('/^([^=\s]++)=(.*+)/m', $response, $m, PREG_PATTERN_ORDER);
+			$response = array_combine($m[1], $m[2]);
+
+			// Fix character encoding if different from UTF-8 (in my case)
+			if(isset($response['charset']) AND strtoupper($response['charset']) !== 'UTF-8')
 			{
-				$checkdate = date('Y-m-01',(strtotime($v)));
-				if($var_date == $checkdate)
-					$not_paid = FALSE;//means paid
+			  foreach($response as $key => &$value)
+			  {
+				$value = mb_convert_encoding($value, 'UTF-8', $response['charset']);
+			  }
+			  $response['charset_original'] = $response['charset'];
+			  $response['charset'] = 'UTF-8';
 			}
-			if($not_paid)
-			{
-				$notpaid_months[] = $var_date;
-				$var_last = date('Y-m-d',(strtotime ( 'last day of this month' , strtotime ( $var_date) ) ));
-				$total_remaining_length += $this->database_model->get_remaining_billing($my->apikey,$var_date,$var_last);
-				
-			}
-			$var_date = date('Y-m-d',(strtotime ( '+1 month' , strtotime ( $var_date) ) ));
-		}
-		if($total_remaining_length != 0)
-		{
-			$total_remaining = $this->computation_model->compute_length($total_remaining_length);
+
+			// Sort on keys for readability (handy when debugging)
+			ksort($response);
+			// echo "<pre>";
+			// print_r($response);
+			// exit();
+			/*
+			Array
+			(
+				[business] => athan17@gmail.com
+				[charset] => UTF-8
+				[charset_original] => windows-1252
+				[custom] => 
+				[first_name] => Jonathan
+				[handling_amount] => 0.00
+				[item_name] => Billing - VocaDB API
+				[item_number] => 
+				[last_name] => Subion
+				[mc_currency] => USD
+				[mc_fee] => 0.34
+				[mc_gross] => 1.37
+				[payer_email] => Athan972000@yahoo.com
+				[payer_id] => 49K3JMVVABNR4
+				[payer_status] => verified
+				[payment_date] => 19:06:47 Nov 16, 2015 PST
+				[payment_fee] => 0.34
+				[payment_gross] => 1.37
+				[payment_status] => Completed
+				[payment_type] => instant
+				[protection_eligibility] => Ineligible
+				[quantity] => 1
+				[receiver_email] => athan17@gmail.com
+				[receiver_id] => CKQMJ4V2CSMFG
+				[residence_country] => US
+				[shipping] => 0.00
+				[tax] => 0.00
+				[transaction_subject] => 
+				[txn_id] => 905763877K570433Y
+				[txn_type] => web_accept
+			)
+			*/
+			$api_billing = json_decode($response['custom']);
+			// var_dump($notpaid_months);
+			// $today =  date('Y-m-d', strtotime($response['payment_date']));
+			$amount_paid = $response['payment_gross'];
+			// $query = $this->database_model->read_user_information($this->session->userdata('email'));
+			// $apikey = $query[0]->apikey;
+			// print_r($api_billing);
+			// exit();
+			$this->database_model->paid_complete($api_billing,$amount_paid);
+			redirect(base_url().'billing','refresh');
 		}
 		else
 		{
-			$total_remaining = 0;
+			// Log the error, ignore it, whatever 
 		}
-		// echo $total_remaining_length;
-		$result = array( 
-			'total_remaining'=>$total_remaining,
-			'notpaid_months'=>$notpaid_months
-			);
-		return $result;
 	}
 	
+	// public function billing_complete_new()
+	// {
+		// $ipn_post_data = $_POST;
+	// }
 	// public function testingtesting()
 	// {
 		// $display['today'] = $today = date('Y-m-01');
@@ -193,7 +279,7 @@ class Users extends MY_Controller {
 	public function contact()
 	{
 		$this->_render('user/contact');
-	}
+	} 
 	
 	public function accountsettings()
 	{

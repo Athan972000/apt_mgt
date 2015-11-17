@@ -419,32 +419,27 @@ Class Database_Model extends CI_Model {
 		$this->db->update('api_users', $data); 
 	}
 	
-	public function get_billing_user($apikey,$ext)
+	public function get_billing_user($apikey)
 	{
 		$result = array();
-
-		$firstday = date('Y-m-01');
-		$minus1 = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $firstday) ) ));
-		$minuslast = date('Y-m-d',(strtotime ( 'last day of this month' , strtotime ( $minus1) ) ));
 		
-		$where = "WHERE datetime>='".$minus1."' AND datetime<='".$minuslast."' AND apikey ='".$apikey."'";
-		$sql = "SELECT SUM(length)as sum_text FROM api_usage_".$ext." ".$where." ORDER BY datetime";
+		$sql = "SELECT * FROM api_billing ab LEFT JOIN api_billing_history abh 
+		ON ab.billing_id = abh.api_billing_id 
+		WHERE ab.apikey = '".$apikey."' 
+		AND ab.amount <> '0.00' ORDER BY date_from DESC";
+		// echo $sql;
+		// exit();
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
-			$row = $query->row_array();
-			$result = $row['sum_text'];
-		}
-		else
-		{
-			$result = 0;
+			$result = $query->result_array();
 		}
 		return $result;
 	}
 	
 	public function get_remaining_billing($apikey,$day1,$daylast)
 	{
-		$result = 0;
+		$result = array();
 		$where = "WHERE datetime>='".$day1."' AND datetime<='".$daylast."' AND apikey ='".$apikey."'";
 		
 		//text
@@ -453,11 +448,18 @@ Class Database_Model extends CI_Model {
 		if ($query->num_rows() > 0)
 		{
 			$row = $query->row_array();
-			$result += $row['sum_text'];
+			if( is_null($row['sum_text']) )
+			{
+				$result['text'] = 0;
+			}
+			else
+			{
+				$result['text'] = $row['sum_text'];
+			}
 		}
 		else
 		{
-			$result += 0;
+			$result['text'] = 0;
 		}
 		//word
 		$sql = "SELECT SUM(length)as sum_text FROM api_usage_word ".$where." ORDER BY datetime";
@@ -465,11 +467,18 @@ Class Database_Model extends CI_Model {
 		if ($query->num_rows() > 0)
 		{
 			$row = $query->row_array();
-			$result += $row['sum_text'];
+			if( is_null($row['sum_text']) )
+			{
+				$result['word'] = 0;
+			}
+			else
+			{
+				$result['word'] = $row['sum_text'];
+			}
 		}
 		else
 		{
-			$result += 0;
+			$result['word'] = 0;
 		}
 		//definition
 		$sql = "SELECT SUM(length)as sum_text FROM api_usage_definition ".$where." ORDER BY datetime";
@@ -477,19 +486,29 @@ Class Database_Model extends CI_Model {
 		if ($query->num_rows() > 0)
 		{
 			$row = $query->row_array();
-			$result += $row['sum_text'];
+			if( is_null($row['sum_text']) )
+			{
+				$result['definition'] = 0;
+			}
+			else
+			{
+				$result['definition'] = $row['sum_text'];
+			}
 		}
 		else
 		{
-			$result += 0;
+			$result['definition'] = 0;
 		}
+		
+		$result['total'] = $result['text'] + $result['definition'] + $result['word'];
 
 		return $result;
 	}
 	
-	public function get_past_billing($api_key,$start_date)
+	public function get_past_billing($api_key,$today)
 	{
 		$result = array();
+		$newday = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
 		$sql = "SELECT * FROM api_billing_history WHERE apikey='".$api_key."'";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
@@ -498,6 +517,77 @@ Class Database_Model extends CI_Model {
 			$result = $row;
 		}
 		return $result;
+	}
+	
+	public function get_user_list()
+	{
+		$sql = "SELECT * FROM api_users WHERE user_type = 'user' ORDER BY start_date DESC";
+		$query = $this->db->query($sql);
+		$result = $query->result_array();
+		return $result;
+	}
+	
+	//paypal
+	public function paid_complete($api_billing,$amount_paid)
+	{
+		foreach($api_billing as $k => $v)
+		{
+			$data = array(
+			   'api_billing_id' => $k ,
+			   'amount_paid' => $v
+			);
+			$this->db->insert('api_billing_history', $data);
+		}
+	}
+	
+	public function get_billing_history($apikey)
+	{
+		$result = array();
+		$sql = "SELECT * FROM api_billing ab LEFT JOIN api_billing_history abh
+			ON ab.billing_id = abh.api_billing_id WHERE ab.apikey='".$apikey."'";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->result_array();
+			$result = $row;
+		}
+		return $result;
+	}
+	
+	public function create_billing($date1,$date2)
+	{
+		$result = array();
+		$sql = "SELECT * FROM api_users WHERE user_type = 'user'";
+		$query = $this->db->query($sql);
+		if($query->num_rows() > 0)
+		{
+			$row = $query->result_array();
+			foreach($row as $v)
+			{
+				// $row[] = $v['apikey'];
+				$result[$v['apikey']] = $this->get_remaining_billing($v['apikey'],$date1,$date2);
+			}
+		}
+		return $result;
+	}
+	
+	public function last_billed_date()
+	{
+		// $return = date('Y-m-01');
+		$return = false;
+		$sql = "SELECT * FROM api_billing ORDER BY date_to DESC";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->result_array();
+			$return = date('Y-m-d',strtotime($row[0]['date_to']));
+		}
+		return $return;
+	}
+	
+	public function insert_billing($data)
+	{
+		$this->db->insert('api_billing',$data);
 	}
 }
 ?>

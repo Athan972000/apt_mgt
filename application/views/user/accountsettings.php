@@ -35,7 +35,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 {
 	width: 100%;
 	max-width: 500px;
-	
 }
 .ctr_label
 {

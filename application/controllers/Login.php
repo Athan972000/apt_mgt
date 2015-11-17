@@ -93,7 +93,7 @@ class Login extends MY_Controller {
 					'confirm' => 1
 					);
 					$this->session->set_userdata($session_data);
-					$return['link'] = base_url()."admin/feat";
+					$return['link'] = base_url()."admin";
 					$return['msg'] = "Logging in as administrator";
 				}
 				else if($confirm)
