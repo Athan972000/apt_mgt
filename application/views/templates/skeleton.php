@@ -43,5 +43,11 @@
 			// $("#scalingright").height( $("#scalingcontent").height() );
 		// }
 	} );
+	$("nav a").on("click",function(e){
+		$('body').addClass("csspinner traditional");
+	});
+	$(".addspinner_whenclick").on("click",function(e){
+		$('body').addClass("csspinner traditional");
+	}); 
 	</script>
 </html>

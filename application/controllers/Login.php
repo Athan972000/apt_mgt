@@ -13,7 +13,7 @@ class Login extends MY_Controller {
 		$this->css[] = base_url() . "resources/app/css/app.css";
 		// $this->css[] = "resources/vendor/fontawesome/css/font-awesome.min.css";
 		// $this->css[] = "resources/vendor/animo/animate+animo.css";
-		// $this->css[] = "resources/vendor/csspinner/csspinner.min.css";
+		$this->css[] = base_url() . "resources/vendor/csspinner/csspinner.min.css";
 		// $this->js[] = "resources/vendor/modernizr/modernizr.js";
 		// $this->js[] = "resources/vendor/fastclick/fastclick.js";
 		$this->viewnav = "user/nav";
@@ -89,12 +89,21 @@ class Login extends MY_Controller {
 				{
 					$session_data = array(
 					'email' => $result[0]->email,
-					'pic' => $result[0]->photo_link,
 					'confirm' => 1
 					);
 					$this->session->set_userdata($session_data);
 					$return['link'] = base_url()."admin";
 					$return['msg'] = "Logging in as administrator";
+				}
+				else if( $result[0]->user_type == 'callcenter' )
+				{
+					$session_data = array(
+					'email' => $result[0]->email,
+					'confirm' => 1
+					);
+					$this->session->set_userdata($session_data);
+					$return['link'] = base_url()."callcenter";
+					$return['msg'] = "Logging in..";
 				}
 				else if($confirm)
 				{
@@ -104,7 +113,7 @@ class Login extends MY_Controller {
 					'confirm' => 1
 					);
 					$this->session->set_userdata($session_data);
-					$return['link'] = base_url()."feat";
+					$return['link'] = base_url();
 					$return['msg'] = "Logging in..";
 				}
 				else
@@ -115,7 +124,7 @@ class Login extends MY_Controller {
 					'confirm' => 0
 					);
 					$this->session->set_userdata($session_data);
-					$return['link'] = base_url()."confirm";
+					$return['link'] = base_url();
 					$return['msg'] = "Please verify your email address";
 				}
 			}
@@ -164,11 +173,25 @@ class Login extends MY_Controller {
 		if($result===true){
 			// $this->_render('login_form');
 			$myconfirm = $this->input->post('confirm');//0 means notconfirmed, 1 means confirmed(from fb)
+			
+			$query = $this->database_model->read_user_information( $this->input->post('email') );
+			$session_data = array(
+				'email' => $query[0]->email,
+				'name' => $query[0]->last_name,
+				'pic' => $query[0]->photo_link
+			);
+			
 			if( !$myconfirm )
 			{
-				$query = $this->database_model->read_user_information( $this->input->post('email') );
+				$session_data['confirm'] = 0;
 				$this->send_confirm_email( $query[0]->email, $query[0]->password );
 			}
+			else
+			{
+				$session_data['confirm'] = 1;
+			}
+			
+			$this->session->set_userdata($session_data);
 			echo TRUE;
 		}
 		else
@@ -313,7 +336,7 @@ class Login extends MY_Controller {
 	{
 		$data['email'] = $this->session->userdata('email');
 		$this->load->view("login/confirm_require",$data);
-		$this->is_logged_in();
+		// $this->is_logged_in();
 	}
 	
 	/*
@@ -323,15 +346,16 @@ class Login extends MY_Controller {
 	{
 		if( $this->session->has_userdata('email') )
 		{
-			$email = $this->session->userdata('email');
-			if( $this->database_model->check_confirmation_email($email) )
-			{
-				redirect(base_url().'feat', 'refresh');
-			}
-			else
-			{
-				redirect(base_url().'login/confirm', 'refresh');
-			}
+			// $email = $this->session->userdata('email');
+			// if( $this->database_model->check_confirmation_email($email) )
+			// {
+				// redirect(base_url(), 'refresh');
+			// }
+			// else
+			// {
+				// redirect(base_url().'login/confirm', 'refresh');
+			// }
+			redirect(base_url(), 'refresh');
 		}
 	}
 	/*

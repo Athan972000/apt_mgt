@@ -75,8 +75,8 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'vocatest',
+	'hostname' => 'vocabdbcom.fatcowmysql.com',
+	'username' => 'root_db',
 	'password' => 'vocabdb123',
 	'database' => 'vocabdb',
 	'dbdriver' => 'mysqli',

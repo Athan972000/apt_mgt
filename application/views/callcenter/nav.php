@@ -24,29 +24,32 @@ if ( $this->session->userdata('pic') != NULL ){$image = $this->session->userdata
                      </div>
                   </div>
                </li>
+			   <!--
                <li>
                   <a href="<?php echo base_url()."admin"; ?>" title="Usage"  class="no-submenu">
                      <em class="fa fa-bar-chart-o"></em>
                      <span class="item-text">Usage Statistics</span>
                   </a>
                </li>
+			   -->
 			   <li>
-                  <a href="<?php echo base_url()."admin/users"; ?>" title="Usage"  class="no-submenu">
+                  <a href="<?php echo base_url()."callcenter"; ?>" title="Usage"  class="no-submenu">
                      <em class="fa fa-users"></em>
                      <span class="item-text">Users</span>
                   </a>
                </li>
+			   <!--
                <li>
                   <a href="<?php echo base_url()."admin/income_stats"; ?>" title="Billing" data-toggle="collapse-next" class="has-submenu">
                      <em class="fa fa-money"></em>
                      <span class="item-text">Income</span>
                   </a>
                </li>
-
+				-->
 			   <li>
-                  <a href="<?php echo base_url()."admin/adminsettings"; ?>"  class="no-submenu">
+                  <a href="<?php echo base_url()."callcenter/settings"; ?>"  class="no-submenu">
                      <em class="fa fa-wrench"></em>
-                     <span class="item-text">Admin Settings</span>
+                     <span class="item-text">Settings</span>
                   </a>
                </li>
 			   <li>

@@ -216,6 +216,7 @@ else
 		
 		var base_url = "<?php echo base_url().'login/';?>";
 		$('#vocadb_regform').on("submit",function (e) {
+			$('body').addClass("csspinner traditional");
 			var f = $(this);
 			f.parsley().validate();
 
@@ -248,7 +249,7 @@ else
 						{
 							if(confirm)
 							{
-								$('#vocamodalmsg').html("Registration Successful. You may now login");
+								$('#vocamodalmsg').html("Registration Successful.");
 								setTimeout(openUrl, 3000);
 							}
 							else
@@ -258,6 +259,7 @@ else
 							}
 							
 						}
+						$('body').removeClass("csspinner traditional");
 						$('#vocadbmodal').modal('show');
 					}               
 				});

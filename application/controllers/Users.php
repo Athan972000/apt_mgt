@@ -13,7 +13,7 @@ class Users extends MY_Controller {
 		$this->css[] = base_url() . "resources/app/css/app.css";
 		// $this->css[] = "resources/vendor/fontawesome/css/font-awesome.min.css";
 		// $this->css[] = "resources/vendor/animo/animate+animo.css";
-		// $this->css[] = base_url() . "resources/vendor/csspinner/csspinner.min.css";
+		$this->css[] = base_url() . "resources/vendor/csspinner/csspinner.min.css";
 		// $this->js[] = "resources/vendor/modernizr/modernizr.js";
 		// $this->js[] = "resources/vendor/fastclick/fastclick.js";
 		$this->not_logged_in();
@@ -58,10 +58,14 @@ class Users extends MY_Controller {
 	
 	public function index()
 	{
+		$data['start_time'] = $this->getMicroTime();
+		//process start
 		$this->not_confirmed();
         $query = $this->database_model->read_user_information($this->session->userdata('email'));
 		$data['text_result'] = $this->database_model->get_usage_users(1,$query[0]->apikey);
 		$data['api_key'] = $query[0]->apikey;
+		//process end
+		$data['end_time'] = $this->getMicroTime();
 		$this->_render('user/stats',$data);
 	}
 	
@@ -94,7 +98,7 @@ class Users extends MY_Controller {
 		$query = $this->database_model->read_user_information($this->session->userdata('email'));
 		echo json_encode($this->database_model->get_usage_users($num,$query[0]->apikey));
 	}
-
+	
 	public function billing()
 	{
 		$this->load->model('computation_model');
@@ -134,6 +138,14 @@ class Users extends MY_Controller {
 		
 		$this->_render('user/billing',$data);
 	}
+	
+	function getMicroTime() 
+	{ 
+		$time = microtime(); 
+		$time = explode( " " , $time ); 
+		$time = $time[0] + $time[1]; 
+		return $time; 
+	} 
 	
 	public function billing_complete()
 	{

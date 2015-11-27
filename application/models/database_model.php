@@ -151,15 +151,31 @@ Class Database_Model extends CI_Model {
 		$api_usage_text = array();
 		$api_usage_word = array();
 		$api_usage_definition = array();
+		$api_usage_trans = array();
 		
-		$today = date('Y-m-d H:i:s');
-		$minus2months = date('Y-m-d H:i:s',(strtotime ( '-'.$monthdeduct.' month' , strtotime ( $today) ) ));
-		$where = "WHERE datetime<='".$today."' AND datetime>='".$minus2months."'";
-		// $sql = "SELECT * FROM api_usage_text ".$where." ORDER BY datetime";
-		// echo $sql;exit();
+		$mysql = "*";
+		
+		if($monthdeduct == 'all')
+		{
+			$where = "";
+		}
+		else if($monthdeduct == 'bymonth')
+		{ 
+			$mysql = "SUM( length ) as length , datetime";
+			$where = "GROUP BY MONTHNAME( datetime )";
+		}
+		else
+		{
+			$today = date('Y-m-d H:i:s');
+			$minus2months = date('Y-m-d H:i:s',(strtotime ( '-'.$monthdeduct.' month' , strtotime ( $today) ) ));
+			$where = "WHERE datetime<='".$today."' AND datetime>='".$minus2months."'";
+			// $sql = "SELECT * FROM api_usage_text ".$where." ORDER BY datetime";
+			// echo $sql;exit();
+		}
+		
 		
 		//TEXT
-		$sql = "SELECT * FROM api_usage_text ".$where." ORDER BY datetime";
+		$sql = "SELECT ".$mysql." FROM api_usage_text ".$where." ORDER BY datetime";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
@@ -192,7 +208,7 @@ Class Database_Model extends CI_Model {
 		}
 		
 		//WORD
-		$sql = "SELECT * FROM api_usage_word ".$where." ORDER BY datetime";
+		$sql = "SELECT ".$mysql." FROM api_usage_word ".$where." ORDER BY datetime";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
@@ -225,7 +241,7 @@ Class Database_Model extends CI_Model {
 		}
 		
 		//Definition
-		$sql = "SELECT * FROM api_usage_definition ".$where." ORDER BY datetime";
+		$sql = "SELECT ".$mysql." FROM api_usage_definition ".$where." ORDER BY datetime";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
@@ -256,11 +272,45 @@ Class Database_Model extends CI_Model {
 				
 			}
 		}
+		
+		//Translation
+		$sql = "SELECT ".$mysql." FROM api_usage_trans ".$where." ORDER BY datetime";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			foreach ($query->result_array() as $row)
+			{
+				//api_usage_definition
+				if( isset( $api_usage_trans[date('m-d-Y',strtotime($row['datetime']))] ) )
+				{
+					$api_usage_trans[date('m-d-Y',strtotime($row['datetime']))]['amount'] += $row['length'];
+					$api_usage_trans[date('m-d-Y',strtotime($row['datetime']))]['count']++;
+				}
+				else
+				{
+					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))]['amount'] = $row['length'];
+					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))]['count'] = 1;
+				}
+				//total_arr
+				if( isset( $total_arr[date('m-d-Y',strtotime($row['datetime']))] ) )
+				{
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['amount'] += $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['count']++;
+				}
+				else
+				{
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['amount'] = $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['count'] = 1;
+				}
+				
+			}
+		}
 		ksort($total_arr);
 		$return['total'] = $total_arr;
 		$return['text'] = $api_usage_text;
 		$return['word'] = $api_usage_word;
 		$return['defi'] = $api_usage_definition;
+		$return['trans'] = $api_usage_trans;
 		
 		return $return;
 	}
@@ -273,15 +323,31 @@ Class Database_Model extends CI_Model {
 		$api_usage_text = array();
 		$api_usage_word = array();
 		$api_usage_definition = array();
+		$api_usage_trans = array();
 		
-		$today = date('Y-m-d H:i:s');
-		$minus2months = date('Y-m-d H:i:s',(strtotime ( '-'.$monthdeduct.' month' , strtotime ( $today) ) ));
-		$where = "WHERE datetime<='".$today."' AND datetime>='".$minus2months."' AND apikey ='".$apikey."'";
-		// $sql = "SELECT * FROM api_usage_text ".$where." ORDER BY datetime";
-		// echo $sql;exit();
+		$mysql = "*";
+		
+		if($monthdeduct == 'all')
+		{
+			$where = "WHERE apikey ='".$apikey."'";
+		}
+		else if($monthdeduct == 'bymonth')
+		{ 
+			$mysql = "SUM( length ) as length , datetime";
+			$where = "WHERE apikey ='".$apikey."' GROUP BY MONTHNAME( datetime )";
+		}
+		else
+		{
+			$today = date('Y-m-d H:i:s');
+			$minus2months = date('Y-m-d H:i:s',(strtotime ( '-'.$monthdeduct.' month' , strtotime ( $today) ) ));
+			$where = "WHERE datetime<='".$today."' AND datetime>='".$minus2months."' AND apikey ='".$apikey."'";
+			// $sql = "SELECT * FROM api_usage_text ".$where." ORDER BY datetime";
+			// echo $sql;exit();
+		}
+		
 		
 		//TEXT
-		$sql = "SELECT * FROM api_usage_text ".$where." ORDER BY datetime";
+		$sql = "SELECT ".$mysql." FROM api_usage_text ".$where." ORDER BY datetime";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
@@ -314,7 +380,7 @@ Class Database_Model extends CI_Model {
 		}
 		
 		//WORD
-		$sql = "SELECT * FROM api_usage_word ".$where." ORDER BY datetime";
+		$sql = "SELECT ".$mysql." FROM api_usage_word ".$where." ORDER BY datetime";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
@@ -347,7 +413,7 @@ Class Database_Model extends CI_Model {
 		}
 		
 		//Definition
-		$sql = "SELECT * FROM api_usage_definition ".$where." ORDER BY datetime";
+		$sql = "SELECT ".$mysql." FROM api_usage_definition ".$where." ORDER BY datetime";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
@@ -378,14 +444,47 @@ Class Database_Model extends CI_Model {
 				
 			}
 		}
+		
+		//Translation
+		$sql = "SELECT ".$mysql." FROM api_usage_trans ".$where." ORDER BY datetime";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			foreach ($query->result_array() as $row)
+			{
+				//api_usage_definition
+				if( isset( $api_usage_trans[date('m-d-Y',strtotime($row['datetime']))] ) )
+				{
+					$api_usage_trans[date('m-d-Y',strtotime($row['datetime']))]['amount'] += $row['length'];
+					$api_usage_trans[date('m-d-Y',strtotime($row['datetime']))]['count']++;
+				}
+				else
+				{
+					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))]['amount'] = $row['length'];
+					$api_usage_definition[date('m-d-Y',strtotime($row['datetime']))]['count'] = 1;
+				}
+				//total_arr
+				if( isset( $total_arr[date('m-d-Y',strtotime($row['datetime']))] ) )
+				{
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['amount'] += $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['count']++;
+				}
+				else
+				{
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['amount'] = $row['length'];
+					$total_arr[date('m-d-Y',strtotime($row['datetime']))]['count'] = 1;
+				}
+				
+			}
+		}
 		ksort($total_arr);
 		$return['total'] = $total_arr;
 		$return['text'] = $api_usage_text;
 		$return['word'] = $api_usage_word;
 		$return['defi'] = $api_usage_definition;
+		$return['trans'] = $api_usage_trans;
 		
 		return $return;
-
 	}
 	
 	public function save_pic_link($email,$pic_link)
@@ -423,10 +522,9 @@ Class Database_Model extends CI_Model {
 	{
 		$result = array();
 		
-		$sql = "SELECT * FROM api_billing ab LEFT JOIN api_billing_history abh 
-		ON ab.billing_id = abh.api_billing_id 
-		WHERE ab.apikey = '".$apikey."' 
-		AND ab.amount <> '0.00' ORDER BY date_from DESC";
+		$sql = "SELECT * FROM api_billing
+		WHERE apikey = '".$apikey."' 
+		AND amount <> '0.00' ORDER BY billing_date DESC";
 		// echo $sql;
 		// exit();
 		$query = $this->db->query($sql);
@@ -505,18 +603,12 @@ Class Database_Model extends CI_Model {
 		return $result;
 	}
 	
-	public function get_past_billing($api_key,$today)
+	public function get_email_from_apikey($apikey)
 	{
-		$result = array();
-		$newday = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
-		$sql = "SELECT * FROM api_billing_history WHERE apikey='".$api_key."'";
+		$sql = "SELECT * FROM api_users WHERE apikey = '".$apikey."'";
 		$query = $this->db->query($sql);
-		if ($query->num_rows() > 0)
-		{
-			$row = $query->result_array();
-			$result = $row;
-		}
-		return $result;
+		$result = $query->row_array();
+		return $result['email'];
 	}
 	
 	public function get_user_list()
@@ -533,18 +625,22 @@ Class Database_Model extends CI_Model {
 		foreach($api_billing as $k => $v)
 		{
 			$data = array(
-			   'api_billing_id' => $k ,
-			   'amount_paid' => $v
+			   'amount_paid' => $v,
+			   'payment_source' => 'paypal',
+			   'paid_date' => date('Y-m-d')
 			);
-			$this->db->insert('api_billing_history', $data);
+			
+			$this->db->where('billing_id', $k);
+			$this->db->update('api_billing', $data); 
+			
+			
 		}
 	}
 	
 	public function get_billing_history($apikey)
 	{
 		$result = array();
-		$sql = "SELECT * FROM api_billing ab LEFT JOIN api_billing_history abh
-			ON ab.billing_id = abh.api_billing_id WHERE ab.apikey='".$apikey."'";
+		$sql = "SELECT * FROM api_billing WHERE apikey='".$apikey."' AND amount <> '0.00'";
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
@@ -587,7 +683,128 @@ Class Database_Model extends CI_Model {
 	
 	public function insert_billing($data)
 	{
+		unset($data['email']);
+		unset($data['name']);
 		$this->db->insert('api_billing',$data);
+	}
+
+	public function get_all_billed_dates()
+	{
+		$return = array();
+		$sql = "SELECT billing_date FROM api_billing GROUP BY billing_date";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$return = $query->result_array();
+		}
+		return $return;
+	}
+	
+	public function get_income_result()
+	{
+		$return = array();
+		$sql = "SELECT SUM(amount_paid) as total, billing_date 
+		FROM api_billing 
+		WHERE amount <> '0.00' 
+		AND amount_paid IS NOT NULL
+		GROUP BY billing_date";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$return = $query->result_array();
+		}
+		return $return;
+	}
+	
+	public function get_unpaid_result()
+	{
+		$return = array();
+		$sql = "SELECT IFNULL(SUM(amount_paid),0) as total, billing_date 
+		FROM api_billing 
+		WHERE amount <> '0.00' 
+		AND amount_paid IS NULL
+		GROUP BY billing_date";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$return = $query->result_array();
+		}
+		return $return;
+	}
+	
+	
+	public function get_billing_month($day1,$dayt)
+	{
+		$return = array();
+		
+		$sql = "SELECT au.apikey, au.email, au.last_name as name, 
+		IFNULL(( SELECT SUM(length) FROM api_usage_definition WHERE apikey = au.apikey AND datetime>'".$day1."' AND datetime<'".$dayt."' ),0) as definition ,
+		IFNULL(( SELECT SUM(length) FROM api_usage_text WHERE apikey = au.apikey AND datetime>'".$day1."' AND datetime<'".$dayt."' ),0) as text ,
+		IFNULL(( SELECT SUM(length) FROM api_usage_trans WHERE apikey = au.apikey AND datetime>'".$day1."' AND datetime<'".$dayt."' ),0)as trans ,
+		IFNULL(( SELECT SUM(length) FROM api_usage_word WHERE apikey = au.apikey AND datetime>'".$day1."' AND datetime<'".$dayt."' ),0) as word
+		FROM api_users au 
+		WHERE au.user_type = 'user'
+		AND NOT EXISTS(SELECT NULL FROM api_billing ab WHERE au.apikey = ab.apikey AND ab.billing_date = '".$day1."')";
+		//
+		
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$return = $query->result_array();
+		}
+		return $return;
+	}
+	
+	public function get_billed_bymonth($day1)
+	{
+		$return = array();
+		$sql = "SELECT ab.*,au.last_name as name,au.email FROM api_billing ab INNER JOIN api_users au ON ab.apikey = au.apikey WHERE ab.billing_date = '".$day1."' AND ab.amount_paid IS NULL";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$return = $query->result_array();
+		}
+		return $return;
+	}
+	
+	public function re_billing_month($day1,$dayt)
+	{
+		$return = array();
+		
+		$sql = "SELECT * FROM api_billing";
+		
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$return = $query->result_array();
+		}
+		return $return;
+	}
+	
+	public function reissue_billing($bill_id,$date_issue)
+	{
+		$data = array(
+			'billing_id' => $bill_id
+		);
+		$this->db->insert('billing_reissue_history', $data);
+		
+		$data = array(
+			'billing_date_issue' => $date_issue
+		);
+		$this->db->where('billing_id', $bill_id);
+		$this->db->update('api_billing', $data); 
+	}
+	
+	public function get_unpaid_billedusers()
+	{
+		$return = array();
+		$sql = "SELECT ab.*,au.last_name as name,au.email FROM api_billing ab INNER JOIN api_users au ON ab.apikey = au.apikey WHERE ab.amount_paid IS NULL";
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$return = $query->result_array();
+		}
+		return $return;
 	}
 }
 ?>

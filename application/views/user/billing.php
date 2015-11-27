@@ -1,32 +1,140 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+$this->load->model('computation_model');
 // echo "<pre>";
 // print_r($Nvoca['billing_history']);
 // echo "</pre>";
 // exit();
 $bill_history = '';
+$bill_details = '';
 foreach( $Nvoca['billing_history'] as $v )
 {
 	$status = "Not Paid";
-	if($v['api_billing_id'])
+	if($v['amount_paid'])
 	{
 		$status = "Paid";
 	}
 	$bill_history .= "
-		<tr>
+		<tr bill_id='".$v['billing_id']."'>
 			<td>
-				".date('F j, Y',strtotime($v['date_from']))."
+				".date('F Y',strtotime($v['billing_date']))."
 			</td>
 			<td>
-				".date('F j, Y',strtotime($v['date_to']))."
+				".$v['amount']."
 			</td>
 			<td>
 				".$status."
 			</td>
 		</tr>
 	";
-}
+	$bill_details .= "<div style='width: 100%;display:none;' id='".$v['billing_id']."'>
+		<table>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					Billing no.
+				</td>
+				<td>
+					".$v['billing_id']."
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					From
+				</td>
+				<td>
+					".date('F Y',strtotime($v['billing_date']))."
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					&nbsp;
+				</td>
+			</tr>
+			<tr style='border:1px solid black;'>
+				<td>
+					Service
+				</td>
+				<td>
+					Usage
+				</td>
+				<td>
+					Price
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Definition
+				</td>
+				<td>
+					".$v['definition']."
+				</td>
+				<td>
+					".$this->computation_model->compute_length($v['definition'])."
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Text
+				</td>
+				<td>
+					".$v['text']."
+				</td>
+				<td>
+					".$this->computation_model->compute_length($v['text'])."
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Word
+				</td>
+				<td>
+					".$v['word']."
+				</td>
+				<td>
+					".$this->computation_model->compute_length($v['word'])."
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Translation
+				</td>
+				<td>
+					".$v['word']."
+				</td>
+				<td>
+					".$this->computation_model->compute_length($v['trans'])."
+				</td>
+			</tr>
+			<tr style='border-top:1px solid black;'>
+				<td>
+					Total
+				</td>
+				<td>
+					".$v['total']."
+				</td>
+				<td>
+					".$v['amount']."
+				</td>
+			</tr>
+		</table>
+	</div>
+	";
+}//end foreach
 
+// echo $bill_details['22'];
+// exit();
 
 ?><!DOCTYPE html>
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
@@ -173,10 +281,10 @@ div.dataTables_sort_wrapper{white-space:nowrap !important;} th{white-space:nowra
 		<thead width="100%">
 			<tr>
 				<th>
-					From
+					Billing date
 				</th>
 				<th>
-					To
+					Amount
 				</th>
 				<th>
 					Status
@@ -223,13 +331,49 @@ div.dataTables_sort_wrapper{white-space:nowrap !important;} th{white-space:nowra
 	</div>
 </div>
 </div>
+<?php echo $bill_details; ?>
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="vocadbmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+	<form id="changepass">
+    <div class="modal-content">
+    <div class="modal-header">
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+        <h4 class="modal-title" id="myModalLabel">Billing no.<span id="bill_no"></span></h4>
+    </div>
+    <div class="modal-body" id="bill_content">
+		
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+    </div>
+	</form>
+  </div>
+</div>
 <script>
 $(document).ready(function(){
     var table =  $('#billing_history').DataTable({
-        "scrollY":        "300px",
         "scrollCollapse": true,
         "paging":         false,
 		"info":     false,
     });
+	$('#billing_history tbody').on( 'click', 'tr', function () {
+        // if ( $(this).hasClass('selected') ) {
+            // $(this).removeClass('selected');
+        // }
+        // else {
+            table.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+			var this_id = $(this).attr('bill_id');
+			$('#bill_content').html( $('#'+this_id).html() );
+			$('#bill_content').children('table').width('100%');
+			$('#bill_no').html(this_id);
+			$('#vocadbmodal').modal('show');
+			// $(this).removeClass('selected');
+        // }
+    } );
+	$('#vocadbmodal').on('hide.bs.modal', function (e) {
+		table.$('tr.selected').removeClass('selected');
+	})
 });
 </script>

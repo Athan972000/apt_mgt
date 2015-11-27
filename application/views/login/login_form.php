@@ -30,7 +30,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		  // Button.  See the onlogin handler attached to it in the sample
 		  // code below.
 		  function checkLoginState() {
-			  console.log("checkloginstate");
+			$('body').addClass("csspinner traditional");
 			FB.login(function(response) {
 			  statusChangeCallback(response);
 			},{ scope: 'email' });
@@ -104,16 +104,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					success: function(msg)
 					{
 						var result = JSON.parse(msg);
-						$('#vocamodalmsg').html(result.msg);
-						$('#vocadbmodal').modal('show');
+						// $('#vocamodalmsg').html(result.msg);
+						// $('#vocadbmodal').modal('show');
 						if(result.state)
 						{
+							var color = 'red';
+							if( result.msg == "Logging in.." )
+							{
+								color = 'green';
+							}
+							
+							$('#login_msg').html(result.msg).css('color',color);
 							setTimeout(openUrl(result.link), 4000);
+						}
+						else
+						{
+							$('body').removeClass("csspinner traditional");
 						}
 					}
 				});
 				
 			});
+			// $('body').removeClass("csspinner traditional");
 		  }
 		function openUrl(url)
 		{
@@ -174,7 +186,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								
 								<div class="clearfix">
 									<!-- <fb:login-button onlogin="checkLoginState();">Log in using Facebook</fb:login-button> -->
-									<div class="pull-left"><a style="position:relative;right:0px;" href="<?php echo base_url().'login/register' ?>">
+									<div class="pull-left"><a class="addspinner_whenclick" style="position:relative;right:0px;" href="<?php echo base_url().'login/register' ?>">
 										<button type="button" class="btn btn-default">Register here!</button>
 									</a></div>
 									<button type="button" onclick="checkLoginState();" class="btn btn-primary" style="background-color: rgb(69, 97, 157); font-size: 20px;"><span class="fa fa-facebook"></span></button>
@@ -196,6 +208,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		}
 		
 		$('form').submit(function (e) {
+			$('body').addClass("csspinner traditional");
 			e.preventDefault();
 			var name = $('#name').val();
 			var emailregex = /.+@.+/;
@@ -238,6 +251,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						{
 							$('#name').parent('div').addClass("has-error");
 							$('#password').parent('div').addClass("has-error");
+							$('body').removeClass("csspinner traditional");
 						}
 					}
 				});

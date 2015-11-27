@@ -53,6 +53,6 @@ $default_controller = $route['default_controller'] = 'users';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-$controller_exceptions = array('resources','admin','login');
+$controller_exceptions = array('resources','admin','login','callcenter');
 $route["^((?!\b".implode('\b|\b', $controller_exceptions)."\b).*)$"] = $default_controller.'/$1';
 
