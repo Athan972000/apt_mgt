@@ -23,6 +23,7 @@ class Login extends MY_Controller {
 	public function index()
 	{
 		// var_dump($this->session->userdata() );
+		// $this->session->set_userdata('email', 'Athan972000@gmail.com');
 		$this->is_logged_in();
         $this->_render("login/login_form");
 	}

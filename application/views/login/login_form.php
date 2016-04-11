@@ -39,9 +39,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		  window.fbAsyncInit = function() {
 		  FB.init({
 			appId      : '642467622561438',
-			//local server app id :421425981381311			
-			//actual server app id: 421187494738493 
-			//new app id: 642467622561438
 			cookie     : true,  // enable cookies to allow the server to access 
 								// the session
 			xfbml      : true,  // parse social plugins on this page
